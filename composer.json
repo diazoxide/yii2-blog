@@ -15,6 +15,7 @@
     "seo"
   ],
   "license": "MIT",
+  "minimum-stability": "dev",
   "authors": [
     {
       "name": "Diazoxide",
