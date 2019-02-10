@@ -17,11 +17,11 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "Akiraz",
-      "email": "akiraz@bk.ru"
+      "name": "Diazoxide",
+      "email": "eyehollow@gmail.com"
     }
   ],
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "require": {
     "yiisoft/yii2": "*",
     "yiidoc/yii2-redactor": "*",
