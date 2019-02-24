@@ -26,6 +26,7 @@ class m180406_201480_blog_init extends Migration
 
     /**
      * @inheritdoc
+     * @throws Exception
      */
     public function up()
     {
@@ -136,30 +137,46 @@ class m180406_201480_blog_init extends Migration
         // Indexes
         $this->createIndex('frequency', '{{%blog_tag}}', 'frequency');
 
-        // Add super-administrator
-        //$this->execute($this->getUserSql());
-        //$this->execute($this->getProfileSql());
+        $this->registerRoles();
+
+        $this->registerPermissions();
     }
 
     /**
-     * @return string SQL to insert first user
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
-    private function getUserSql()
-    {
-        $time = time();
-        $password_hash = Yii::$app->security->generatePasswordHash('admin12345');
-        $auth_key = Yii::$app->security->generateRandomString();
-        $token = Security::generateExpiringRandomString();
-        return "INSERT INTO {{%users}} (`username`, `email`, `password_hash`, `auth_key`, `token`, `role`, `status_id`, `created_at`, `updated_at`) VALUES ('admin', 'admin@demo.com', '$password_hash', '$auth_key', '$token', 'superadmin', 1, $time, $time)";
+    public function registerPermissions(){
+        $auth = Yii::$app->authManager;
+
+        $permissions = $this->getModule()->permissions;
+
+        foreach($permissions as $permission){
+            $p = $auth->createPermission($permission[0]);
+            $p->description = $permission[1];
+            if(isset($permission[2])){
+                foreach ($permission[2] as $ruleClass){
+                    $rule = new $ruleClass;
+                    $auth->add($rule);
+                    $p->ruleName = $rule->name;
+                }
+            }
+            $auth->add($p);
+        }
     }
 
     /**
-     * @return string SQL to insert first profile
+     * @throws Exception
      */
-    private function getProfileSql()
-    {
-        return "INSERT INTO {{%profiles}} (`user_id`, `name`, `slug`) VALUES (1, 'Administration', 'Site')";
+    public function registerRoles(){
+        $auth = Yii::$app->authManager;
+
+        $roles = $this->getModule()->roles;
+
+        foreach($roles as $role){
+            $createPost = $auth->createPermission($role[0]);
+            $createPost->description = $role[1];
+            $auth->add($createPost);
+        }
     }
 
     /**

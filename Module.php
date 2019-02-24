@@ -58,6 +58,39 @@ class Module extends \yii\base\Module
 
     protected $_isBackend;
 
+
+    public $permissions = [
+        ['BLOG_BULK_COMMENTS','Bulk blog comments'],
+        ['BLOG_CONFIRM_ALL_COMMENTS','Confirm all blog comments'],
+        ['BLOG_CREATE_CATEGORY','Create blog category'],
+        ['BLOG_CREATE_COMMENT','Create blog comment'],
+        ['BLOG_CREATE_POST','Create blog post'],
+        ['BLOG_CREATE_TAG','Create blog tag'],
+        ['BLOG_DELETE_ALL_COMMENTS','Delete all blog comments'],
+        ['BLOG_DELETE_CATEGORY','Delete blog cateogry'],
+        ['BLOG_DELETE_COMMENT','Delete blog comment'],
+        ['BLOG_DELETE_POST','Delete blog post'],
+        ['BLOG_DELETE_TAG','Delete blog tag'],
+        ['BLOG_UPDATE_CATEGORY','Update blog cateogry'],
+        ['BLOG_UPDATE_COMMENT','Update comment'],
+        ['BLOG_UPDATE_OWN_POST','Update own blog post',['diazoxide/rbac/AuthorRule']],
+        ['BLOG_UPDATE_POST','Update blog post'],
+        ['BLOG_UPDATE_TAG','Update blog tag'],
+        ['BLOG_VIEW_CATEGORIES','View blog categories'],
+        ['BLOG_VIEW_CATEGORY','View blog category'],
+        ['BLOG_VIEW_COMMENT','View blog comment'],
+        ['BLOG_VIEW_COMMENTS','View blog comments'],
+        ['BLOG_VIEW_POST','View blog post'],
+        ['BLOG_VIEW_POSTS','View blog posts'],
+        ['BLOG_VIEW_TAG','View blog tag'],
+        ['BLOG_VIEW_TAGS','View blog tags'],
+    ];
+
+    public $roles = [
+        ['BLOG_ADMIN','Blog Administrator'],
+        ['BLOG_MANAGER','Blog Administrator'],
+        ['BLOG_EDITOR','Blog Editor'],
+    ];
     /**
      *
      */
