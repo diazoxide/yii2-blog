@@ -72,6 +72,7 @@ class m180406_201480_blog_init extends Migration
                 'tags' => Schema::TYPE_STRING . '(255) NOT NULL',
                 'slug' => Schema::TYPE_STRING . '(128) NOT NULL',
                 'banner' => Schema::TYPE_STRING . '(255) ',
+                'is_slide' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
                 'click' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0',
                 'user_id' => Schema::TYPE_INTEGER . '',
                 'status' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
@@ -83,6 +84,7 @@ class m180406_201480_blog_init extends Migration
 
         // Indexes
         $this->createIndex('category_id', '{{%blog_post}}', 'category_id');
+        $this->createIndex('is_nav', '{{%blog_post}}', 'is_slide');
         $this->createIndex('status', '{{%blog_post}}', 'status');
         $this->createIndex('created_at', '{{%blog_post}}', 'created_at');
 
