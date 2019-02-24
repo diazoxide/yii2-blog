@@ -34,9 +34,7 @@ class Module extends \yii\base\Module
 
     public $showBannerInPost = false;
 
-
     public $blogViewLayout = null;
-
 
     public $schemaOrg = [];
 
