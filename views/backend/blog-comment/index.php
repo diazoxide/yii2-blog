@@ -5,13 +5,13 @@
  * Copyright (c) 2018.
  */
 
-use app\modules\blog\models\Status;
-use app\modules\blog\Module;
+use diazoxide\yii2blog\models\Status;
+use diazoxide\yii2blog\Module;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $searchModel \app\modules\blog\models\BlogCommentSearch */
+/* @var $searchModel \diazoxide\yii2blog\models\BlogCommentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Module::t('blog', 'Blog Comments');
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 /*'filter' => Html::activeDropDownList(
                     $searchModel,
                     'post_id',
-                    \app\modules\blog\models\BlogPost::getArrayCategory(),
+                    \diazoxide\yii2blog\models\BlogPost::getArrayCategory(),
                     ['class' => 'form-control', 'prompt' => Module::t('blog', 'Please Filter')]
                 )*/
             ],
@@ -56,9 +56,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status',
                 'format' => 'html',
                 'value' => function ($model) {
-                    if ($model->status === \app\modules\blog\traits\IActiveStatus::STATUS_ACTIVE) {
+                    if ($model->status === \diazoxide\yii2blog\traits\IActiveStatus::STATUS_ACTIVE) {
                         $class = 'label-success';
-                    } elseif ($model->status === \app\modules\blog\traits\IActiveStatus::STATUS_INACTIVE) {
+                    } elseif ($model->status === \diazoxide\yii2blog\traits\IActiveStatus::STATUS_INACTIVE) {
                         $class = 'label-warning';
                     } else {
                         $class = 'label-danger';
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::activeDropDownList(
                     $searchModel,
                     'status',
-                    \app\modules\blog\models\BlogPost::getStatusList(),
+                    \diazoxide\yii2blog\models\BlogPost::getStatusList(),
                     ['class' => 'form-control', 'prompt' => Module::t('blog', 'PROMPT_STATUS')]
                 )
             ],

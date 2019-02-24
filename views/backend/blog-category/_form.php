@@ -5,14 +5,14 @@
  * Copyright (c) 2018.
  */
 
-use app\modules\blog\models\BlogCategory;
-use app\modules\blog\Module;
+use diazoxide\yii2blog\models\BlogCategory;
+use diazoxide\yii2blog\Module;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\blog\models\BlogCategory */
+/* @var $model diazoxide\yii2blog\models\BlogCategory */
 /* @var $form yii\widgets\ActiveForm */
 
 //fix the issue that it can assign itself as parent

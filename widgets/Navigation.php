@@ -1,5 +1,5 @@
 <?php
-namespace app\modules\blog\widgets;
+namespace diazoxide\yii2blog\widgets;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 
@@ -33,7 +33,7 @@ class Navigation extends \yii\bootstrap\Widget
 
         $this->buildNav();
 
-        echo \app\modules\blog\widgets\Search::widget([]);
+        echo \diazoxide\yii2blog\widgets\Search::widget([]);
 
         NavBar::end();
     }
@@ -46,7 +46,7 @@ class Navigation extends \yii\bootstrap\Widget
         echo Nav::widget([
             'encodeLabels' => false,
             'options' => ['class' => $class],
-            'items' => \app\modules\blog\models\BlogCategory::getAllMenuItems()
+            'items' => \diazoxide\yii2blog\models\BlogCategory::getAllMenuItems()
         ]);
     }
 }

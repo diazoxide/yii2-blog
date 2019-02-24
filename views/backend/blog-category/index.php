@@ -5,12 +5,12 @@
  * Copyright (c) 2018.
  */
 
-use app\modules\blog\models\BlogCategory;
-use app\modules\blog\Module;
+use diazoxide\yii2blog\models\BlogCategory;
+use diazoxide\yii2blog\Module;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\blog\models\BlogCategorySearch */
+/* @var $searchModel diazoxide\yii2blog\models\BlogCategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Module::t('blog', 'Blog Categorys');

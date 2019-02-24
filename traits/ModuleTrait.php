@@ -1,8 +1,8 @@
 <?php
 
-namespace app\modules\blog\traits;
+namespace diazoxide\yii2blog\traits;
 
-use app\modules\blog\Module;
+use diazoxide\yii2blog\Module;
 
 trait ModuleTrait
 {

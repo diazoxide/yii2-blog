@@ -5,7 +5,7 @@
  * Copyright (c) 2018.
  */
 
-use app\modules\blog\Module;
+use diazoxide\yii2blog\Module;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 

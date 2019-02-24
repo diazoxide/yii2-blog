@@ -5,12 +5,12 @@
  * Copyright (c) 2018.
  */
 
-namespace app\modules\blog\models;
+namespace diazoxide\yii2blog\models;
 
-use app\modules\blog\Module;
-use app\modules\blog\traits\IActiveStatus;
-use app\modules\blog\traits\ModuleTrait;
-use app\modules\blog\traits\StatusTrait;
+use diazoxide\yii2blog\Module;
+use diazoxide\yii2blog\traits\IActiveStatus;
+use diazoxide\yii2blog\traits\ModuleTrait;
+use diazoxide\yii2blog\traits\StatusTrait;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\Html;
 use yii\helpers\StringHelper;

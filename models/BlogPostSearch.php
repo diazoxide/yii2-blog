@@ -5,13 +5,13 @@
  * Copyright (c) 2018.
  */
 
-namespace app\modules\blog\models;
+namespace diazoxide\yii2blog\models;
 
-use app\modules\blog\traits\IActiveStatus;
+use diazoxide\yii2blog\traits\IActiveStatus;
 use yii\data\ActiveDataProvider;
 
 /**
- * BlogPostSearch represents the model behind the search form about `app\modules\blog\models\BlogPost`.
+ * BlogPostSearch represents the model behind the search form about `diazoxide\yii2blog\models\BlogPost`.
  */
 class BlogPostSearch extends BlogPost
 {

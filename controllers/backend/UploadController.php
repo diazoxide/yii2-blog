@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\blog\controllers\backend;
+namespace diazoxide\yii2blog\controllers\backend;
 
 use yii\web\Response;
 

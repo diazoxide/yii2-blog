@@ -5,12 +5,12 @@
  * Copyright (c) 2018.
  */
 
-use app\modules\blog\Module;
+use diazoxide\yii2blog\Module;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\blog\models\BlogCategory */
+/* @var $model diazoxide\yii2blog\models\BlogCategory */
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Module::t('blog', 'Blog Categorys'), 'url' => ['index']];

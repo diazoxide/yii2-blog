@@ -1,10 +1,10 @@
 <?php
 
-namespace app\modules\blog\widgets;
+namespace diazoxide\yii2blog\widgets;
 
-use app\modules\blog\models\BlogPost;
-use app\modules\blog\models\BlogPostSearch;
-use app\modules\blog\traits\IActiveStatus;
+use diazoxide\yii2blog\models\BlogPost;
+use diazoxide\yii2blog\models\BlogPostSearch;
+use diazoxide\yii2blog\traits\IActiveStatus;
 use kop\y2sp\ScrollPager;
 use Yii;
 use yii\data\ActiveDataProvider;

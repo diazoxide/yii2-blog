@@ -5,14 +5,14 @@
  * Copyright (c) 2018.
  */
 
-namespace app\modules\blog\models;
+namespace diazoxide\yii2blog\models;
 
-use app\modules\blog\traits\IActiveStatus;
+use diazoxide\yii2blog\traits\IActiveStatus;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * BlogCommentSearch represents the model behind the search form about `app\modules\blog\models\BlogComment`.
+ * BlogCommentSearch represents the model behind the search form about `diazoxide\yii2blog\models\BlogComment`.
  */
 class BlogCommentSearch extends BlogComment
 {

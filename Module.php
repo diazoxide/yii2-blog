@@ -5,14 +5,14 @@
  * Copyright (c) 2018.
  */
 
-namespace app\modules\blog;
+namespace diazoxide\yii2blog;
 
 use Yii;
 use yii\i18n\PhpMessageSource;
 
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'app\modules\blog\controllers\frontend';
+    public $controllerNamespace = 'diazoxide\yii2blog\controllers\frontend';
 
     public $urlManager = 'urlManager';
 

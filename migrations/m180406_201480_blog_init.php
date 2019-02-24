@@ -10,7 +10,7 @@ use yii\db\Schema;
 
 /**
  * CLass m141208_201480_blog_init
- * @package app\modules\blog\migrations
+ * @package diazoxide\yii2blog\migrations
  *
  * Create blog tables.
  *
@@ -22,7 +22,7 @@ use yii\db\Schema;
  */
 class m180406_201480_blog_init extends Migration
 {
-    use \app\modules\blog\traits\ModuleTrait;
+    use \diazoxide\yii2blog\traits\ModuleTrait;
 
     /**
      * @inheritdoc

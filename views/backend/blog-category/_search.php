@@ -5,12 +5,12 @@
  * Copyright (c) 2018.
  */
 
-use app\modules\blog\Module;
+use diazoxide\yii2blog\Module;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\blog\models\BlogCategorySearch */
+/* @var $model diazoxide\yii2blog\models\BlogCategorySearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
