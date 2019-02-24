@@ -5,13 +5,13 @@
  * Copyright (c) 2018.
  */
 
-namespace diazoxide\yii2blog\models;
+namespace diazoxide\blog\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * BlogTagSearch represents the model behind the search form about `diazoxide\yii2blog\models\BlogTag`.
+ * BlogTagSearch represents the model behind the search form about `diazoxide\blog\models\BlogTag`.
  */
 class BlogTagSearch extends BlogTag
 {

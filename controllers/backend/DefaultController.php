@@ -5,7 +5,7 @@
  * Copyright (c) 2018.
  */
 
-namespace diazoxide\yii2blog\controllers\backend;
+namespace diazoxide\blog\controllers\backend;
 
 use Yii;
 

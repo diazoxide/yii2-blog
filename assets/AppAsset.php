@@ -5,7 +5,7 @@
  * Copyright (c) 2018.
  */
 
-namespace diazoxide\yii2blog\assets;
+namespace diazoxide\blog\assets;
 
 use yii\web\AssetBundle;
 

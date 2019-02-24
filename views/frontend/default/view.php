@@ -5,15 +5,15 @@
  * Copyright (c) 2018.
  */
 /* @var $this \yii\web\View */
-/* @var $post \diazoxide\yii2blog\models\BlogPost */
+/* @var $post \diazoxide\blog\models\BlogPost */
 
 /* @var $dataProvider \yii\data\ActiveDataProvider */
 
-use diazoxide\yii2blog\Module;
+use diazoxide\blog\Module;
 use yii\helpers\Html;
 use kartik\social\FacebookPlugin;
 
-\diazoxide\yii2blog\assets\AppAsset::register($this);
+\diazoxide\blog\assets\AppAsset::register($this);
 
 $this->title = $post->title;
 

@@ -13,7 +13,7 @@ $this->title = Yii::$app->params['home_title'];
             <div class="col-lg-10 nopadding">
                 <div class="widget_title hidden-xs"><i class="fa fa-star"></i> Գլխավոր</div>
 
-                <?= \diazoxide\yii2blog\widgets\Slider::widget(
+                <?= \diazoxide\blog\widgets\Slider::widget(
                     ['itemsCount' => 5]
                 ) ?>
             </div>
@@ -28,7 +28,7 @@ $this->title = Yii::$app->params['home_title'];
             <div class="widget_title"><i class="fa fa-eye"></i> Շատ Ընթերցվող</div>
             <div class="col-md-6">
                 <div class="top-buffer-20">
-                    <?= \diazoxide\yii2blog\widgets\Posts::widget([
+                    <?= \diazoxide\blog\widgets\Posts::widget([
                         'itemsCount' => 1,
                         'type' => 'hot',
                         'daysInterval' => 7,
@@ -42,7 +42,7 @@ $this->title = Yii::$app->params['home_title'];
             </div>
             <div class="col-md-6">
                 <div class="top-buffer-20">
-                    <?= \diazoxide\yii2blog\widgets\Feed::widget([
+                    <?= \diazoxide\blog\widgets\Feed::widget([
                         'itemsCount' => 6,
                         'showBrief' => false,
                         'showPager' => false,
@@ -64,7 +64,7 @@ $this->title = Yii::$app->params['home_title'];
         <div class="row top-buffer-20 home-white-content">
             <div class="col-md-4 home_posts_widget">
 
-                <?= \diazoxide\yii2blog\widgets\Posts::widget([
+                <?= \diazoxide\blog\widgets\Posts::widget([
                     'itemsCount' => 2,
                     'categoryId' => 110,
                     'showCategoryTitle' => true
@@ -72,7 +72,7 @@ $this->title = Yii::$app->params['home_title'];
             </div>
 
             <div class="col-md-4 home_posts_widget">
-                <?= \diazoxide\yii2blog\widgets\Posts::widget([
+                <?= \diazoxide\blog\widgets\Posts::widget([
                     'itemsCount' => 2,
                     'categoryId' => 114,
                     'showCategoryTitle' => true
@@ -80,7 +80,7 @@ $this->title = Yii::$app->params['home_title'];
             </div>
 
             <div class="col-md-4 home_posts_widget">
-                <?= \diazoxide\yii2blog\widgets\Posts::widget([
+                <?= \diazoxide\blog\widgets\Posts::widget([
                     'itemsCount' => 2,
                     'categoryId' => 103,
                     'showCategoryTitle' => true
@@ -97,20 +97,20 @@ $this->title = Yii::$app->params['home_title'];
 
             <div class="col-md-6">
                 <div class="top-buffer-20">
-                    <?= \diazoxide\yii2blog\widgets\Posts::widget([
+                    <?= \diazoxide\blog\widgets\Posts::widget([
                         'itemsCount' => 1,
                         'categoryId' => 139,
                         'briefLength' => 200,
                         'showItemReadMoreButton' => true,
                         'showCategoryTitle' => false,
                         'itemImageType' => 'xthumb',
-                        'itemReadMoreText' => '<i class="fa fa-play"></i> ' . \diazoxide\yii2blog\Module::t('blog', 'Play video'),
+                        'itemReadMoreText' => '<i class="fa fa-play"></i> ' . \diazoxide\blog\Module::t('blog', 'Play video'),
                     ]) ?>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="top-buffer-20">
-                    <?= \diazoxide\yii2blog\widgets\Feed::widget([
+                    <?= \diazoxide\blog\widgets\Feed::widget([
                         'itemsCount' => 5,
                         'categoryId' => 139,
                         'showBrief' => false,
@@ -128,7 +128,7 @@ $this->title = Yii::$app->params['home_title'];
 
         <div class="row top-buffer-20 home-white-content">
             <div class="col-md-4 home_posts_widget">
-                <?= \diazoxide\yii2blog\widgets\Posts::widget([
+                <?= \diazoxide\blog\widgets\Posts::widget([
                     'itemsCount' => 2,
                     'categoryId' => 107,
                     'showCategoryTitle' => true
@@ -136,7 +136,7 @@ $this->title = Yii::$app->params['home_title'];
             </div>
 
             <div class="col-md-4 home_posts_widget">
-                <?= \diazoxide\yii2blog\widgets\Posts::widget([
+                <?= \diazoxide\blog\widgets\Posts::widget([
                     'itemsCount' => 2,
                     'categoryId' => 140,
                     'showCategoryTitle' => true
@@ -144,7 +144,7 @@ $this->title = Yii::$app->params['home_title'];
             </div>
 
             <div class="col-md-4 home_posts_widget">
-                <?= \diazoxide\yii2blog\widgets\Posts::widget([
+                <?= \diazoxide\blog\widgets\Posts::widget([
                     'itemsCount' => 2,
                     'categoryId' => 100,
                     'showCategoryTitle' => true
@@ -169,7 +169,7 @@ $this->title = Yii::$app->params['home_title'];
                     ?>
                 </div>
                 <div class="widget_title"><i class="fa fa-newspaper-o"></i> Լրահոս</div>
-                <?= \diazoxide\yii2blog\widgets\Feed::widget([
+                <?= \diazoxide\blog\widgets\Feed::widget([
                     'itemsCount' => 15,
                     'showBrief' => false,
                     //'showItemCategoryIcon' => 'true',

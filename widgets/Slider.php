@@ -1,10 +1,10 @@
 <?php
 
-namespace diazoxide\yii2blog\widgets;
+namespace diazoxide\blog\widgets;
 
-use diazoxide\yii2blog\models\BlogPost;
-use diazoxide\yii2blog\models\BlogPostSearch;
-use diazoxide\yii2blog\traits\IActiveStatus;
+use diazoxide\blog\models\BlogPost;
+use diazoxide\blog\models\BlogPostSearch;
+use diazoxide\blog\traits\IActiveStatus;
 use kop\y2sp\ScrollPager;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -103,7 +103,7 @@ class Slider extends \yii\bootstrap\Widget
     }
 
     public function getItems(){
-        $posts = \diazoxide\yii2blog\models\BlogPost::find()->where(['status' => IActiveStatus::STATUS_ACTIVE,'is_slide'=>true])->limit($this->itemsCount)->orderBy(['id' => SORT_DESC])->all();
+        $posts = \diazoxide\blog\models\BlogPost::find()->where(['status' => IActiveStatus::STATUS_ACTIVE,'is_slide'=>true])->limit($this->itemsCount)->orderBy(['id' => SORT_DESC])->all();
         $items = [];
         foreach ($posts as $post) {
             $items[] = [

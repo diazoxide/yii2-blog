@@ -1,6 +1,6 @@
 <?php
 
-use diazoxide\yii2blog\Module;
+use diazoxide\blog\Module;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 

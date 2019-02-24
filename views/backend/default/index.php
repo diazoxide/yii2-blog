@@ -1,18 +1,18 @@
 <?php
 
-use diazoxide\yii2blog\Module;
+use diazoxide\blog\Module;
 use yii\helpers\Html;
 
 ?>
 
 <div class="col-md-3">
     <?php
-    $model = \diazoxide\yii2blog\models\BlogCategory::find()->limit(10)->orderBy(['sort_order' => SORT_DESC]);
+    $model = \diazoxide\blog\models\BlogCategory::find()->limit(10)->orderBy(['sort_order' => SORT_DESC]);
     echo Html::a('<i class="fa fa-list"></i> ' . Module::t('blog', 'Blog Categories') . ' (' . $model->count() . ')', ['/blog/blog-post']);
     ?>
     <ul>
         <?php
-        /** @var \diazoxide\yii2blog\models\BlogCategory $item */
+        /** @var \diazoxide\blog\models\BlogCategory $item */
         foreach ($model->all() as $item) {
             echo Html::tag(
                 'li', Html::a($item->titleWithIcon, $item->url),
@@ -26,12 +26,12 @@ use yii\helpers\Html;
 </div>
 <div class="col-md-3">
     <?php
-    $model = \diazoxide\yii2blog\models\BlogPost::find()->limit(10)->orderBy(['id' => SORT_DESC]);
+    $model = \diazoxide\blog\models\BlogPost::find()->limit(10)->orderBy(['id' => SORT_DESC]);
     echo Html::a('<i class="fa fa-newspaper-o"></i> ' . Module::t('blog', 'Blog Posts') . ' (' . $model->count() . ')', ['/blog/blog-post']);
     ?>
     <ul>
         <?php
-        /** @var \diazoxide\yii2blog\models\BlogPost $item */
+        /** @var \diazoxide\blog\models\BlogPost $item */
         foreach ($model->all() as $item) {
             echo Html::tag(
                 'li',

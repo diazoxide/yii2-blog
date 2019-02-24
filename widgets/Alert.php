@@ -5,7 +5,7 @@
  * Copyright (c) 2018.
  */
 
-namespace diazoxide\yii2blog\widgets;
+namespace diazoxide\blog\widgets;
 
 /**
  * Alert widget renders a message from session flash. All flash messages are displayed

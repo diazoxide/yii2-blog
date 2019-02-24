@@ -6,9 +6,9 @@
  *
  */
 
-namespace diazoxide\yii2blog\controllers\backend;
+namespace diazoxide\blog\controllers\backend;
 
-use diazoxide\yii2blog\traits\ModuleTrait;
+use diazoxide\blog\traits\ModuleTrait;
 use dektrium\user\filters\AccessRule;
 use yii\filters\VerbFilter;
 use yii\web\Controller;

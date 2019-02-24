@@ -5,9 +5,9 @@
  * Copyright (c) 2018.
  */
 
-namespace diazoxide\yii2blog\widgets;
+namespace diazoxide\blog\widgets;
 
-use diazoxide\yii2blog\models\BlogComment;
+use diazoxide\blog\models\BlogComment;
 use yii\base\Widget;
 
 class RecentComments extends Widget

@@ -5,16 +5,16 @@
  * Copyright (c) 2018.
  */
 
-namespace diazoxide\yii2blog\controllers\frontend;
+namespace diazoxide\blog\controllers\frontend;
 
-use diazoxide\yii2blog\models\BlogCategory;
-use diazoxide\yii2blog\models\BlogComment;
-use diazoxide\yii2blog\models\BlogCommentSearch;
-use diazoxide\yii2blog\models\BlogPost;
-use diazoxide\yii2blog\models\BlogPostSearch;
-use diazoxide\yii2blog\Module;
-use diazoxide\yii2blog\traits\IActiveStatus;
-use diazoxide\yii2blog\traits\ModuleTrait;
+use diazoxide\blog\models\BlogCategory;
+use diazoxide\blog\models\BlogComment;
+use diazoxide\blog\models\BlogCommentSearch;
+use diazoxide\blog\models\BlogPost;
+use diazoxide\blog\models\BlogPostSearch;
+use diazoxide\blog\Module;
+use diazoxide\blog\traits\IActiveStatus;
+use diazoxide\blog\traits\ModuleTrait;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;

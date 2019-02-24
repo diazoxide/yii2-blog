@@ -5,8 +5,8 @@
  * Copyright (c) 2018.
  */
 
-use diazoxide\yii2blog\models\BlogPost;
-use diazoxide\yii2blog\Module;
+use diazoxide\blog\models\BlogPost;
+use diazoxide\blog\Module;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;

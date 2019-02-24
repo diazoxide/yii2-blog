@@ -5,10 +5,10 @@
  * Copyright (c) 2018.
  */
 
-namespace diazoxide\yii2blog\controllers\backend;
+namespace diazoxide\blog\controllers\backend;
 
-use diazoxide\yii2blog\models\BlogTag;
-use diazoxide\yii2blog\models\BlogTagSearch;
+use diazoxide\blog\models\BlogTag;
+use diazoxide\blog\models\BlogTagSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;

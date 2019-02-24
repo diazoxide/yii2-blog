@@ -5,15 +5,15 @@
  * Copyright (c) 2018.
  */
 
-use diazoxide\yii2blog\models\BlogCategory;
-use diazoxide\yii2blog\Module;
+use diazoxide\blog\models\BlogCategory;
+use diazoxide\blog\Module;
 use kartik\markdown\MarkdownEditor;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model diazoxide\yii2blog\models\BlogPost */
+/* @var $model diazoxide\blog\models\BlogPost */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -68,7 +68,7 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'click')->textInput() ?>
 
-            <?= $form->field($model, 'status')->dropDownList(\diazoxide\yii2blog\models\BlogPost::getStatusList()) ?>
+            <?= $form->field($model, 'status')->dropDownList(\diazoxide\blog\models\BlogPost::getStatusList()) ?>
 
         </div>
     </div>

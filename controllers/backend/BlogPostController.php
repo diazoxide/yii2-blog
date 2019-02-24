@@ -5,12 +5,12 @@
  * Copyright (c) 2018.
  */
 
-namespace diazoxide\yii2blog\controllers\backend;
+namespace diazoxide\blog\controllers\backend;
 
-use diazoxide\yii2blog\models\BlogPost;
-use diazoxide\yii2blog\models\BlogPostSearch;
-use diazoxide\yii2blog\models\Status;
-use diazoxide\yii2blog\traits\IActiveStatus;
+use diazoxide\blog\models\BlogPost;
+use diazoxide\blog\models\BlogPostSearch;
+use diazoxide\blog\models\Status;
+use diazoxide\blog\traits\IActiveStatus;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;

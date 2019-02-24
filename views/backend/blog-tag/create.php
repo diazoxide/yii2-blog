@@ -5,7 +5,7 @@
  * Copyright (c) 2018.
  */
 
-use diazoxide\yii2blog\Module;
+use diazoxide\blog\Module;
 
 
 /* @var $this yii\web\View */

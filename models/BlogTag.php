@@ -5,11 +5,11 @@
  * Copyright (c) 2018.
  */
 
-namespace diazoxide\yii2blog\models;
+namespace diazoxide\blog\models;
 
-use diazoxide\yii2blog\Module;
-use diazoxide\yii2blog\traits\ModuleTrait;
-use diazoxide\yii2blog\traits\StatusTrait;
+use diazoxide\blog\Module;
+use diazoxide\blog\traits\ModuleTrait;
+use diazoxide\blog\traits\StatusTrait;
 
 /**
  * This is the model class for table "blog_tag".

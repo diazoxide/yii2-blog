@@ -5,12 +5,12 @@
  * Copyright (c) 2018.
  */
 
-namespace diazoxide\yii2blog\widgets;
+namespace diazoxide\blog\widgets;
 
-use diazoxide\yii2blog\models\BlogPost;
-use diazoxide\yii2blog\models\Status;
-use diazoxide\yii2blog\Module;
-use diazoxide\yii2blog\traits\IActiveStatus;
+use diazoxide\blog\models\BlogPost;
+use diazoxide\blog\models\Status;
+use diazoxide\blog\Module;
+use diazoxide\blog\traits\IActiveStatus;
 use yii\base\Widget;
 use yii\db\Expression;
 

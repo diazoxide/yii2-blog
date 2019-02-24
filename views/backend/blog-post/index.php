@@ -5,15 +5,15 @@
  * Copyright (c) 2018.
  */
 
-use diazoxide\yii2blog\models\BlogPost;
-use diazoxide\yii2blog\models\Status;
-use diazoxide\yii2blog\Module;
-use diazoxide\yii2blog\traits\IActiveStatus;
+use diazoxide\blog\models\BlogPost;
+use diazoxide\blog\models\Status;
+use diazoxide\blog\Module;
+use diazoxide\blog\traits\IActiveStatus;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $searchModel diazoxide\yii2blog\models\BlogPostSearch */
+/* @var $searchModel diazoxide\blog\models\BlogPostSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Module::t('blog', 'Blog Posts');

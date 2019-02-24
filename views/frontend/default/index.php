@@ -5,10 +5,10 @@
  * Copyright (c) 2018.
  */
 
-use diazoxide\yii2blog\Module;
+use diazoxide\blog\Module;
 use yii\widgets\ListView;
 
-\diazoxide\yii2blog\assets\AppAsset::register($this);
+\diazoxide\blog\assets\AppAsset::register($this);
 
 $this->title = $title;
 

@@ -1,6 +1,6 @@
 <?php
 // _list_item.php
-use diazoxide\yii2blog\Module;
+use diazoxide\blog\Module;
 use yii\helpers\Html;
 use yii\helpers\Url;
 

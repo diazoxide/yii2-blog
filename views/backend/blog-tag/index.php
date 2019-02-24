@@ -5,7 +5,7 @@
  * Copyright (c) 2018.
  */
 
-use diazoxide\yii2blog\Module;
+use diazoxide\blog\Module;
 use yii\grid\GridView;
 use yii\helpers\Html;
 

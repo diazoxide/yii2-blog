@@ -8,7 +8,7 @@
 use yii\helpers\Html;
 
 ?>
-<div class="blog-comment<?= $model->status == \diazoxide\yii2blog\traits\IActiveStatus::STATUS_INACTIVE ? ' blog-comment--inactive' : '' ?>" id="c<?= $model->id; ?>">
+<div class="blog-comment<?= $model->status == \diazoxide\blog\traits\IActiveStatus::STATUS_INACTIVE ? ' blog-comment--inactive' : '' ?>" id="c<?= $model->id; ?>">
     <p class="blog-comment__top">
         <span class="blog-comment__author">
             <?= $model->authorLink; ?> <?= $model->getMaskedEmail(); ?>

@@ -12,7 +12,7 @@ NavBar::begin([
 ]);
 echo Nav::widget([
     'options' => ['class' => 'navbar-nav navbar-left'],
-    'items' => \diazoxide\yii2blog\models\BlogCategory::getAllMenuItems()
+    'items' => \diazoxide\blog\models\BlogCategory::getAllMenuItems()
 ]);
 
 
