@@ -1,0 +1,53 @@
+{
+  "name": "diazoxide/yii2-blog",
+  "description": "Simple, configurable blog module for Yii2 (post, comment, nested category, tags). + frontend, backend. + SEO! (Opengraph, Schema.org)",
+  "type": "yii2-extension",
+  "keywords": [
+    "yii2",
+    "extension",
+    "blog",
+    "post",
+    "category",
+    "tag",
+    "comments",
+    "module",
+    "yii2-blog",
+    "seo"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Diazoxide",
+      "email": "diazoxide@gmail.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "*",
+    "yiidoc/yii2-redactor": "*",
+    "yii-dream-team/yii2-upload-behavior": "dev-master",
+    "dektrium/yii2-rbac": "^1.0",
+    "yiisoft/yii2-imagine": "*",
+    "dragonjet/yii2-opengraph": "dev-master",
+    "kop/yii2-scroll-pager": "dev-master",
+    "bower-asset/font-awesome": "^5.7",
+    "bower-asset/sticky-sidebar": "*",
+    "yiidoc/yii2-redactor": "*",
+    "yii-dream-team/yii2-upload-behavior": "*",
+    "lesha724/yii2-math-captcha": "*",
+    "kartik-v/yii2-social": "@dev"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/diazoxide/yii2-translateable"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "diazoxide\\blog\\": ""
+    }
+  },
+  "extra": {
+    "bootstrap": "diazoxide\\blog\\Bootstrap"
+  }
+}
