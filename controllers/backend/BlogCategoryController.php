@@ -11,13 +11,58 @@ use app\modules\blog\models\BlogCategory;
 use app\modules\blog\models\BlogCategorySearch;
 use app\modules\blog\traits\IActiveStatus;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
  * BlogCategoryController implements the CRUD actions for BlogCategory model.
  */
-class BlogCategoryController extends BaseAdminController
+class BlogCategoryController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'delete', 'create', 'update', 'view'],
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['BLOG_VIEW_CATEGORIES']
+                    ],
+                    [
+                        'actions' => ['view'],
+                        'allow' => true,
+                        'roles' => ['BLOG_VIEW_CATEGORY']
+                    ],
+                    [
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'roles' => ['BLOG_DELETE_CATEGORY']
+                    ],
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['BLOG_CREATE_CATEGORY']
+                    ],
+                    [
+                        'actions' => ['update'],
+                        'allow' => true,
+                        'roles' => ['BLOG_UPDATE_CATEGORY']
+                    ],
+                ],
+            ],
+        ];
+    }
     /**
      * Lists all BlogCategory models.
      * @return mixed

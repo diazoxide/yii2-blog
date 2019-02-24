@@ -18,6 +18,8 @@ class BlogPostSearch extends BlogPost
     const SCENARIO_ADMIN = 'admin';
     const SCENARIO_USER = 'user';
 
+    public $q;
+
     /**
      * @inheritdoc
      */
@@ -25,10 +27,15 @@ class BlogPostSearch extends BlogPost
     {
         return [
             [['id', 'category_id', 'click', 'user_id', 'status'], 'integer'],
-            [['title'], 'string'],
+            [['title', 'q'], 'string'],
         ];
     }
 
+    public function formName(){
+        if($this->scenario == self::SCENARIO_USER){
+            return '';
+        } else return parent::formName();
+    }
     /**
      * @inheritdoc
      */
@@ -36,7 +43,7 @@ class BlogPostSearch extends BlogPost
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_ADMIN] = ['id', 'category_id', 'click', 'user_id', 'status', 'title'];
-        $scenarios[self::SCENARIO_USER] = ['category_id', 'title'];
+        $scenarios[self::SCENARIO_USER] = ['category_id', 'q'];
         return $scenarios;
     }
 
@@ -53,8 +60,8 @@ class BlogPostSearch extends BlogPost
         $query->orderBy(['created_at' => SORT_DESC]);
 
         if ($this->scenario == self::SCENARIO_USER) {
-            $query->andWhere(['{{%blog_post}}.status' => IActiveStatus::STATUS_ACTIVE])->innerJoinWith('category')
-                ->andWhere(['{{%blog_category}}.status' => IActiveStatus::STATUS_ACTIVE]);
+            $query->andWhere([BlogCategory::tableName() . '.status' => IActiveStatus::STATUS_ACTIVE])->innerJoinWith('category')
+                ->andWhere([BlogCategory::tableName() . '.status' => IActiveStatus::STATUS_ACTIVE]);
         }
 
         $dataProvider = new ActiveDataProvider([
@@ -68,23 +75,32 @@ class BlogPostSearch extends BlogPost
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
-            'category_id' => $this->category_id,
-        ]);
+
+        if ($this->scenario == self::SCENARIO_USER) {
+            if ($this->category_id) {
+                $query->andFilterWhere([$this::tableName() . '.category_id' => $this->category_id]);
+            }
+            $query
+                ->andFilterWhere(['like', $this::tableName() . '.title', $this->q])
+                ->orFilterWhere(['like', $this::tableName() . '.content', $this->q]);
+        }
+
 
         if ($this->scenario == self::SCENARIO_ADMIN) {
             $query->andFilterWhere([
-                'id' => $this->id,
-                'status' => $this->status,
-                'click' => $this->click,
-                'user_id' => $this->user_id,
-                'created_at' => $this->created_at,
-                'updated_at' => $this->updated_at,
+                $this::tableName() . '.category_id' => $this->category_id,
+
+                $this::tableName() . '.id' => $this->id,
+                $this::tableName() . '.status' => $this->status,
+                $this::tableName() . '.click' => $this->click,
+                $this::tableName() . '.user_id' => $this->user_id,
+                $this::tableName() . '.created_at' => $this->created_at,
+                $this::tableName() . '.updated_at' => $this->updated_at,
             ]);
-            $query->andFilterWhere(['like', 'title', $this->title])
-                ->andFilterWhere(['like', 'content', $this->content])
-                ->andFilterWhere(['like', 'tags', $this->tags])
-                ->andFilterWhere(['like', 'slug', $this->slug]);
+            $query
+                ->andFilterWhere(['like', $this::tableName() . '.slug', $this->slug])
+                ->andFilterWhere(['like', $this::tableName() . '.title', $this->title])
+                ->andFilterWhere(['like', $this::tableName() . '.content', $this->content]);
         }
 
         return $dataProvider;

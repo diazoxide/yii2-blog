@@ -12,6 +12,8 @@ use app\modules\blog\models\BlogPostSearch;
 use app\modules\blog\models\Status;
 use app\modules\blog\traits\IActiveStatus;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -19,6 +21,53 @@ use yii\web\NotFoundHttpException;
  */
 class BlogPostController extends BaseAdminController
 {
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'delete', 'create', 'update', 'view'],
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['BLOG_VIEW_POSTS']
+                    ],
+                    [
+                        'actions' => ['view'],
+                        'allow' => true,
+                        'roles' => ['BLOG_VIEW_POST']
+                    ],
+                    [
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'roles' => ['BLOG_DELETE_POST']
+                    ],
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['BLOG_CREATE_POST']
+                    ],
+                    [
+                        'actions' => ['update'],
+                        'allow' => true,
+                        'matchCallback' => function () {
+                            return Yii::$app->user->can('BLOG_UPDATE_OWN_POST', ['model' => $this->findModel(Yii::$app->request->getQueryParam('id'))])
+                                || Yii::$app->user->can('BLOG_UPDATE_POST');
+                        },
+
+                    ],
+
+                ],
+            ],
+        ];
+    }
     /**
      * Lists all BlogPost models.
      * @return mixed

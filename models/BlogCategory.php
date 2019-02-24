@@ -39,6 +39,8 @@ use yiidreamteam\upload\ImageUploadBehavior;
  *
  * @property BlogPost[] $blogPosts
  * @property string titleWithIcon
+ * @property string url
+ * @property BlogCategory childs
  */
 class BlogCategory extends \yii\db\ActiveRecord
 {
@@ -331,7 +333,7 @@ class BlogCategory extends \yii\db\ActiveRecord
             [['parent_id', 'is_nav', 'sort_order', 'page_size', 'status'], 'integer'],
             [['title'], 'required'],
             [['sort_order', 'page_size'], 'default', 'value' => 0],
-            [['title', 'template', 'redirect_url', 'slug','icon_class'], 'string', 'max' => 255],
+            [['title', 'template', 'redirect_url', 'slug', 'icon_class'], 'string', 'max' => 255],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
         ];
     }
@@ -372,7 +374,7 @@ class BlogCategory extends \yii\db\ActiveRecord
      */
     public function getChilds()
     {
-        return $this->hasMany(BlogCategory::class, ['parent_id' => 'id']);
+        return $this->hasMany(BlogCategory::class, ['parent_id' => 'id'])->orderBy(['sort_order' => SORT_ASC]);
     }
 
     /**
@@ -383,24 +385,29 @@ class BlogCategory extends \yii\db\ActiveRecord
         return $this->count(BlogPost::class, ['category_id' => 'id']);
     }
 
-    public static function getAllMenuItems()
+    public static function getAllMenuItems($subCats = false)
     {
         $items = [];
-        $model = self::find()->andWhere(['parent_id' => 0])->andWhere(['is_nav' => 1])->all();
+        $model = self::find()->andWhere(['parent_id' => 0])->orderBy(['sort_order' => SORT_DESC])->andWhere(['is_nav' => true])->all();
+        /** @var BlogCategory $item */
         foreach ($model as $item) {
-            $items[] = $item->getMenuItem();
+
+            $items[] = $item->getMenuItem($subCats);
         }
+
         return $items;
     }
 
-    public function getMenuItem()
+    public function getMenuItem($subCats = false)
     {
         $item = [
             'label' => $this->titleWithIcon,
             'url' => $this->url,
         ];
-        foreach ($this->childs as $child) {
-            $item['items'][] = $child->getMenuItem();
+        if($subCats) {
+            foreach ($this->childs as $child) {
+                $item['items'][] = $child->getMenuItem();
+            }
         }
         return $item;
     }
@@ -421,7 +428,7 @@ class BlogCategory extends \yii\db\ActiveRecord
 
     public function getUrl()
     {
-        return Yii::$app->getUrlManager()->createUrl(['blog/default/category', 'slug' => $this->slug]);
+        return Yii::$app->getUrlManager()->createUrl(['blog/default/archive', 'slug' => $this->slug]);
     }
 
     /**

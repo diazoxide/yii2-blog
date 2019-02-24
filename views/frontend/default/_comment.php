@@ -1,6 +1,6 @@
 <?php
 /**
- * Project: yii2-blog for internal using
+ * Project: yirmi2-blog for internal using
  * Author: akiraz2
  * Copyright (c) 2018.
  */

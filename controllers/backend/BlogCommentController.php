@@ -12,6 +12,8 @@ use app\modules\blog\models\BlogCommentSearch;
 use app\modules\blog\Module;
 use app\modules\blog\traits\IActiveStatus;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -19,6 +21,63 @@ use yii\web\NotFoundHttpException;
  */
 class BlogCommentController extends BaseAdminController
 {
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'delete', 'create', 'update', 'view','bulk','deleteAll','confirmAll'],
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['BLOG_VIEW_COMMENTS']
+                    ],
+                    [
+                        'actions' => ['view'],
+                        'allow' => true,
+                        'roles' => ['BLOG_VIEW_COMMENT']
+                    ],
+                    [
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'roles' => ['BLOG_DELETE_COMMENT']
+                    ],
+                    [
+                        'actions' => ['deleteAll'],
+                        'allow' => true,
+                        'roles' => ['BLOG_DELETE_ALL_COMMENTS']
+                    ],
+                    [
+                        'actions' => ['confirmAll'],
+                        'allow' => true,
+                        'roles' => ['BLOG_CONFIRM_ALL_COMMENTS']
+                    ],
+                    [
+                        'actions' => ['bulk'],
+                        'allow' => true,
+                        'roles' => ['BLOG_BULK_COMMENTS']
+                    ],
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['BLOG_CREATE_COMMENT']
+                    ],
+                    [
+                        'actions' => ['update'],
+                        'allow' => true,
+                        'roles' => ['BLOG_UPDATE_COMMENT']
+                    ],
+                ],
+            ],
+        ];
+    }
     /**
      * Lists all Comment models.
      * @return mixed

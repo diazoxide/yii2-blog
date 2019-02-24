@@ -8,6 +8,7 @@
 namespace app\modules\blog;
 
 use Yii;
+use yii\i18n\PhpMessageSource;
 
 class Module extends \yii\base\Module
 {
@@ -27,8 +28,11 @@ class Module extends \yii\base\Module
 
     public $enableComments = false;
 
-    public $showBannerInPost = false;
+    public $enableLocalComments = false;
 
+    public $enableFacebookComments = true;
+
+    public $showBannerInPost = false;
 
 
     public $blogViewLayout = null;
@@ -62,14 +66,44 @@ class Module extends \yii\base\Module
     public function init()
     {
         parent::init();
-
         if ($this->getIsBackend() === true) {
             $this->setViewPath('@app/modules/blog/views/backend');
         } else {
             $this->setViewPath('@app/modules/blog/views/frontend');
             $this->setLayoutPath('@app/modules/blog/views/frontend/layouts');
         }
+        $this->registerRedactorModule();
+        $this->registerTranslations();
+
     }
+
+    protected function registerRedactorModule()
+    {
+        $redactorModule = $this->redactorModule;
+        if ($this->getIsBackend() && !Yii::$app->hasModule($redactorModule)) {
+            Yii::$app->setModule($redactorModule, [
+                'class' => 'yii\redactor\RedactorModule',
+                'imageUploadRoute' => ['/blog/upload/image'],
+                'uploadDir' => $this->imgFilePath . '/upload/',
+                'uploadUrl' => $this->getImgFullPathUrl() . '/upload',
+                'imageAllowExtensions' => ['jpg', 'png', 'gif', 'svg']
+            ]);
+        }
+    }
+
+    protected function registerTranslations()
+    {
+        Yii::$app->i18n->translations['modules/blog'] = [
+            'class' => PhpMessageSource::class,
+            'basePath' => '@app/modules/blog/messages',
+            'forceTranslation' => true,
+            'fileMap' => [
+                'modules/blog' => 'blog.php',
+            ]
+        ];
+
+    }
+
 
     /**
      * Translates a message to the specified language.
@@ -99,7 +133,7 @@ class Module extends \yii\base\Module
      */
     public static function t($category, $message, $params = [], $language = null)
     {
-        return Yii::t('akiraz2/' . $category, $message, $params, $language);
+        return Yii::t('modules/' . $category, $message, $params, $language);
     }
 
     /**
@@ -125,5 +159,15 @@ class Module extends \yii\base\Module
     public function getImgFullPathUrl()
     {
         return \Yii::$app->get($this->urlManager)->getHostInfo() . $this->imgFileUrl;
+    }
+
+    public static function getBlogNavigation()
+    {
+        return [
+            ['label' => 'Posts', 'url' => ['/blog/blog-post'], 'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS")],
+            ['label' => 'Categories', 'url' => ['/blog/blog-category', 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")]],
+            ['label' => 'Comments', 'url' => ['/blog/blog-comment'], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
+            ['label' => 'Tags', 'url' => ['/blog/blog-tag'], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
+        ];
     }
 }

@@ -28,7 +28,7 @@ return [
     'Banner' => 'Баннер',
     'Blog' => 'Статьи',
     'Blog Category' => 'Категория блога',
-    'Blog Categorys' => 'Категории блога',
+    'Blog Categories' => 'Категории блога',
     'Blog Comment' => 'Комментарий блога',
     'Blog Comments' => 'Комментарии блога',
     'Blog Post' => 'Запись блога',

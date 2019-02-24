@@ -27,6 +27,8 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @property integer $id
  * @property integer $category_id
  * @property string $title
+ * @property string $url
+ * @method getThumbFileUrl($attribute, $thumbType)
  * @property string $content
  * @property string $brief
  * @property string $tags
@@ -69,20 +71,8 @@ class BlogPost extends \yii\db\ActiveRecord
                 'class' => SluggableBehavior::class,
                 'attribute' => 'title',
                 'slugAttribute' => 'slug',
-                'immutable'=>true
+                'immutable' => true
             ],
-//            'slug' => [
-//                'class' => 'Zelenin\yii\behaviors\Slug',
-//                'slugAttribute' => 'slug',
-//                'attribute' => 'title',
-//                // optional params
-//                'ensureUnique' => true,
-//                'replacement' => '-',
-//                'lowercase' => true,
-//                'immutable' => false,
-//                // If intl extension is enabled, see http://userguide.icu-project.org/transforms/general.
-//                'transliterateOptions' => 'Russian-Latin/BGN; Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFC;'
-//            ],
             [
                 'class' => AttributeBehavior::class,
                 'attributes' => [
@@ -96,7 +86,12 @@ class BlogPost extends \yii\db\ActiveRecord
                 'class' => ImageUploadBehavior::class,
                 'attribute' => 'banner',
                 'thumbs' => [
-                    'thumb' => ['width' => 400, 'height' => 300]
+                    'xsthumb' => ['width' => 64, 'height' => 64],
+                    'sthumb' => ['width' => 128, 'height' => 128],
+                    'mthumb' => ['width' => 240, 'height' => 240],
+                    'xthumb' => ['width' => 480, 'height' => 480],
+                    'thumb' => ['width' => 400, 'height' => 300],
+                    'facebook' => ['width' => 600, 'height' => 315],
                 ],
                 'filePath' => $this->module->imgFilePath . '/[[model]]/[[pk]].[[extension]]',
                 'fileUrl' => $this->module->getImgFullPathUrl() . '/[[model]]/[[pk]].[[extension]]',
@@ -116,7 +111,7 @@ class BlogPost extends \yii\db\ActiveRecord
             [['category_id', 'click', 'user_id', 'status'], 'integer'],
             [['brief', 'content'], 'string'],
             [['is_slide'], 'boolean'],
-            [['banner'], 'file', 'extensions' => 'jpg, png, webp', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
+            [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
             [['title', 'tags'], 'string', 'max' => 255],
             [['slug'], 'string', 'max' => 128],
             [['slug'], 'unique'],
@@ -131,7 +126,7 @@ class BlogPost extends \yii\db\ActiveRecord
     {
         return [
             'id' => Module::t('blog', 'ID'),
-            'category_id' => Module::t('blog', 'Category ID'),
+            'category_id' => Module::t('blog', 'Category'),
             'title' => Module::t('blog', 'Title'),
             'brief' => Module::t('blog', 'Brief'),
             'content' => Module::t('blog', 'Content'),
@@ -139,7 +134,7 @@ class BlogPost extends \yii\db\ActiveRecord
             'slug' => Module::t('blog', 'Slug'),
             'banner' => Module::t('blog', 'Banner'),
             'click' => Module::t('blog', 'Click'),
-            'user_id' => Module::t('blog', 'User ID'),
+            'user_id' => Module::t('blog', 'Author'),
             'status' => Module::t('blog', 'Status'),
             'created_at' => Module::t('blog', 'Created At'),
             'updated_at' => Module::t('blog', 'Updated At'),
@@ -237,6 +232,9 @@ class BlogPost extends \yii\db\ActiveRecord
      */
     public function getUrl()
     {
+        if($this->getModule()->getIsBackend()){
+            return Yii::$app->getUrlManager()->createUrl(['blog/blog-post/update', 'id'=>$this->id]);
+        }
         $year = date('Y', $this->created_at);
         $month = date('m', $this->created_at);
         $day = date('d', $this->created_at);
@@ -245,7 +243,13 @@ class BlogPost extends \yii\db\ActiveRecord
 
     public function getAbsoluteUrl()
     {
-        return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default/view', 'id' => $this->id, 'slug' => $this->slug]);
+        if($this->getModule()->getIsBackend()){
+             return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/blog-post/update', 'id'=>$this->id]);
+        }
+        $year = date('Y', $this->created_at);
+        $month = date('m', $this->created_at);
+        $day = date('d', $this->created_at);
+        return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default/view', 'year' => $year, 'month' => $month, 'day' => $day, 'slug' => $this->slug]);
     }
 
     /**
@@ -269,6 +273,16 @@ class BlogPost extends \yii\db\ActiveRecord
         $comment->status = IActiveStatus::STATUS_INACTIVE;
         $comment->post_id = $this->id;
         return $comment->save();
+    }
+
+    public function getCreatedRelativeTime()
+    {
+        return Yii::$app->formatter->format($this->created_at, 'relativeTime');
+    }
+
+    public function getUpdatedRelativeTime()
+    {
+        return Yii::$app->formatter->format($this->updated_at, 'relativeTime');
     }
 
     public function getSluga()

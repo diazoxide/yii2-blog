@@ -38,44 +38,30 @@ class DefaultController extends Controller
 
 
     public function actionIndex(){
-        $categories = BlogCategory::find()->where(['status' => IActiveStatus::STATUS_ACTIVE, 'is_nav' => BlogCategory::IS_NAV_YES])
-            ->orderBy(['sort_order' => SORT_ASC])->all();
-
-        $cat_items = ArrayHelper::toArray($categories, [
-            'app\modules\blog\models\BlogCategory' => [
-                'label' => 'title',
-                'url' => function ($cat) {
-                    return ['default/index', 'category_id' => $cat->id, 'slug' => $cat->slug];
-                },
-            ],
-        ]);
-
-        $searchModel = new BlogPostSearch();
-        $searchModel->scenario = BlogPostSearch::SCENARIO_USER;
-
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 
         return $this->render('home', [
-            'cat_items' => $cat_items,
-            'post_list' => $dataProvider
+
         ]);
 
     }
 
 
-    public function actionCategory($slug)
+    public function actionArchive()
     {
         $searchModel = new BlogPostSearch();
-        $searchModel->scenario = BlogPostSearch::SCENARIO_USER;
 
-        $category_id = BlogCategory::findOne(['slug'=>$slug])->id;
+        $searchModel->scenario = BlogPostSearch::SCENARIO_USER;
+        if(Yii::$app->request->getQueryParam('slug')) {
+            $category = BlogCategory::findOne(['slug' => Yii::$app->request->getQueryParam('slug')]);
+            $searchModel->category_id = $category->id;
+
+        }
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $dataProvider->query->andWhere(['category_id'=>$category_id]);
-
         return $this->render('index', [
+            'title' => isset($category) ? $category->title : "Գրառումներ",
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -85,6 +71,7 @@ class DefaultController extends Controller
      * @param $id
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionView($slug)
     {
@@ -93,6 +80,28 @@ class DefaultController extends Controller
         if ($post === null) {
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
+
+        if (Yii::$app->get('opengraph', false)) {
+            Yii::$app->opengraph->set([
+                'title' => $post->title,
+                'description' => $post->brief,
+                'image' => $post->getThumbFileUrl('banner','facebook'),
+                'imageWidth' => "600",
+                'imageHeight' => "315",
+            ]);
+        }
+
+        Yii::$app->view->registerMetaTag([
+            'name' => 'description',
+            'content' => $post->brief
+        ]);
+
+        Yii::$app->view->registerMetaTag([
+            'name' => 'keywords',
+            'content' => $post->title
+        ]);
+
+
 
         $post->updateCounters(['click' => 1]);
 

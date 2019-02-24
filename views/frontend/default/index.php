@@ -10,7 +10,8 @@ use yii\widgets\ListView;
 
 \app\modules\blog\assets\AppAsset::register($this);
 
-$this->title = Module::t('blog', 'Blog');
+$this->title = $title;
+
 Yii::$app->view->registerMetaTag([
     'name' => 'description',
     'content' => Yii::$app->name . ' ' . Module::t('blog', 'Blog')
@@ -27,12 +28,7 @@ if (Yii::$app->get('opengraph', false)) {
         //'image' => '',
     ]);
 }
-//$this->params['breadcrumbs'][] = '文章';
 
-/*$this->breadcrumbs=[
-    //$post->category->title => Yii::app()->createUrl('post/category', array('id'=>$post->category->id, 'slug'=>$post->category->slug)),
-    '文章',
-];*/
 
 ?>
 
@@ -42,13 +38,13 @@ if (Yii::$app->get('opengraph', false)) {
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1 class="title title--1"><?= Module::t('blog', 'Blog'); ?></h1>
+                    <h1 class="title title--1"><?= $title ?></h1>
                 </div>
             </div>
         
         </div>
     </div>
-    
+
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -56,8 +52,8 @@ if (Yii::$app->get('opengraph', false)) {
                 echo ListView::widget([
                     'dataProvider' => $dataProvider,
                     'itemView' => '_brief',
-                    'options' => [
-                        'class' => 'blog-list-view'
+                    'itemOptions'=>[
+                            'class'=>'col-sm-3 top-buffer-20'
                     ],
                     'layout' => '{items}{pager}{summary}'
                 ]);

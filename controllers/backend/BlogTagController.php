@@ -10,6 +10,8 @@ namespace app\modules\blog\controllers\backend;
 use app\modules\blog\models\BlogTag;
 use app\modules\blog\models\BlogTagSearch;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -17,6 +19,48 @@ use yii\web\NotFoundHttpException;
  */
 class BlogTagController extends BaseAdminController
 {
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'delete', 'create', 'update', 'view'],
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['BLOG_VIEW_TAGS']
+                    ],
+                    [
+                        'actions' => ['view'],
+                        'allow' => true,
+                        'roles' => ['BLOG_VIEW_TAG']
+                    ],
+                    [
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'roles' => ['BLOG_DELETE_TAG']
+                    ],
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['BLOG_CREATE_TAG']
+                    ],
+                    [
+                        'actions' => ['update'],
+                        'allow' => true,
+                        'roles' => ['BLOG_UPDATE_TAG']
+                    ],
+                ],
+            ],
+        ];
+    }
     /**
      * Lists all Tag models.
      * @return mixed

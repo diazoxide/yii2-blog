@@ -4,14 +4,54 @@ use app\modules\blog\Module;
 use yii\helpers\Html;
 
 ?>
-<section class="blog-default-index">
-    <h1>
-        <?= Module::t('blog', 'Welcome to Blog Module'); ?>
-    </h1>
+
+<div class="col-md-3">
+    <?php
+    $model = \app\modules\blog\models\BlogCategory::find()->limit(10)->orderBy(['sort_order' => SORT_DESC]);
+    echo Html::a('<i class="fa fa-list"></i> ' . Module::t('blog', 'Blog Categories') . ' (' . $model->count() . ')', ['/blog/blog-post']);
+    ?>
     <ul>
-        <li><?= Html::a(Module::t('blog', 'Blog Categorys'), ['/blog/blog-category']); ?></li>
-        <li><?= Html::a(Module::t('blog', 'Blog Posts'), ['/blog/blog-post']); ?></li>
-        <li><?= Html::a(Module::t('blog', 'Blog Comments'), ['/blog/blog-comment']); ?></li>
-        <li><?= Html::a(Module::t('blog', 'Blog Tags'), ['/blog/blog-tag']); ?></li>
+        <?php
+        /** @var \app\modules\blog\models\BlogCategory $item */
+        foreach ($model->all() as $item) {
+            echo Html::tag(
+                'li', Html::a($item->titleWithIcon, $item->url),
+                ['class' => '']
+            );
+        }
+        ?>
     </ul>
-</section>
+    <?= Html::a(Module::t('blog', 'See All'), ['/blog/blog-category'], ['class' => 'btn btn-warning']); ?>
+
+</div>
+<div class="col-md-3">
+    <?php
+    $model = \app\modules\blog\models\BlogPost::find()->limit(10)->orderBy(['id' => SORT_DESC]);
+    echo Html::a('<i class="fa fa-newspaper-o"></i> ' . Module::t('blog', 'Blog Posts') . ' (' . $model->count() . ')', ['/blog/blog-post']);
+    ?>
+    <ul>
+        <?php
+        /** @var \app\modules\blog\models\BlogPost $item */
+        foreach ($model->all() as $item) {
+            echo Html::tag(
+                'li',
+                Html::a(
+                        Html::img($item->getThumbFileUrl('banner', 'xsthumb'), ['width' => '16px', 'style' => 'float:left']) . ' ' .
+                    yii\helpers\StringHelper::truncate(Html::encode($item->title), 30, '...'),
+                    $item->absoluteUrl),
+                ['class' => '']
+            );
+        }
+        ?>
+    </ul>
+    <?= Html::a(Module::t('blog', 'See All'), ['/blog/blog-post'], ['class' => 'btn btn-warning']); ?>
+
+</div>
+<div class="col-md-3">
+    <i class="fa fa-comment"></i>
+    <?= Html::a(Module::t('blog', 'Blog Comments'), ['/blog/blog-comment']); ?>
+</div>
+<div class="col-md-3">
+    <i class="fa fa-tags"></i>
+    <?= Html::a(Module::t('blog', 'Blog Tags'), ['/blog/blog-tag']); ?>
+</div>

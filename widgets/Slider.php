@@ -103,7 +103,7 @@ class Slider extends \yii\bootstrap\Widget
     }
 
     public function getItems(){
-        $posts = \app\modules\blog\models\BlogPost::find()->where(['status' => IActiveStatus::STATUS_ACTIVE])->limit($this->itemsCount)->orderBy(['id' => SORT_DESC])->all();
+        $posts = \app\modules\blog\models\BlogPost::find()->where(['status' => IActiveStatus::STATUS_ACTIVE,'is_slide'=>true])->limit($this->itemsCount)->orderBy(['id' => SORT_DESC])->all();
         $items = [];
         foreach ($posts as $post) {
             $items[] = [

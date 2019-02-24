@@ -13,7 +13,7 @@ use yii\grid\GridView;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\modules\blog\models\BlogPostSearch */
+/* @var $searchModel app\modules\blog\models\BlogPostSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Module::t('blog', 'Blog Posts');
@@ -26,24 +26,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Module::t('blog', 'Create ') . Module::t('blog', 'Blog Post'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <?php \yii\widgets\Pjax::begin();?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\CheckboxColumn'],
-            [
-                'attribute' => 'category_id',
-                'value' => function ($model) {
-                    return $model->category->title;
-                },
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'category_id',
-                    BlogPost::getArrayCategory(),
-                    ['class' => 'form-control', 'prompt' => Module::t('blog', 'Please Filter')]
-                )
-            ],
             [
                 'attribute' => 'banner',
                 'value' => function ($model) {
@@ -52,7 +41,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'filter' => false
             ],
-            'title',
+            [
+                'attribute' => 'title',
+                'value' => function ($model) {
+                    return \yii\helpers\StringHelper::truncate(Html::encode($model->title), 50, "...");
+                }
+            ],
+            [
+                'attribute' => 'category_id',
+                'value' => function ($model) {
+                    return \yii\helpers\StringHelper::truncate(Html::encode($model->category->title), 50, "...");
+                },
+                'filter' => Html::activeDropDownList(
+                    $searchModel,
+                    'category_id',
+                    BlogPost::getArrayCategory(),
+                    ['class' => 'form-control', 'prompt' => Module::t('blog', 'Please Filter')]
+                )
+            ],
             'click',
             'commentsCount',
             [
@@ -76,10 +82,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'form-control', 'prompt' => Module::t('blog', 'PROMPT_STATUS')]
                 )
             ],
+            [
+                'attribute' => 'user_id',
+                'value'=>'user.username',
+                'filter' => Html::activeDropDownList(
+                    $searchModel,
+                    'user_id',
+                    \yii\helpers\ArrayHelper::map(\dektrium\user\models\User::find()->all(),'id','username'),
+                    ['class' => 'form-control', 'prompt' => Module::t('blog', 'Author')]
+                )
+            ],
             'created_at:date',
-            // 'update_time',
+            'updated_at:date',
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+    <?php \yii\widgets\Pjax::end();?>
 
 </div>
