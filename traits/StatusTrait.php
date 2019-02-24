@@ -2,7 +2,7 @@
 
 /**
  * Project: yii2-blog for internal using
- * Author: akiraz2
+ * Author: diazoxide
  * Copyright (c) 2018.
  */
 

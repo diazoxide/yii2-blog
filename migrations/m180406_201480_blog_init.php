@@ -1,7 +1,7 @@
 <?php
 /**
  * Project: yii2-blog for internal using
- * Author: akiraz2
+ * Author: diazoxide
  * Copyright (c) 2018.
  */
 
@@ -143,6 +143,7 @@ class m180406_201480_blog_init extends Migration
 
     /**
      * @return string SQL to insert first user
+     * @throws \yii\base\Exception
      */
     private function getUserSql()
     {
