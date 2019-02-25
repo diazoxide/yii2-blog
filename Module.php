@@ -59,6 +59,8 @@ class Module extends \yii\base\Module
     protected $_isBackend;
 
 
+
+    public $homeTitle = 'Blog';
     /**
      *
      */
@@ -66,10 +68,10 @@ class Module extends \yii\base\Module
     {
         parent::init();
         if ($this->getIsBackend() === true) {
-            $this->setViewPath('@app/modules/blog/views/backend');
+            $this->setViewPath('@vendor/diazoxide/yii2-blog/views/backend');
         } else {
-            $this->setViewPath('@app/modules/blog/views/frontend');
-            $this->setLayoutPath('@app/modules/blog/views/frontend/layouts');
+            $this->setViewPath('@vendor/diazoxide/yii2-blog/views/frontend');
+            $this->setLayoutPath('@vendor/diazoxide/yii2-blog/views/frontend/layouts');
         }
         $this->registerRedactorModule();
         $this->registerTranslations();

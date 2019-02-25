@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 
-$this->title = Yii::$app->params['home_title'];
+$this->title = $title;
 ?>
 
 <div class="row top-buffer-20-sm">

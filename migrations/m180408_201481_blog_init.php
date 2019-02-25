@@ -20,7 +20,7 @@ use yii\db\Schema;
  * - `{{%blog_comment}}` -
  * - `{{%blog_tag}}` -
  */
-class m180408_201480_blog_init extends Migration
+class m180408_201481_blog_init extends Migration
 {
     use \diazoxide\blog\traits\ModuleTrait;
 
@@ -81,8 +81,44 @@ class m180408_201480_blog_init extends Migration
             'BLOG_VIEW_TAG',
             'BLOG_VIEW_TAGS',
         ]],
-        ['BLOG_MANAGER', 'Blog Manager'],
-        ['BLOG_EDITOR', 'Blog Editor'],
+        ['BLOG_MANAGER', 'Blog Manager', [
+            'BLOG_BULK_COMMENTS',
+            'BLOG_CONFIRM_ALL_COMMENTS',
+            'BLOG_CREATE_CATEGORY',
+            'BLOG_CREATE_COMMENT',
+            'BLOG_CREATE_POST',
+            'BLOG_CREATE_TAG',
+            'BLOG_DELETE_ALL_COMMENTS',
+            'BLOG_DELETE_CATEGORY',
+            'BLOG_DELETE_COMMENT',
+            'BLOG_DELETE_POST',
+            'BLOG_DELETE_TAG',
+            'BLOG_UPDATE_CATEGORY',
+            'BLOG_UPDATE_COMMENT',
+            'BLOG_UPDATE_OWN_POST',
+            'BLOG_UPDATE_POST',
+            'BLOG_UPDATE_TAG',
+            'BLOG_VIEW_CATEGORIES',
+            'BLOG_VIEW_CATEGORY',
+            'BLOG_VIEW_COMMENT',
+            'BLOG_VIEW_COMMENTS',
+            'BLOG_VIEW_POST',
+            'BLOG_VIEW_POSTS',
+            'BLOG_VIEW_TAG',
+            'BLOG_VIEW_TAGS',
+        ]],
+        ['BLOG_EDITOR', 'Blog Editor', [
+            'BLOG_CREATE_POST',
+            'BLOG_UPDATE_OWN_POST',
+            'BLOG_VIEW_CATEGORIES',
+            'BLOG_VIEW_CATEGORY',
+            'BLOG_VIEW_COMMENT',
+            'BLOG_VIEW_COMMENTS',
+            'BLOG_VIEW_POST',
+            'BLOG_VIEW_POSTS',
+            'BLOG_VIEW_TAG',
+            'BLOG_VIEW_TAGS',
+        ]],
     ];
 
     /**
@@ -91,7 +127,6 @@ class m180408_201480_blog_init extends Migration
      */
     public function up()
     {
-
         $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
 
         if ($this->db->getTableSchema('{{%blog_category}}', true) === null) {
