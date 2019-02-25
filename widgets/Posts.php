@@ -84,7 +84,7 @@ class Posts extends \yii\bootstrap\Widget
                 'class' => "post_widget"
             ],
             'layout' => "{items}",
-            'itemView' => '@app/modules/blog/widgets/views/_post_item',
+            'itemView' => '@diazoxide/yii2-blog/widgets/views/_post_item',
             'viewParams' => [
                 'showBrief' => $this->showBrief,
                 'briefLength' => $this->briefLength,
