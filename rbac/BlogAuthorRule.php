@@ -1,5 +1,5 @@
 <?php
-namespace diazoxide\rbac;
+namespace diazoxide\blog\rbac;
 
 use yii\rbac\Item;
 use yii\rbac\Rule;
@@ -7,9 +7,9 @@ use yii\rbac\Rule;
 /**
  * Checks if authorID matches user passed via params
  */
-class AuthorRule extends Rule
+class BlogAuthorRule extends Rule
 {
-    public $name = 'isAuthor';
+    public $name = 'blogIsAuthor';
 
     /**
      * @param string|int $user the user ID.
