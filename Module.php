@@ -7,6 +7,7 @@
 
 namespace diazoxide\blog;
 
+use diazoxide\blog\assets\AppAsset;
 use Yii;
 use yii\i18n\PhpMessageSource;
 
@@ -74,6 +75,9 @@ class Module extends \yii\base\Module
         } else {
             $this->setViewPath('@vendor/diazoxide/yii2-blog/views/frontend');
             $this->setLayoutPath('@vendor/diazoxide/yii2-blog/views/frontend/layouts');
+
+            AppAsset::register(Yii::$app->view);
+
         }
         $this->registerRedactorModule();
         $this->registerTranslations();

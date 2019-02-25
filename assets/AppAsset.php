@@ -11,7 +11,7 @@ use yii\web\AssetBundle;
 
 class AppAsset extends AssetBundle
 {
-    public $sourcePath = '@app/modules/blog/assets/default';
+    public $sourcePath = '@vendor/diazoxide/yii2-blog/assets/default';
     public $baseUrl = '@web';
     public $css = [
         'css/blog-style.css',
@@ -20,6 +20,7 @@ class AppAsset extends AssetBundle
     ];
     public $depends = [
         'yii\bootstrap\BootstrapAsset',
-        'diazoxide\assets\StickySidebarAsset',
+        'diazoxide\blog\assets\StickySidebarAsset',
+        'diazoxide\blog\assets\StickySidebarAsset',
     ];
 }
