@@ -185,6 +185,8 @@ class m180406_201480_blog_init extends Migration
 
         $roles = $this->getModule()->roles;
 
+        print_r($roles);
+
         foreach ($roles as $role) {
             $createPost = $auth->createPermission($role[0]);
             $createPost->description = $role[1];
