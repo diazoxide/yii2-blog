@@ -195,16 +195,15 @@ class m180406_201480_blog_init extends Migration
 
         foreach ($this->permissions as $permission) {
 
-            $auth->remove($permission[0]);
             $p = $auth->createPermission($permission[0]);
             $p->description = $permission[1];
             if (isset($permission[2])) {
                 foreach ($permission[2] as $ruleClass) {
                     $rule = new $ruleClass;
-                    $auth->add($rule);
                     $p->ruleName = $rule->name;
                 }
             }
+            $auth->remove($p);
             $auth->add($p);
         }
 
@@ -219,11 +218,10 @@ class m180406_201480_blog_init extends Migration
         $auth = Yii::$app->authManager;
 
         foreach ($this->roles as $role) {
-            $auth->remove($role[0]);
-
             if ($auth->getRole($role[0]) == null) {
                 $r = $auth->createPermission($role[0]);
                 $r->description = $role[1];
+                $auth->remove($r);
                 $auth->add($r);
             }
         }
