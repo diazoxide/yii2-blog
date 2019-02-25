@@ -193,23 +193,22 @@ class m180406_201480_blog_init extends Migration
     {
         $auth = Yii::$app->authManager;
 
-        $permissions = $this->permissions;
+        foreach ($this->permissions as $permission) {
 
-        foreach ($permissions as $permission) {
-            if ($auth->getPermission($permission[0]) == null) {
-                $p = $auth->createPermission($permission[0]);
-                $p->description = $permission[1];
-                if (isset($permission[2])) {
-                    foreach ($permission[2] as $ruleClass) {
-                        $rule = new $ruleClass;
-                        $auth->add($rule);
-                        $p->ruleName = $rule->name;
-                    }
+            $auth->remove($permission[0]);
+            $p = $auth->createPermission($permission[0]);
+            $p->description = $permission[1];
+            if (isset($permission[2])) {
+                foreach ($permission[2] as $ruleClass) {
+                    $rule = new $ruleClass;
+                    $auth->add($rule);
+                    $p->ruleName = $rule->name;
                 }
-                $auth->add($p);
             }
-
+            $auth->add($p);
         }
+
+
     }
 
     /**
@@ -219,11 +218,9 @@ class m180406_201480_blog_init extends Migration
     {
         $auth = Yii::$app->authManager;
 
-        $roles = $this->roles;
+        foreach ($this->roles as $role) {
+            $auth->remove($role[0]);
 
-        print_r($roles);
-
-        foreach ($roles as $role) {
             if ($auth->getRole($role[0]) == null) {
                 $r = $auth->createPermission($role[0]);
                 $r->description = $role[1];
