@@ -109,7 +109,7 @@ class Feed extends \yii\bootstrap\Widget
             ],
             'itemOptions' =>$this->articleOptions,
             'layout' => "{items}" . ($this->showPager ? "{pager}" : ""),
-            'itemView' => '@app/modules/blog/widgets/views/_feed_item',
+            'itemView' => '@diazoxide/yii2-blog/widgets/views/_feed_item',
             'viewParams' => [
                 'showBrief' => $this->showBrief,
                 'imageType' => $this->itemImageType,
