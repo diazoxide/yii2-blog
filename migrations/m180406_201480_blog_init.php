@@ -30,9 +30,11 @@ class m180406_201480_blog_init extends Migration
      */
     public function up()
     {
+
+        $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
+
         if ($this->db->getTableSchema('{{%blog_category}}', true) === null) {
             // MySql table options
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
 
             // table blog_category
             $this->createTable(
