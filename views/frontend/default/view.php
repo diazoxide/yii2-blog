@@ -114,9 +114,12 @@ $username_attribute = Module::getInstance()->userName;
 
 <section id="blog-post__bottom_ad">
     <?php
-    $banners = Yii::$app->params['middle_banners'];
-    $banner = $banners[(rand(0, (count($banners) - 1)))];
-    echo Html::a(Html::img($banner['src'], ['class' => 'img-responsive', 'style' => 'width:100%']), $banner['href']);
+    $banner = isset($banners['in_post']) ?  $banners['in_post'] : '';
+    if(is_array($banner)) {
+        echo Html::a(Html::img($banner['src'], ['class' => 'img-responsive', 'style' => 'width:100%']), $banner['href']);
+    } else {
+        echo $banner;
+    }
     ?>
 </section>
 

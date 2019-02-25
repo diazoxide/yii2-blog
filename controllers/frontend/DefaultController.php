@@ -122,6 +122,8 @@ class DefaultController extends Controller
             'post' => $post,
             'dataProvider' => $dataProvider,
             'comment' => $comment,
+            'banners' => $this->getModule()->banners,
+
         ]);
     }
 }
