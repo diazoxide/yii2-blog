@@ -8,6 +8,7 @@
 namespace diazoxide\blog;
 
 use diazoxide\blog\assets\AppAsset;
+use diazoxide\blog\components\OpenGraph;
 use Yii;
 use yii\i18n\PhpMessageSource;
 
@@ -176,5 +177,11 @@ class Module extends \yii\base\Module
             ['label' => 'Comments', 'url' => ['/blog/blog-comment'], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
             ['label' => 'Tags', 'url' => ['/blog/blog-tag'], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
         ];
+    }
+
+    public function getOpenGraph(){
+        $opengraph = new OpenGraph();
+        $opengraph->title = $this->homeTitle;
+        return $opengraph;
     }
 }

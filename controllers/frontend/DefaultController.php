@@ -37,12 +37,13 @@ class DefaultController extends Controller
     }
 
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
 
         return $this->render('home', [
-            'title'=>$this->getModule()->homeTitle,
-            'banners'=>$this->getModule()->banners,
+            'title' => $this->getModule()->homeTitle,
+            'banners' => $this->getModule()->banners,
         ]);
 
     }
@@ -53,7 +54,7 @@ class DefaultController extends Controller
         $searchModel = new BlogPostSearch();
 
         $searchModel->scenario = BlogPostSearch::SCENARIO_USER;
-        if(Yii::$app->request->getQueryParam('slug')) {
+        if (Yii::$app->request->getQueryParam('slug')) {
             $category = BlogCategory::findOne(['slug' => Yii::$app->request->getQueryParam('slug')]);
             $searchModel->category_id = $category->id;
 
@@ -82,15 +83,14 @@ class DefaultController extends Controller
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
 
-        if (Yii::$app->get('opengraph', false)) {
-            Yii::$app->opengraph->set([
-                'title' => $post->title,
-                'description' => $post->brief,
-                'image' => $post->getThumbFileUrl('banner','facebook'),
-                'imageWidth' => "600",
-                'imageHeight' => "315",
-            ]);
-        }
+       $this->getModule()->openGraph->set([
+            'title' => $post->title,
+            'description' => $post->brief,
+            'image' => $post->getThumbFileUrl('banner', 'facebook'),
+            'imageWidth' => "600",
+            'imageHeight' => "315",
+        ]);
+
 
         Yii::$app->view->registerMetaTag([
             'name' => 'description',
@@ -101,7 +101,6 @@ class DefaultController extends Controller
             'name' => 'keywords',
             'content' => $post->title
         ]);
-
 
 
         $post->updateCounters(['click' => 1]);
