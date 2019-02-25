@@ -169,8 +169,8 @@ class BlogPost extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        if (\dektrium\user\models\User) {
-            return $this->hasOne(\dektrium\user\models\User::className(), ['id' => 'user_id']);
+        if (\dektrium\user\models\User::class) {
+            return $this->hasOne(\dektrium\user\models\User::class, ['id' => 'user_id']);
         }
         return null;
     }
