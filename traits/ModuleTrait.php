@@ -3,6 +3,8 @@
 namespace diazoxide\blog\traits;
 
 
+use Yii;
+
 trait ModuleTrait
 {
     /**
@@ -10,7 +12,7 @@ trait ModuleTrait
      */
     public function getModule()
     {
-        return \Yii::$app->getModule('blog');
+        return Yii::$app->getModule('blog');
     }
 
 }

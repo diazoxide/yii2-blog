@@ -100,12 +100,12 @@ class Module extends \yii\base\Module
 
     protected function registerTranslations()
     {
-        Yii::$app->i18n->translations['modules/blog'] = [
+        Yii::$app->i18n->translations['diazoxide/blog'] = [
             'class' => PhpMessageSource::class,
-            'basePath' => '@app/modules/blog/messages',
+            'basePath' => '@vendor/diazoxide/yii2-blog/messages',
             'forceTranslation' => true,
             'fileMap' => [
-                'modules/blog' => 'blog.php',
+                'diazoxide/blog' => 'blog.php',
             ]
         ];
 
@@ -140,7 +140,7 @@ class Module extends \yii\base\Module
      */
     public static function t($category, $message, $params = [], $language = null)
     {
-        return Yii::t('modules/' . $category, $message, $params, $language);
+        return Yii::t('diazoxide/' . $category, $message, $params, $language);
     }
 
     /**

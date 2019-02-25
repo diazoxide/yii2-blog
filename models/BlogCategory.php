@@ -404,7 +404,7 @@ class BlogCategory extends \yii\db\ActiveRecord
             'label' => $this->titleWithIcon,
             'url' => $this->url,
         ];
-        if($subCats) {
+        if ($subCats) {
             foreach ($this->childs as $child) {
                 $item['items'][] = $child->getMenuItem();
             }

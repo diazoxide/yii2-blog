@@ -20,7 +20,7 @@ use yii\db\Schema;
  * - `{{%blog_comment}}` -
  * - `{{%blog_tag}}` -
  */
-class m180408_201481_blog_init extends Migration
+class m180408_201482_blog_init extends Migration
 {
     use \diazoxide\blog\traits\ModuleTrait;
 
@@ -140,6 +140,7 @@ class m180408_201481_blog_init extends Migration
                     'parent_id' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0',
                     'title' => Schema::TYPE_STRING . '(255) NOT NULL',
                     'slug' => Schema::TYPE_STRING . '(128) NOT NULL',
+                    'icon_class' => Schema::TYPE_STRING . '(255) DEFAULT NULL',
                     'banner' => Schema::TYPE_STRING . '(255) ',
                     'is_nav' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
                     'sort_order' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 50',
@@ -193,10 +194,10 @@ class m180408_201481_blog_init extends Migration
 
             // Foreign Keys
             $this->addForeignKey('{{%FK_post_category}}', '{{%blog_post}}', 'category_id', '{{%blog_category}}', 'id', 'CASCADE', 'CASCADE');
-            if ($this->getModule()->userModel) {
-                $userClass = $this->getModule()->userModel;
-                $this->addForeignKey('{{%FK_post_user}}', '{{%blog_post}}', 'user_id', $userClass::tableName(), $this->getModule()->userPK, 'CASCADE', 'CASCADE');
-            }
+            $userClass = \dektrium\user\models\User;
+            $userPK = 'id';
+            $this->addForeignKey('{{%FK_post_user}}', '{{%blog_post}}', 'user_id', $userClass::tableName(), $userPK, 'CASCADE', 'CASCADE');
+
         }
 
         if ($this->db->getTableSchema('{{%blog_comment}}', true) === null) {
