@@ -103,7 +103,7 @@ class m180406_201480_blog_init extends Migration
             }
         }
 
-        if ($this->db->getTableSchema('{{%blog_comments}}', true) === null) {
+        if ($this->db->getTableSchema('{{%blog_comment}}', true) === null) {
 
             // table blog_comment
             $this->createTable(
