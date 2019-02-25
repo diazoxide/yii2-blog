@@ -21,6 +21,7 @@
       "email": "diazoxide@gmail.com"
     }
   ],
+
   "require": {
     "yiisoft/yii2": "*",
     "diazoxide/yii2-revslider": "*",
