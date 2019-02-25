@@ -62,84 +62,81 @@ class m180406_201480_blog_init extends Migration
 
 
         // table blog_post
-        try {
-            $this->createTable(
-                '{{%blog_post}}',
-                [
-                    'id' => Schema::TYPE_PK,
-                    'category_id' => Schema::TYPE_INTEGER . ' NOT NULL',
-                    'title' => Schema::TYPE_STRING . '(255) NOT NULL',
-                    'brief' => Schema::TYPE_TEXT,
-                    'content' => Schema::TYPE_TEXT . ' NOT NULL',
-                    'tags' => Schema::TYPE_STRING . '(255) NOT NULL',
-                    'slug' => Schema::TYPE_STRING . '(128) NOT NULL',
-                    'banner' => Schema::TYPE_STRING . '(255) ',
-                    'is_slide' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
-                    'click' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0',
-                    'user_id' => Schema::TYPE_INTEGER . '',
-                    'status' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
-                    'created_at' => Schema::TYPE_INTEGER . ' NOT NULL',
-                    'updated_at' => Schema::TYPE_INTEGER . ' NOT NULL'
-                ],
-                $tableOptions
-            );
+        $this->createTable(
+            '{{%blog_post}}',
+            [
+                'id' => Schema::TYPE_PK,
+                'category_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+                'title' => Schema::TYPE_STRING . '(255) NOT NULL',
+                'brief' => Schema::TYPE_TEXT,
+                'content' => Schema::TYPE_TEXT . ' NOT NULL',
+                'tags' => Schema::TYPE_STRING . '(255) NOT NULL',
+                'slug' => Schema::TYPE_STRING . '(128) NOT NULL',
+                'banner' => Schema::TYPE_STRING . '(255) ',
+                'is_slide' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
+                'click' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0',
+                'user_id' => Schema::TYPE_INTEGER . '',
+                'status' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
+                'created_at' => Schema::TYPE_INTEGER . ' NOT NULL',
+                'updated_at' => Schema::TYPE_INTEGER . ' NOT NULL'
+            ],
+            $tableOptions
+        );
 
-            // Indexes
-            $this->createIndex('category_id', '{{%blog_post}}', 'category_id');
-            $this->createIndex('is_nav', '{{%blog_post}}', 'is_slide');
-            $this->createIndex('status', '{{%blog_post}}', 'status');
-            $this->createIndex('created_at', '{{%blog_post}}', 'created_at');
+        // Indexes
+        $this->createIndex('category_id', '{{%blog_post}}', 'category_id');
+        $this->createIndex('is_nav', '{{%blog_post}}', 'is_slide');
+        $this->createIndex('status', '{{%blog_post}}', 'status');
+        $this->createIndex('created_at', '{{%blog_post}}', 'created_at');
 
-            // Foreign Keys
-            $this->addForeignKey('{{%FK_post_category}}', '{{%blog_post}}', 'category_id', '{{%blog_category}}', 'id', 'CASCADE', 'CASCADE');
-            if ($this->getModule()->userModel) {
-                $userClass = $this->getModule()->userModel;
-                $this->addForeignKey('{{%FK_post_user}}', '{{%blog_post}}', 'user_id', $userClass::tableName(), $this->getModule()->userPK, 'CASCADE', 'CASCADE');
-            }
-
-
-            // table blog_comment
-            $this->createTable(
-                '{{%blog_comment}}',
-                [
-                    'id' => Schema::TYPE_PK,
-                    'post_id' => Schema::TYPE_INTEGER . ' NOT NULL',
-                    'content' => Schema::TYPE_TEXT . ' NOT NULL',
-                    'author' => Schema::TYPE_STRING . '(128) NOT NULL',
-                    'email' => Schema::TYPE_STRING . '(128) NOT NULL',
-                    'url' => Schema::TYPE_STRING . '(128) NULL',
-                    'status' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
-                    'created_at' => Schema::TYPE_INTEGER . ' NOT NULL',
-                    'updated_at' => Schema::TYPE_INTEGER . ' NOT NULL'
-                ],
-                $tableOptions
-            );
-
-            // Indexes
-            $this->createIndex('post_id', '{{%blog_comment}}', 'post_id');
-            $this->createIndex('status', '{{%blog_comment}}', 'status');
-            $this->createIndex('created_at', '{{%blog_comment}}', 'created_at');
-
-            // Foreign Keys
-            $this->addForeignKey('{{%FK_comment_post}}', '{{%blog_comment}}', 'post_id', '{{%blog_post}}', 'id', 'CASCADE', 'CASCADE');
-
-
-            // table blog_tag
-            $this->createTable(
-                '{{%blog_tag}}',
-                [
-                    'id' => Schema::TYPE_PK,
-                    'name' => Schema::TYPE_STRING . '(128) NOT NULL',
-                    'frequency' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
-                ],
-                $tableOptions
-            );
-
-            // Indexes
-            $this->createIndex('frequency', '{{%blog_tag}}', 'frequency');
-        } catch (Exception $exception) {
-
+        // Foreign Keys
+        $this->addForeignKey('{{%FK_post_category}}', '{{%blog_post}}', 'category_id', '{{%blog_category}}', 'id', 'CASCADE', 'CASCADE');
+        if ($this->getModule()->userModel) {
+            $userClass = $this->getModule()->userModel;
+            $this->addForeignKey('{{%FK_post_user}}', '{{%blog_post}}', 'user_id', $userClass::tableName(), $this->getModule()->userPK, 'CASCADE', 'CASCADE');
         }
+
+
+        // table blog_comment
+        $this->createTable(
+            '{{%blog_comment}}',
+            [
+                'id' => Schema::TYPE_PK,
+                'post_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+                'content' => Schema::TYPE_TEXT . ' NOT NULL',
+                'author' => Schema::TYPE_STRING . '(128) NOT NULL',
+                'email' => Schema::TYPE_STRING . '(128) NOT NULL',
+                'url' => Schema::TYPE_STRING . '(128) NULL',
+                'status' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
+                'created_at' => Schema::TYPE_INTEGER . ' NOT NULL',
+                'updated_at' => Schema::TYPE_INTEGER . ' NOT NULL'
+            ],
+            $tableOptions
+        );
+
+        // Indexes
+        $this->createIndex('post_id', '{{%blog_comment}}', 'post_id');
+        $this->createIndex('status', '{{%blog_comment}}', 'status');
+        $this->createIndex('created_at', '{{%blog_comment}}', 'created_at');
+
+        // Foreign Keys
+        $this->addForeignKey('{{%FK_comment_post}}', '{{%blog_comment}}', 'post_id', '{{%blog_post}}', 'id', 'CASCADE', 'CASCADE');
+
+
+        // table blog_tag
+        $this->createTable(
+            '{{%blog_tag}}',
+            [
+                'id' => Schema::TYPE_PK,
+                'name' => Schema::TYPE_STRING . '(128) NOT NULL',
+                'frequency' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
+            ],
+            $tableOptions
+        );
+
+        // Indexes
+        $this->createIndex('frequency', '{{%blog_tag}}', 'frequency');
+
         $this->registerRoles();
 
         $this->registerPermissions();
@@ -148,17 +145,16 @@ class m180406_201480_blog_init extends Migration
     /**
      * @throws Exception
      */
-    public function registerPermissions()
-    {
+    public function registerPermissions(){
         $auth = Yii::$app->authManager;
 
         $permissions = $this->getModule()->permissions;
 
-        foreach ($permissions as $permission) {
+        foreach($permissions as $permission){
             $p = $auth->createPermission($permission[0]);
             $p->description = $permission[1];
-            if (isset($permission[2])) {
-                foreach ($permission[2] as $ruleClass) {
+            if(isset($permission[2])){
+                foreach ($permission[2] as $ruleClass){
                     $rule = new $ruleClass;
                     $auth->add($rule);
                     $p->ruleName = $rule->name;
@@ -171,13 +167,12 @@ class m180406_201480_blog_init extends Migration
     /**
      * @throws Exception
      */
-    public function registerRoles()
-    {
+    public function registerRoles(){
         $auth = Yii::$app->authManager;
 
         $roles = $this->getModule()->roles;
 
-        foreach ($roles as $role) {
+        foreach($roles as $role){
             $createPost = $auth->createPermission($role[0]);
             $createPost->description = $role[1];
             $auth->add($createPost);
