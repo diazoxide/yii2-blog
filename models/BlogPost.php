@@ -169,8 +169,8 @@ class BlogPost extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        if ($this->getModule()->userModel) {
-            return $this->hasOne($this->getModule()->userModel::className(), [$this->getModule()->userPK => 'user_id']);
+        if (\dektrium\user\models\User) {
+            return $this->hasOne(\dektrium\user\models\User::className(), ['id' => 'user_id']);
         }
         return null;
     }
@@ -232,8 +232,8 @@ class BlogPost extends \yii\db\ActiveRecord
      */
     public function getUrl()
     {
-        if($this->getModule()->getIsBackend()){
-            return Yii::$app->getUrlManager()->createUrl(['blog/blog-post/update', 'id'=>$this->id]);
+        if ($this->getModule()->getIsBackend()) {
+            return Yii::$app->getUrlManager()->createUrl(['blog/blog-post/update', 'id' => $this->id]);
         }
         $year = date('Y', $this->created_at);
         $month = date('m', $this->created_at);
@@ -243,8 +243,8 @@ class BlogPost extends \yii\db\ActiveRecord
 
     public function getAbsoluteUrl()
     {
-        if($this->getModule()->getIsBackend()){
-             return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/blog-post/update', 'id'=>$this->id]);
+        if ($this->getModule()->getIsBackend()) {
+            return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/blog-post/update', 'id' => $this->id]);
         }
         $year = date('Y', $this->created_at);
         $month = date('m', $this->created_at);
