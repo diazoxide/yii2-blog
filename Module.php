@@ -58,7 +58,6 @@ class Module extends \yii\base\Module
 
     protected $_isBackend;
 
-
     public $permissions = [
         ['BLOG_BULK_COMMENTS','Bulk blog comments'],
         ['BLOG_CONFIRM_ALL_COMMENTS','Confirm all blog comments'],

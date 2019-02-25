@@ -2,12 +2,11 @@
 
 namespace diazoxide\blog\traits;
 
-use diazoxide\blog\Module;
 
 trait ModuleTrait
 {
     /**
-     * @return Module
+     * @return  \diazoxide\blog\Module
      */
     public function getModule()
     {
