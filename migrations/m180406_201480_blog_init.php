@@ -225,9 +225,9 @@ class m180406_201480_blog_init extends Migration
 
         foreach ($roles as $role) {
             if ($auth->getRole($role[0]) == null) {
-                $createPost = $auth->createPermission($role[0]);
-                $createPost->description = $role[1];
-                $auth->add($createPost);
+                $r = $auth->createPermission($role[0]);
+                $r->description = $role[1];
+                $auth->add($r);
             }
         }
     }
