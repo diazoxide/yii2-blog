@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 
+/** @var String $title */
+/** @var array $banners */
 $this->title = $title;
 ?>
 
@@ -18,7 +20,7 @@ $this->title = $title;
                 ) ?>
             </div>
             <div class="col-lg-2 nopadding">
-                <?= Yii::$app->params['banners']['weather'] ?>
+                <?= isset($banners[0]) ? $banners[0] : \diazoxide\blog\Module::t('blog', "Insert Banner Code"); ?>
             </div>
         </div>
 
@@ -163,9 +165,12 @@ $this->title = $title;
 
                 <div id="home_feed_ad" class="visible-lg visible-md">
                     <?php
-                    $banners = Yii::$app->params['middle_banners'];
-                    $banner = $banners[(rand(0, (count($banners) - 1)))];
-                    echo Html::a(Html::img($banner['src'], ['class' => 'img-responsive']), $banner['href']);
+                    if (isset($banners[1])) {
+                        $banner = $banners[1];
+                        echo Html::a(Html::img($banner['src'], ['class' => 'img-responsive']), $banner['href']);
+                    } else {
+                        echo \diazoxide\blog\Module::t('blog', "Insert Banner Code");
+                    }
                     ?>
                 </div>
                 <div class="widget_title"><i class="fa fa-newspaper-o"></i> Լրահոս</div>
@@ -176,11 +181,10 @@ $this->title = $title;
                     'briefLength' => 50,
                     'infiniteScroll' => true,
                     'id' => 'home_feed_widget',
-                    'itemImageType'=>'xsthumb',
+                    'itemImageType' => 'xsthumb',
                     'itemImageContainerOptions' => ['class' => 'col-xs-2 nospaces'],
                     'itemContentContainerOptions' => ['class' => 'col-xs-10 nospaces'],
-                    'articleOptions'=>['tag'=>'article','class' => 'item col-xs-12 top-buffer-20-xs left-padding-0-xs right-padding-10-xs'],
-
+                    'articleOptions' => ['tag' => 'article', 'class' => 'item col-xs-12 top-buffer-20-xs left-padding-0-xs right-padding-10-xs'],
                 ]);
                 ?>
             </div>
@@ -205,6 +209,7 @@ function fixFeedHeight(){
       var widget = $('#home_feed .feed-widget-listview');
       widget.height(widgetHeight);
 }
+
 $(window).on('load ready resize', fixFeedHeight);
 $(document).ready(fixFeedHeight);
 

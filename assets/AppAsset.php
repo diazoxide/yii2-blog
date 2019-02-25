@@ -20,5 +20,6 @@ class AppAsset extends AssetBundle
     ];
     public $depends = [
         'yii\bootstrap\BootstrapAsset',
+        'diazoxide\assets\StickySidebarAsset',
     ];
 }

@@ -18,7 +18,7 @@ class Slider extends \yii\bootstrap\Widget
     {
         parent::init();
 
-        echo \app\modules\SliderRevolution\widgets\Slider::widget([
+        echo \diazoxide\revslider\widgets\Slider::widget([
 
             'items' => $this->getItems(),
             'config' => [

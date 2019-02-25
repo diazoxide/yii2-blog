@@ -61,6 +61,8 @@ class Module extends \yii\base\Module
 
 
     public $homeTitle = 'Blog';
+
+    public $banners = [];
     /**
      *
      */

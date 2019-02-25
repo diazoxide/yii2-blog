@@ -41,7 +41,8 @@ class DefaultController extends Controller
 
 
         return $this->render('home', [
-            'title'=>$this->getModule()->homeTitle
+            'title'=>$this->getModule()->homeTitle,
+            'banners'=>$this->getModule()->banners,
         ]);
 
     }
