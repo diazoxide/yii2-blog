@@ -38,7 +38,7 @@ class m180406_201480_blog_init extends Migration
         ['BLOG_DELETE_TAG','Delete blog tag'],
         ['BLOG_UPDATE_CATEGORY','Update blog cateogry'],
         ['BLOG_UPDATE_COMMENT','Update comment'],
-        ['BLOG_UPDATE_OWN_POST','Update own blog post',['diazoxide\blog\bac\AuthorRule']],
+        ['BLOG_UPDATE_OWN_POST','Update own blog post',['diazoxide\blog\rbac\AuthorRule']],
         ['BLOG_UPDATE_POST','Update blog post'],
         ['BLOG_UPDATE_TAG','Update blog tag'],
         ['BLOG_VIEW_CATEGORIES','View blog categories'],
