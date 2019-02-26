@@ -368,6 +368,7 @@ class BlogCategory extends \yii\db\ActiveRecord
             'banner' => Module::t('blog', 'Banner'),
             'icon_class' => Module::t('blog', 'Icon Class'),
             'is_nav' => Module::t('blog', 'Is Nav'),
+            'is_featured' => Module::t('blog', 'Is Featured'),
             'sort_order' => Module::t('blog', 'Sort Order'),
             'page_size' => Module::t('blog', 'Page Size'),
             'template' => Module::t('blog', 'Template'),

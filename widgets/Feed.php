@@ -25,17 +25,25 @@ class Feed extends \yii\bootstrap\Widget
 
     public $type = self::TYPE_RECENT;
     public $itemsCount = 10;
+    public $offset = 0;
     public $itemImageType = 'mthumb';
+
     public $itemImageContainerOptions = ['class' => 'col-xs-3'];
     public $itemContentContainerOptions = ['class' => 'col-xs-9'];
     public $articleOptions = ['tag'=>'article','class' => 'item row top-buffer-20'];
     public $listOptions = ['tag'=>'div','class' => 'feed-widget-listview row'];
-    public $offset = 0;
+
+
+
     public $showBrief = false;
     public $briefLength = 100;
+
+
     public $infiniteScroll = false;
     public $showPager = false;
     public $loadMoreButton = false;
+
+
     public $showItemCategory = false;
     public $showItemCategoryIcon = false;
     public $showItemCategoryWithIcon = false;

@@ -97,6 +97,7 @@ return [
     'General'=>'Գլխավոր',
     'Insert banner code'=>'Ավելացրեք բանների կոդը',
     'Popular posts'=>'Շատ ընթերցվողներ',
-    'Videos'=>'Տեսանյութեր'
+    'Videos'=>'Տեսանյութեր',
+    'Is Featured'=>'Կարևորված'
 
 ];
