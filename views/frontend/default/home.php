@@ -1,5 +1,7 @@
 <?php
+
 use yii\helpers\Html;
+
 /** @var String $title */
 /** @var array $banners */
 $this->title = $title;
@@ -181,7 +183,6 @@ $this->title = $title;
                         <?= \diazoxide\blog\widgets\Feed::widget([
                             'itemsCount' => 15,
                             'showBrief' => false,
-                            //'showItemCategoryIcon' => 'true',
                             'briefLength' => 50,
                             'infiniteScroll' => true,
                             'id' => 'home_feed_widget',
