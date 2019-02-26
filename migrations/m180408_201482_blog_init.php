@@ -143,6 +143,7 @@ class m180408_201482_blog_init extends Migration
                     'icon_class' => Schema::TYPE_STRING . '(255) DEFAULT NULL',
                     'banner' => Schema::TYPE_STRING . '(255) ',
                     'is_nav' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
+                    'is_featured' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 1',
                     'sort_order' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 50',
                     'page_size' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 10',
                     'template' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT "post"',

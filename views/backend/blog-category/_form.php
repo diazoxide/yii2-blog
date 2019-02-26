@@ -43,6 +43,8 @@ unset($parentCategory[$model->id]);
 
     <?= $form->field($model, 'is_nav')->dropDownList(BlogCategory::getArrayIsNav()) ?>
 
+    <?= $form->field($model, 'is_featured')->dropDownList(BlogCategory::getArrayIsFeatured()) ?>
+
     <?= $form->field($model, 'sort_order')->textInput() ?>
 
     <?= $form->field($model, 'page_size')->textInput() ?>
@@ -52,7 +54,7 @@ unset($parentCategory[$model->id]);
     <?= $form->field($model, 'redirect_url')->textInput(['maxlength' => 255]) ?>
 
     <?= $form->field($model, 'status')->dropDownList(BlogCategory::getStatusList()) ?>
-    
+
     <div class="form-group">
         <label class="col-lg-2 control-label" for="">&nbsp;</label>
         <?= Html::submitButton($model->isNewRecord ? Module::t('blog', 'Create') : Module::t('blog', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

@@ -48,6 +48,11 @@ class BlogCategory extends \yii\db\ActiveRecord
 
     const IS_NAV_YES = 1;
     const IS_NAV_NO = 0;
+
+    const IS_FEATURED_YES = 1;
+    const IS_FEATURED_NO = 0;
+
+
     const PAGE_TYPE_LIST = 'list';
     const PAGE_TYPE_PAGE = 'page';
 
@@ -75,14 +80,26 @@ class BlogCategory extends \yii\db\ActiveRecord
         return;
     }
 
+
     /**
-     * @inheritdoc
+     * @return array
      */
     public static function getArrayIsNav()
     {
         return [
             self::IS_NAV_YES => Module::t('blog', 'YES'),
             self::IS_NAV_NO => Module::t('blog', 'NO'),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getArrayIsFeatured()
+    {
+        return [
+            self::IS_FEATURED_YES => Module::t('blog', 'YES'),
+            self::IS_FEATURED_NO => Module::t('blog', 'NO'),
         ];
     }
 
