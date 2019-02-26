@@ -5,6 +5,7 @@ namespace diazoxide\blog\widgets;
 use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\models\BlogPostSearch;
+use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use kop\y2sp\ScrollPager;
 use Yii;
@@ -77,7 +78,7 @@ class Feed extends \yii\bootstrap\Widget
             $pager = [
                 'class' => ScrollPager::className(),
                 'container' => "#$listViewId",
-                'triggerText' => 'Բեռնել ավելին'
+                'triggerText' => Module::t('blog','Load more...')
             ];
         }
 

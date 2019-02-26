@@ -186,8 +186,8 @@ $this->title = $title;
                             'infiniteScroll' => true,
                             'id' => 'home_feed_widget',
                             'itemImageType' => 'xsthumb',
-                            'itemImageContainerOptions' => ['class' => 'col-xs-2 nospaces'],
-                            'itemContentContainerOptions' => ['class' => 'col-xs-10 nospaces'],
+                            'itemImageContainerOptions' => ['class' => 'col-xs-2 nospaces-xs'],
+                            'itemContentContainerOptions' => ['class' => 'col-xs-10 nospaces-xs'],
                             'articleOptions' => ['tag' => 'article', 'class' => 'item col-xs-12 top-buffer-20-xs left-padding-0-xs right-padding-10-xs'],
                         ]);
                         ?>

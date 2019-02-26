@@ -42,7 +42,7 @@ use yii\helpers\Url;
 
 </p>
 
-<h5 class="nospaces"><?= Html::a(\yii\helpers\StringHelper::truncate(Html::encode($model->title), 50, "..."), $model->url) ?></h5>
+<h5 class="nospaces-xs"><?= Html::a(\yii\helpers\StringHelper::truncate(Html::encode($model->title), 50, "..."), $model->url) ?></h5>
 
 <?php /** @var boolean $showBrief */
 if ($showBrief) {
