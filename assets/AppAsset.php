@@ -21,6 +21,6 @@ class AppAsset extends AssetBundle
     public $depends = [
         'yii\bootstrap\BootstrapAsset',
         'diazoxide\blog\assets\StickySidebarAsset',
-        'diazoxide\blog\assets\StickySidebarAsset',
+        'diazoxide\blog\assets\FontAwesomeAsset',
     ];
 }
