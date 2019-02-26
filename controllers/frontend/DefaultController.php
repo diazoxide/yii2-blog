@@ -39,10 +39,12 @@ class DefaultController extends Controller
 
     public function actionIndex()
     {
+        $featuredCategories = BlogCategory::find()->where(['is_featured' => true,'status' => IActiveStatus::STATUS_ACTIVE])->orderBy(['sort_order' => SORT_DESC]);
 
         return $this->render('index', [
             'title' => $this->getModule()->homeTitle,
             'banners' => $this->getModule()->banners,
+            'featuredCategories'=>$featuredCategories,
         ]);
 
     }

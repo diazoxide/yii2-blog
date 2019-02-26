@@ -143,6 +143,7 @@ class BlogCategory extends \yii\db\ActiveRecord
                     'banner' => $v->getThumbFileUrl('banner', 'thumb'), //'postsCount'=>$v['postsCount'],
                     'icon_class' => $v['icon_class'],
                     'is_nav' => $v['is_nav'],
+                    'is_featured' => $v['is_featured'],
                     'template' => $v['template'],
                     'status' => $v->getStatus(),
                     'created_at' => $v['created_at'],
@@ -347,7 +348,7 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'is_nav', 'sort_order', 'page_size', 'status'], 'integer'],
+            [['parent_id', 'is_nav','is_featured', 'sort_order', 'page_size', 'status'], 'integer'],
             [['title'], 'required'],
             [['sort_order', 'page_size'], 'default', 'value' => 0],
             [['title', 'template', 'redirect_url', 'slug', 'icon_class'], 'string', 'max' => 255],

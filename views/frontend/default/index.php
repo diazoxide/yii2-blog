@@ -1,5 +1,7 @@
 <?php
+
 use yii\helpers\Html;
+
 /** @var String $title */
 /** @var array $banners */
 $this->title = $title;
@@ -63,31 +65,17 @@ $this->title = $title;
                 </div><!--Popular posts end-->
 
                 <div class="row top-buffer-20-xs home-white-content">
-                    <div class="col-md-4 home_posts_widget">
 
-                        <?= \diazoxide\blog\widgets\Posts::widget([
-                            'itemsCount' => 2,
-                            'categoryId' => 110,
-                            'showCategoryTitle' => true
-                        ]) ?>
-                    </div>
+                    <?php foreach ($featuredCategories->limit(3)->all() as $category): ?>
+                        <div class="col-md-4 home_posts_widget">
 
-                    <div class="col-md-4 home_posts_widget">
-                        <?= \diazoxide\blog\widgets\Posts::widget([
-                            'itemsCount' => 2,
-                            'categoryId' => 114,
-                            'showCategoryTitle' => true
-                        ]) ?>
-                    </div>
-
-                    <div class="col-md-4 home_posts_widget">
-                        <?= \diazoxide\blog\widgets\Posts::widget([
-                            'itemsCount' => 2,
-                            'categoryId' => 103,
-                            'showCategoryTitle' => true
-                        ]) ?>
-                    </div>
-
+                            <?= \diazoxide\blog\widgets\Posts::widget([
+                                'itemsCount' => 2,
+                                'categoryId' => $category->id,
+                                'showCategoryTitle' => true
+                            ]) ?>
+                        </div>
+                    <?php endforeach; ?>
 
                 </div>
 
@@ -130,30 +118,16 @@ $this->title = $title;
                 </div><!--Popular posts end-->
 
                 <div class="row top-buffer-20-xs home-white-content">
-                    <div class="col-md-4 home_posts_widget">
-                        <?= \diazoxide\blog\widgets\Posts::widget([
-                            'itemsCount' => 2,
-                            'categoryId' => 107,
-                            'showCategoryTitle' => true
-                        ]) ?>
-                    </div>
+                    <?php foreach ($featuredCategories->limit(3)->offset(3)->all() as $category): ?>
+                        <div class="col-md-4 home_posts_widget">
 
-                    <div class="col-md-4 home_posts_widget">
-                        <?= \diazoxide\blog\widgets\Posts::widget([
-                            'itemsCount' => 2,
-                            'categoryId' => 140,
-                            'showCategoryTitle' => true
-                        ]) ?>
-                    </div>
-
-                    <div class="col-md-4 home_posts_widget">
-                        <?= \diazoxide\blog\widgets\Posts::widget([
-                            'itemsCount' => 2,
-                            'categoryId' => 100,
-                            'showCategoryTitle' => true
-                        ]) ?>
-                    </div>
-
+                            <?= \diazoxide\blog\widgets\Posts::widget([
+                                'itemsCount' => 2,
+                                'categoryId' => $category->id,
+                                'showCategoryTitle' => true
+                            ]) ?>
+                        </div>
+                    <?php endforeach; ?>
 
                 </div>
 

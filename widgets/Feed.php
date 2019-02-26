@@ -30,9 +30,8 @@ class Feed extends \yii\bootstrap\Widget
 
     public $itemImageContainerOptions = ['class' => 'col-xs-3'];
     public $itemContentContainerOptions = ['class' => 'col-xs-9'];
-    public $articleOptions = ['tag'=>'article','class' => 'item row top-buffer-20'];
+    public $articleOptions = ['tag'=>'article','class' => 'item row top-buffer-20-xs'];
     public $listOptions = ['tag'=>'div','class' => 'feed-widget-listview row'];
-
 
 
     public $showBrief = false;
