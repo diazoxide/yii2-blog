@@ -1,7 +1,5 @@
 <?php
-
 use yii\helpers\Html;
-
 /** @var String $title */
 /** @var array $banners */
 $this->title = $title;
@@ -25,13 +23,12 @@ $this->title = $title;
                     </div>
                 </div>
 
-
                 <!--Popular posts-->
-                <div class="row top-buffer-20 home-white-content">
+                <div class="row top-buffer-20-xs home-white-content">
                     <div class="widget_title"><i
                                 class="fa fa-eye"></i> <?= \diazoxide\blog\Module::t('blog', 'Popular posts') ?></div>
                     <div class="col-md-6">
-                        <div class="top-buffer-20">
+                        <div class="top-buffer-20-xs">
                             <?= \diazoxide\blog\widgets\Posts::widget([
                                 'itemsCount' => 1,
                                 'type' => 'hot',
@@ -45,7 +42,7 @@ $this->title = $title;
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="top-buffer-20">
+                        <div class="top-buffer-20-xs">
                             <?= \diazoxide\blog\widgets\Feed::widget([
                                 'itemsCount' => 6,
                                 'showBrief' => false,
@@ -65,7 +62,7 @@ $this->title = $title;
 
                 </div><!--Popular posts end-->
 
-                <div class="row top-buffer-20 home-white-content">
+                <div class="row top-buffer-20-xs home-white-content">
                     <div class="col-md-4 home_posts_widget">
 
                         <?= \diazoxide\blog\widgets\Posts::widget([
@@ -95,14 +92,14 @@ $this->title = $title;
                 </div>
 
                 <!--Popular posts-->
-                <div class="row top-buffer-20 home-videos-content">
+                <div class="row top-buffer-20-xs home-videos-content">
 
                     <div class="widget_title"><i
                                 class="fa fa-youtube-play"></i> <?= \diazoxide\blog\Module::t('blog', 'Videos') ?>
                     </div>
 
                     <div class="col-md-6">
-                        <div class="top-buffer-20">
+                        <div class="top-buffer-20-xs">
                             <?= \diazoxide\blog\widgets\Posts::widget([
                                 'itemsCount' => 1,
                                 'categoryId' => 139,
@@ -115,7 +112,7 @@ $this->title = $title;
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="top-buffer-20">
+                        <div class="top-buffer-20-xs">
                             <?= \diazoxide\blog\widgets\Feed::widget([
                                 'itemsCount' => 5,
                                 'categoryId' => 139,
@@ -132,7 +129,7 @@ $this->title = $title;
 
                 </div><!--Popular posts end-->
 
-                <div class="row top-buffer-20 home-white-content">
+                <div class="row top-buffer-20-xs home-white-content">
                     <div class="col-md-4 home_posts_widget">
                         <?= \diazoxide\blog\widgets\Posts::widget([
                             'itemsCount' => 2,
@@ -161,7 +158,6 @@ $this->title = $title;
                 </div>
 
             </div>
-
 
             <div class="col-md-4">
                 <div class="home-feed nopadding-xs" id="home-feed-container">
