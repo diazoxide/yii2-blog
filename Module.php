@@ -60,11 +60,12 @@ class Module extends \yii\base\Module
 
     protected $_isBackend;
 
-
-
     public $homeTitle = 'Blog';
 
     public $banners = [];
+
+    public $htmlClass = "diazoxide_blog";
+
     /**
      *
      */

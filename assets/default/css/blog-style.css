@@ -2,6 +2,7 @@
     margin-top: 30px;
     margin-bottom: 25px;
 }
+
 .blog-index__cat {
     margin: 0;
     padding: 0;
@@ -111,7 +112,7 @@
 
 .blog-comments, .blog-share {
     margin-bottom: 30px;
-    border-top:solid 1px #bbb;
+    border-top: solid 1px #bbb;
 }
 
 .blog-comments__header, .blog-share__header {
@@ -184,10 +185,116 @@
     font-size: 12px;
     color: #cccccc;
 }
+
 .blog-post__wrapper {
     margin-bottom: 30px;
 }
+
 .blog-post__content img {
     float: left;
     margin: 0px 10px 10px 0;
+}
+
+/*New*/
+
+#home_feed_ad img {
+    width: 100%;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    background: #930000;
+    border-color: #fff;
+}
+
+.pagination > li > a, .pagination > li > span {
+    color: #444;
+}
+
+.home-videos-content {
+    color: #bbb;
+    background: #2d2d2d;
+}
+
+.home-videos-content a {
+    color: #b0b0b0;
+}
+
+.home-videos-content > div:last-child a {
+    color: #b0b0b0;
+}
+
+.home-white-content {
+    background: #fff;
+    box-shadow: 0px 0px 4px #bbb;
+    border-radius: 4px;
+}
+
+.fb-comments.fb_iframe_widget,
+.fb_iframe_widget span,
+.fb_iframe_widget span iframe {
+    width: 100% !important;
+}
+
+.widget_title {
+    background: #930000;
+    color: #fff;
+    padding: 5px 10px;
+    text-align: left;
+    font-size: 18px;
+}
+
+.home-feed .item {
+    background: #fff;
+    transition: 0.3s ease all;
+    border-radius: 3px;
+    border: solid 1px #ccc;
+}
+
+.home-feed .item:hover a {
+    color: #eee;
+}
+
+.home-feed .item:hover {
+    background: #252525;
+    color: #fff;
+}
+
+.home-feed .item .thumbnail {
+    margin: 0
+}
+
+.home-feed .item p {
+    margin-bottom: 0;
+}
+
+#home_feed {
+    height: 100vh;
+}
+
+#home_feed .feed-widget-listview {
+    overflow-y: auto;
+    height: calc(100vh - 35px);
+}
+
+.home_posts_widget .post_widget .item {
+    padding: 15px 0;
+    border-radius: 3px;
+    transition: 0.4s ease all;
+}
+
+.home_posts_widget .post_widget .item:hover {
+    background: #444;
+    color: #fff;
+}
+
+.home_posts_widget .post_widget .item:hover a {
+    color: #bbbbbb;
+}
+
+.home_posts_widget > h4 {
+    background: #930000;
+    color: #fff;
+    line-height: 2em;
+    text-align: center;
+    margin-bottom: 0;
 }
