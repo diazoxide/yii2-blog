@@ -40,8 +40,7 @@ class DefaultController extends Controller
     public function actionIndex()
     {
 
-
-        return $this->render('home', [
+        return $this->render('index', [
             'title' => $this->getModule()->homeTitle,
             'banners' => $this->getModule()->banners,
         ]);
@@ -62,8 +61,8 @@ class DefaultController extends Controller
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'title' => isset($category) ? $category->title : "Գրառումներ",
+        return $this->render('archive', [
+            'title' => isset($category) ? $category->title : Module::t('blog', "Գրառումներ"),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -83,7 +82,7 @@ class DefaultController extends Controller
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
 
-       $this->getModule()->openGraph->set([
+        $this->getModule()->openGraph->set([
             'title' => $post->title,
             'description' => $post->brief,
             'image' => $post->getThumbFileUrl('banner', 'facebook'),
