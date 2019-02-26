@@ -12,14 +12,14 @@ $this->title = $title;
                 <div class="row">
                     <div class="col-lg-10 nopadding">
                         <div class="widget_title hidden-xs"><i
-                                    class="fa fa-star"></i> <?php \diazoxide\blog\Module::t('blog', 'General') ?></div>
+                                    class="fa fa-star"></i> <?= \diazoxide\blog\Module::t('blog', 'General') ?></div>
 
                         <?= \diazoxide\blog\widgets\Slider::widget(
                             ['itemsCount' => 5]
                         ) ?>
                     </div>
                     <div class="col-lg-2 nopadding">
-                        <?= isset($banners[0]) ? $banners[0] : \diazoxide\blog\Module::t('blog', "Insert Banner Code"); ?>
+                        <?= isset($banners[0]) ? $banners[0] : \diazoxide\blog\Module::t('blog', "Insert banner code"); ?>
                     </div>
                 </div>
 
@@ -27,7 +27,7 @@ $this->title = $title;
                 <!--Popular posts-->
                 <div class="row top-buffer-20 home-white-content">
                     <div class="widget_title"><i
-                                class="fa fa-eye"></i> <?php \diazoxide\blog\Module::t('blog', 'Popular posts') ?></div>
+                                class="fa fa-eye"></i> <?= \diazoxide\blog\Module::t('blog', 'Popular posts') ?></div>
                     <div class="col-md-6">
                         <div class="top-buffer-20">
                             <?= \diazoxide\blog\widgets\Posts::widget([
@@ -96,7 +96,7 @@ $this->title = $title;
                 <div class="row top-buffer-20 home-videos-content">
 
                     <div class="widget_title"><i
-                                class="fa fa-youtube-play"></i> <?php \diazoxide\blog\Module::t('blog', 'Videos') ?>
+                                class="fa fa-youtube-play"></i> <?= \diazoxide\blog\Module::t('blog', 'Videos') ?>
                     </div>
 
                     <div class="col-md-6">
@@ -176,7 +176,7 @@ $this->title = $title;
                             ?>
                         </div>
                         <div class="widget_title"><i
-                                    class="fa fa-newspaper-o"></i> <?php \diazoxide\blog\Module::t('blog', 'News Feed') ?>
+                                    class="fa fa-newspaper-o"></i> <?= \diazoxide\blog\Module::t('blog', 'News Feed') ?>
                         </div>
                         <?= \diazoxide\blog\widgets\Feed::widget([
                             'itemsCount' => 15,

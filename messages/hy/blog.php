@@ -94,5 +94,9 @@ return [
     'STATUS_ACTIVE'=>'Ակտիվ',
     'STATUS_DELETED'=>'Ջնջված',
     'Show In Slider'=>'Ցուցադրել սլայդերում',
+    'General'=>'Գլխավոր',
+    'Insert banner code'=>'Ավելացրեք բանների կոդը',
+    'Popular posts'=>'Շատ ընթերցվողներ',
+    'Videos'=>'Տեսանյութեր'
 
 ];
