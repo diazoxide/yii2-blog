@@ -1,12 +1,8 @@
 <?php
-
 use yii\helpers\Html;
-
 /** @var String $title */
 /** @var array $banners */
 $this->title = $title;
-
-
 ?>
     <div id="blog-container" class="container">
         <div class="row top-buffer-20-sm">

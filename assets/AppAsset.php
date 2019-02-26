@@ -17,6 +17,7 @@ class AppAsset extends AssetBundle
 
     public $css = [
         'css/blog-style.css',
+        'css/bootstrap_custom.css',
     ];
 
     public $js = [
