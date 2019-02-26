@@ -12,7 +12,7 @@ $this->title = $title;
             <div class="col-md-8 home-slider-container">
 
                 <div class="row">
-                    <div class="col-lg-10 nopadding">
+                    <div class="col-lg-10 nopadding-xs">
                         <div class="widget_title hidden-xs"><i
                                     class="fa fa-star"></i> <?= \diazoxide\blog\Module::t('blog', 'General') ?></div>
 
@@ -20,7 +20,7 @@ $this->title = $title;
                             ['itemsCount' => 5]
                         ) ?>
                     </div>
-                    <div class="col-lg-2 nopadding">
+                    <div class="col-lg-2 nopadding-xs">
                         <?= isset($banners[0]) ? $banners[0] : \diazoxide\blog\Module::t('blog', "Insert banner code"); ?>
                     </div>
                 </div>
@@ -164,7 +164,7 @@ $this->title = $title;
 
 
             <div class="col-md-4">
-                <div class="home-feed nopadding" id="home-feed-container">
+                <div class="home-feed nopadding-xs" id="home-feed-container">
                     <div id="home_feed" class="top-buffer-20-xs top-buffer-0-md">
 
                         <div id="home_feed_ad" class="visible-lg visible-md">
