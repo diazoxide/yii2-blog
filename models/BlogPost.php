@@ -110,7 +110,7 @@ class BlogPost extends \yii\db\ActiveRecord
             [['category_id', 'title', 'content'], 'required'],
             [['category_id', 'click', 'user_id', 'status'], 'integer'],
             [['brief', 'content'], 'string'],
-            [['is_slide'], 'boolean'],
+            [['is_slide','comments_status'], 'boolean'],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
             [['title', 'tags'], 'string', 'max' => 255],
             [['slug'], 'string', 'max' => 128],
