@@ -15,8 +15,7 @@ use yii\helpers\Url;
 
 $this->title = Module::t('blog', 'Update ') . Module::t('blog', 'Blog Post') . ' ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => Module::t('blog', 'Blog Posts'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Module::t('blog', 'Update');
+$this->params['breadcrumbs'][] = ['label' => $model->title];
 ?>
 <div class="blog-post-update">
 
@@ -26,6 +25,9 @@ $this->params['breadcrumbs'][] = Module::t('blog', 'Update');
 
 
     <div class="col-sm-6">
+        <div class="col-xs-12 text-right">
+            <?= Html::a('Create Book', ['create-book', 'post_id' => $model->id], ['class' => 'btn btn-default']) ?>
+        </div>
         <?=
         /** @var \yii\debug\models\timeline\DataProvider $bookDataProvider */
         GridView::widget([

@@ -9,6 +9,7 @@ namespace diazoxide\blog\controllers\backend;
 
 use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\models\BlogPostBook;
+use diazoxide\blog\models\BlogPostBookChapter;
 use diazoxide\blog\models\BlogPostSearch;
 use diazoxide\blog\models\Status;
 use diazoxide\blog\traits\IActiveStatus;
@@ -154,6 +155,21 @@ class BlogPostController extends BaseAdminController
         }
     }
 
+
+    /**
+     * @param $id
+     * @return BlogPostBookChapter|null
+     * @throws NotFoundHttpException
+     */
+    protected function findBookChapterModel($id)
+    {
+        if (($model = BlogPostBookChapter::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
     /**
      * Creates a new BlogPost model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -191,8 +207,8 @@ class BlogPostController extends BaseAdminController
                 'pageParam' => 'book_page',
                 'pageSizeParam' => 'book_page_size',
             ],
-            'sort'=>[
-                'sortParam'=>'book_sort'
+            'sort' => [
+                'sortParam' => 'book_sort'
             ]
         ]);
 
@@ -238,6 +254,23 @@ class BlogPostController extends BaseAdminController
 
     }
 
+
+    public function actionCreateBookChapter($book_id)
+    {
+        $model = new BlogPostBookChapter();
+
+        $model->book_id = $book_id;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['update-book', 'id' => $model->book->id]);
+        }
+
+        return $this->render('createBookChapter', [
+            'model' => $model,
+        ]);
+
+    }
+
     /**
      * @param $id
      * @return string|\yii\web\Response
@@ -252,6 +285,24 @@ class BlogPostController extends BaseAdminController
         }
 
         return $this->render('updateBook', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     */
+    public function actionUpdateBookChapter($id)
+    {
+        $model = $this->findBookChapterModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['update-book', 'id' => $model->id]);
+        }
+
+        return $this->render('updateBookChapter', [
             'model' => $model,
         ]);
     }

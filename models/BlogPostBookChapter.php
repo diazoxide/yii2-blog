@@ -25,21 +25,19 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * This is the model class for table "blog_post".
  *
  * @property integer $id
- * @property integer $post_id
+ * @property integer $book_id
+ * @property integer $parent
  * @property string $title
  * @property string $url
  * @method getThumbFileUrl($attribute, $thumbType)
  * @property string $brief
- * @property string $slug
  * @property string $banner
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
+
  *
  * @property BlogComment[] $blogComments
  * @property BlogCategory $category
  */
-class BlogPostBook extends \yii\db\ActiveRecord
+class BlogPostBookChapter extends \yii\db\ActiveRecord
 {
     use StatusTrait, ModuleTrait;
 
@@ -52,7 +50,7 @@ class BlogPostBook extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%blog_post_book}}';
+        return '{{%blog_post_book_chapter}}';
     }
 
     /**
@@ -62,13 +60,6 @@ class BlogPostBook extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            'class' => TimestampBehavior::class,
-            [
-                'class' => SluggableBehavior::class,
-                'attribute' => 'title',
-                'slugAttribute' => 'slug',
-                'immutable' => true
-            ],
             [
                 'class' => ImageUploadBehavior::class,
                 'attribute' => 'banner',
@@ -92,13 +83,13 @@ class BlogPostBook extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'post_id'], 'required'],
-            [['post_id', 'status'], 'integer'],
+            [['title', 'book_id'], 'required'],
+            [['book_id', 'parent_id'], 'integer'],
             [['brief'], 'string'],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
             [['title'], 'string', 'max' => 255],
-            [['slug'], 'string', 'max' => 128],
-            [['slug'], 'unique'],
+            [['content'], 'string'],
+
         ];
     }
 
@@ -111,22 +102,18 @@ class BlogPostBook extends \yii\db\ActiveRecord
             'id' => Module::t('blog', 'ID'),
             'title' => Module::t('blog', 'Title'),
             'brief' => Module::t('blog', 'Brief'),
-            'slug' => Module::t('blog', 'Slug'),
             'banner' => Module::t('blog', 'Banner'),
-            'post_id' => Module::t('blog', 'Author'),
-            'status' => Module::t('blog', 'Status'),
-            'created_at' => Module::t('blog', 'Created At'),
-            'updated_at' => Module::t('blog', 'Updated At'),
-
+            'book_id' => Module::t('blog', 'Book'),
+            'content' => Module::t('blog', 'Content'),
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPost()
+    public function getBook()
     {
-        return $this->hasOne(BlogPost::className(), ['id' => 'post_id']);
+        return $this->hasOne(BlogPostBook::className(), ['id' => 'book_id']);
     }
 
 
@@ -135,21 +122,25 @@ class BlogPostBook extends \yii\db\ActiveRecord
      */
     public function getChapters()
     {
-        return $this->hasMany(BlogPostBookChapter::className(), ['book_id' => 'id']);
+        return $this->hasMany(BlogPostBookChapter::className(), ['parent_id' => 'id']);
     }
 
+
     /**
-     *
+     * @return string
      */
     public function getUrl()
     {
         if ($this->getModule()->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createUrl(['blog/blog-post-book/update', 'id' => $this->id]);
+            return Yii::$app->getUrlManager()->createUrl(['blog/blog-post-book-chapter/update', 'id' => $this->id]);
         }
 
         return Yii::$app->getUrlManager()->createUrl(['blog/default/book', 'post' => $this->post->slug, 'slug' => $this->slug]);
     }
 
+    /**
+     * @return string
+     */
     public function getAbsoluteUrl()
     {
         if ($this->getModule()->getIsBackend()) {
@@ -160,11 +151,17 @@ class BlogPostBook extends \yii\db\ActiveRecord
     }
 
 
+    /**
+     * @return string
+     */
     public function getCreatedRelativeTime()
     {
         return Yii::$app->formatter->format($this->created_at, 'relativeTime');
     }
 
+    /**
+     * @return string
+     */
     public function getUpdatedRelativeTime()
     {
         return Yii::$app->formatter->format($this->updated_at, 'relativeTime');
