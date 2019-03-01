@@ -26,7 +26,7 @@ use yiidreamteam\upload\ImageUploadBehavior;
  *
  * @property integer $id
  * @property integer $book_id
- * @property integer $parent
+ * @property integer $parent_id
  * @property string $title
  * @property string $url
  * @method getThumbFileUrl($attribute, $thumbType)

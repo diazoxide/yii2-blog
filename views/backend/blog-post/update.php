@@ -34,8 +34,6 @@ $this->params['breadcrumbs'][] = ['label' => $model->title];
             'dataProvider' => $bookDataProvider,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                // Обычные поля определенные данными содержащимися в $dataProvider.
-                // Будут использованы данные из полей модели.
                 [
                     'attribute' => "banner",
                     'format' => 'raw',

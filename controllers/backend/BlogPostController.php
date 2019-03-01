@@ -13,6 +13,7 @@ use diazoxide\blog\models\BlogPostBookChapter;
 use diazoxide\blog\models\BlogPostSearch;
 use diazoxide\blog\models\Status;
 use diazoxide\blog\traits\IActiveStatus;
+use DOMDocument;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -35,7 +36,7 @@ class BlogPostController extends BaseAdminController
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'delete', 'create', 'update', 'view'],
+                'only' => ['index', 'delete', 'create', 'update', 'view', 'create-book', 'update-book', 'delete-book', 'create-book-chapter', 'update-book-chapter', 'delete-book-chapter'],
                 'rules' => [
                     [
                         'actions' => ['index'],
@@ -69,21 +70,52 @@ class BlogPostController extends BaseAdminController
                     ],
 
                     [
-                        'actions' => ['deleteBook'],
+                        'actions' => ['delete-book'],
                         'allow' => true,
-                        'roles' => ['BLOG_DELETE_POST_BOOK']
+                        'matchCallback' => function () {
+                            return Yii::$app->user->can('BLOG_DELETE_OWN_POST_BOOK', ['model' => $this->findBookModel(Yii::$app->request->getQueryParam('id'))->post])
+                                || Yii::$app->user->can('BLOG_DELETE_POST_BOOK');
+                        },
                     ],
                     [
-                        'actions' => ['createBook'],
+                        'actions' => ['create-book'],
                         'allow' => true,
-                        'roles' => ['BLOG_CREATE_POST_BOOK']
+                        'matchCallback' => function () {
+                            return Yii::$app->user->can('BLOG_CREATE_OWN_POST_BOOK', ['model' => $this->findBookModel(Yii::$app->request->getQueryParam('post_id'))->post])
+                                || Yii::$app->user->can('BLOG_CREATE_POST_BOOK');
+                        },
                     ],
                     [
-                        'actions' => ['updateBook'],
+                        'actions' => ['update-book'],
                         'allow' => true,
                         'matchCallback' => function () {
                             return Yii::$app->user->can('BLOG_UPDATE_OWN_POST_BOOK', ['model' => $this->findBookModel(Yii::$app->request->getQueryParam('id'))->post])
                                 || Yii::$app->user->can('BLOG_UPDATE_POST_BOOK');
+                        },
+
+                    ],
+                    [
+                        'actions' => ['delete-book-chapter'],
+                        'allow' => true,
+                        'matchCallback' => function () {
+                            return Yii::$app->user->can('BLOG_DELETE_OWN_POST_BOOK_CHAPTER', ['model' => $this->findBookChapterModel(Yii::$app->request->getQueryParam('id'))->book->post])
+                                || Yii::$app->user->can('BLOG_DELETE_POST_BOOK_CHAPTER');
+                        },
+                    ],
+                    [
+                        'actions' => ['create-book-chapter'],
+                        'allow' => true,
+                        'matchCallback' => function () {
+                            return Yii::$app->user->can('BLOG_CREATE_OWN_POST_BOOK_CHAPTER', ['model' => $this->findBookChapterModel(Yii::$app->request->getQueryParam('book_id'))->book->post])
+                                || Yii::$app->user->can('BLOG_CREATE_POST_BOOK_CHAPTER');
+                        },
+                    ],
+                    [
+                        'actions' => ['update-book-chapter'],
+                        'allow' => true,
+                        'matchCallback' => function () {
+                            return Yii::$app->user->can('BLOG_UPDATE_OWN_POST_BOOK_CHAPTER', ['model' => $this->findBookChapterModel(Yii::$app->request->getQueryParam('id'))->book->post])
+                                || Yii::$app->user->can('BLOG_UPDATE_POST_BOOK_CHAPTER');
                         },
 
                     ],
@@ -255,22 +287,6 @@ class BlogPostController extends BaseAdminController
     }
 
 
-    public function actionCreateBookChapter($book_id)
-    {
-        $model = new BlogPostBookChapter();
-
-        $model->book_id = $book_id;
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['update-book', 'id' => $model->book->id]);
-        }
-
-        return $this->render('createBookChapter', [
-            'model' => $model,
-        ]);
-
-    }
-
     /**
      * @param $id
      * @return string|\yii\web\Response
@@ -291,6 +307,19 @@ class BlogPostController extends BaseAdminController
 
     /**
      * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     */
+    public function actionDeleteBook($id)
+    {
+        $model = $this->findBookModel($id);
+        $model->status = IActiveStatus::STATUS_ARCHIVE;
+        $model->save();
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    /**
+     * @param $id
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException
      */
@@ -307,16 +336,53 @@ class BlogPostController extends BaseAdminController
         ]);
     }
 
+    public function actionCreateBookChapter($book_id)
+    {
+        $model = new BlogPostBookChapter();
+
+        $model->book_id = $book_id;
+
+        if (Yii::$app->request->getQueryParam('parent_id')) {
+            $model->parent_id = Yii::$app->request->getQueryParam('parent_id');
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['update-book', 'id' => $model->book->id]);
+        }
+
+        return $this->render('createBookChapter', [
+            'model' => $model,
+        ]);
+
+    }
+
+    public function actionFix()
+    {
+        $model = BlogPostBookChapter::find()->where('content!=""')->limit(10)->offset(0);
+        //echo $model;
+        //die();
+        foreach ($model->all() as $key => $item) {
+            $content = $item->content;
+            $content = preg_replace('/(\<)(\/?\w+)(.*?)(>)/m', '[$2$3]', $content);
+
+            //bbcode_parse($content)
+            echo "<textarea cols='100' rows='20'>$content</textarea>";
+        }
+    }
+
     /**
      * @param $id
      * @return \yii\web\Response
      * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDeleteBook($id)
+    public function actionDeleteBookChapter($id)
     {
-        $model = $this->findBookModel($id);
-        $model->status = IActiveStatus::STATUS_ARCHIVE;
-        $model->save();
+        $model = $this->findBookChapterModel($id);
+        $model->delete();
         return $this->redirect(Yii::$app->request->referrer);
     }
+
+
 }

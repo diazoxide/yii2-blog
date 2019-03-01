@@ -37,7 +37,8 @@
     "yiidoc/yii2-redactor": "*",
     "yii-dream-team/yii2-upload-behavior": "*",
     "lesha724/yii2-math-captcha": "*",
-    "kartik-v/yii2-social": "@dev"
+    "kartik-v/yii2-social": "@dev",
+    "chriskonnertz/bbcode": "dev-master"
   },
   "repositories": [
     {
