@@ -447,7 +447,11 @@ class BlogCategory extends \yii\db\ActiveRecord
 
     public function getUrl()
     {
+        if ($this->getModule()->getIsBackend()) {
+            return Yii::$app->getUrlManager()->createUrl(['blog/blog-category/update', 'id' => $this->id]);
+        }
         return Yii::$app->getUrlManager()->createUrl(['blog/default/archive', 'slug' => $this->slug]);
+
     }
 
     /**

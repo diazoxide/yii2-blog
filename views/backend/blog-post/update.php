@@ -6,9 +6,12 @@
  */
 
 use diazoxide\blog\Module;
+use diazoxide\blog\traits\IActiveStatus;
+use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $model backend\modules\blog\models\BlogPost */
 
 $this->title = Module::t('blog', 'Update ') . Module::t('blog', 'Blog Post') . ' ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => Module::t('blog', 'Blog Posts'), 'url' => ['index']];
@@ -21,4 +24,64 @@ $this->params['breadcrumbs'][] = Module::t('blog', 'Update');
         'model' => $model,
     ]) ?>
 
+
+    <div class="col-sm-6">
+        <?=
+        /** @var \yii\debug\models\timeline\DataProvider $bookDataProvider */
+        GridView::widget([
+            'dataProvider' => $bookDataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                // Обычные поля определенные данными содержащимися в $dataProvider.
+                // Будут использованы данные из полей модели.
+                [
+                    'attribute' => "banner",
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        /** @var \diazoxide\blog\models\BlogPostBook $model */
+                        return Html::img($model->getThumbFileUrl('banner', "xsthumb"));
+                    }
+                ],
+                'title',
+                'brief',
+                [
+                    'attribute' => 'status',
+                    'format' => 'html',
+                    'value' => function ($model) {
+                        if ($model->status === IActiveStatus::STATUS_ACTIVE) {
+                            $class = 'label-success';
+                        } elseif ($model->status === IActiveStatus::STATUS_INACTIVE) {
+                            $class = 'label-warning';
+                        } else {
+                            $class = 'label-danger';
+                        }
+
+                        return '<span class="label ' . $class . '">' . $model->getStatus() . '</span>';
+                    },
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'header' => 'Actions',
+                    'headerOptions' => ['style' => 'color:#337ab7'],
+                    'template' => '{update}{delete}',
+                    'urlCreator' => function ($action, $model, $key, $index) {
+                        if ($action === 'update') {
+                            return Url::toRoute(['update-book', 'id' => $model->id]);
+
+                        }
+                        if ($action === 'delete') {
+                            return Url::toRoute(['delete-book', 'id' => $model->id]);
+
+                        }
+                    }
+                ],
+
+            ],
+        ]);
+        ?>
+    </div>
+
+
 </div>
+
+

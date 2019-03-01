@@ -38,7 +38,7 @@ use yii\helpers\Html;
                 Html::a(
                         Html::img($item->getThumbFileUrl('banner', 'xsthumb'), ['width' => '16px', 'style' => 'float:left']) . ' ' .
                     yii\helpers\StringHelper::truncate(Html::encode($item->title), 30, '...'),
-                    $item->absoluteUrl),
+                    $item->url),
                 ['class' => '']
             );
         }
