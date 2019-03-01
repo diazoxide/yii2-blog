@@ -123,7 +123,7 @@ $username_attribute = Module::getInstance()->userName;
     ?>
 </section>
 
-<?php if ($post->module->enableComments) : ?>
+<?php if ($post->module->enableComments && $post->show_comments) : ?>
     <section id="comments" class="blog-comments">
         <h2 class="blog-comments__header title title--2"><?= Module::t('blog', 'Comments'); ?></h2>
 

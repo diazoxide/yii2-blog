@@ -28,6 +28,7 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @property integer $category_id
  * @property string $title
  * @property string $url
+ * @property boolean $show_comments
  * @method getThumbFileUrl($attribute, $thumbType)
  * @property string $content
  * @property string $brief
@@ -110,7 +111,8 @@ class BlogPost extends \yii\db\ActiveRecord
             [['category_id', 'title', 'content'], 'required'],
             [['category_id', 'click', 'user_id', 'status'], 'integer'],
             [['brief', 'content'], 'string'],
-            [['is_slide','comments_status'], 'boolean'],
+            [['is_slide', 'show_comments'], 'boolean'],
+            [['show_comments'], 'default', 'value' => true],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
             [['title', 'tags'], 'string', 'max' => 255],
             [['slug'], 'string', 'max' => 128],
@@ -133,6 +135,7 @@ class BlogPost extends \yii\db\ActiveRecord
             'tags' => Module::t('blog', 'Tags'),
             'slug' => Module::t('blog', 'Slug'),
             'banner' => Module::t('blog', 'Banner'),
+            'show_comments' => Module::t('blog', 'Show Comments'),
             'click' => Module::t('blog', 'Click'),
             'user_id' => Module::t('blog', 'Author'),
             'status' => Module::t('blog', 'Status'),
@@ -149,6 +152,14 @@ class BlogPost extends \yii\db\ActiveRecord
     public function getBlogComments()
     {
         return $this->hasMany(BlogComment::className(), ['post_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBooks()
+    {
+        return $this->hasMany(BlogPostBook::className(), ['post_id' => 'id']);
     }
 
     public function getCommentsCount()

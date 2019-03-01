@@ -98,6 +98,7 @@ return [
     'Insert banner code'=>'Ավելացրեք բանների կոդը',
     'Popular posts'=>'Շատ ընթերցվողներ',
     'Videos'=>'Տեսանյութեր',
-    'Is Featured'=>'Կարևորված'
+    'Is Featured'=>'Կարևորված',
+    'Show Comments'=>"Ցուցադրել Մեկնաբանությունները"
 
 ];
