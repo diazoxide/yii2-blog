@@ -53,6 +53,8 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'banner')->fileInput() ?>
 
+            <?= $form->field($model, 'bbcode')->dropDownList([0=>'Disabled',1=>'Enabled'],['prompt'=>"Select"]) ?>
+
             <?= $form->field($model, 'status')->dropDownList(\diazoxide\blog\models\BlogPost::getStatusList()) ?>
 
         </div>

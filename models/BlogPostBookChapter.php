@@ -28,11 +28,12 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @property integer $book_id
  * @property integer $parent_id
  * @property string $title
+ * @property string $content
  * @property string $url
+ * @property boolean $bbcode
  * @method getThumbFileUrl($attribute, $thumbType)
  * @property string $brief
  * @property string $banner
-
  *
  * @property BlogComment[] $blogComments
  * @property BlogCategory $category
@@ -86,6 +87,7 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
             [['title', 'book_id'], 'required'],
             [['book_id', 'parent_id'], 'integer'],
             [['brief'], 'string'],
+            [['bbcode'], 'boolean'],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
             [['title'], 'string', 'max' => 255],
             [['content'], 'string'],
@@ -102,6 +104,7 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
             'id' => Module::t('blog', 'ID'),
             'title' => Module::t('blog', 'Title'),
             'brief' => Module::t('blog', 'Brief'),
+            'bbcode' => Module::t('blog', 'BBCode'),
             'banner' => Module::t('blog', 'Banner'),
             'book_id' => Module::t('blog', 'Book'),
             'content' => Module::t('blog', 'Content'),
@@ -117,6 +120,12 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
     }
 
 
+    public function getParent()
+    {
+        return $this->hasOne(BlogPostBookChapter::className(), ['id' => 'parent_id']);
+    }
+
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -125,6 +134,67 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
         return $this->hasMany(BlogPostBookChapter::className(), ['parent_id' => 'id']);
     }
 
+    public function isBBcode()
+    {
+        if ($this->bbcode === null) {
+            if ($this->parent) {
+                return $this->parent->isBBcode();
+            } else {
+                return $this->book->bbcode;
+            }
+        } else return $this->bbcode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParsedContent()
+    {
+        if(!$this->isBBcode()) {
+            return $this->content;
+        }
+
+        $bbcode = new \ChrisKonnertz\BBCode\BBCode();
+
+        $bbcode->addTag('section', function ($tag, &$html, $openingTag) {
+            if ($tag->opening) {
+                return '<section>';
+            } else {
+                return '</section>';
+            }
+        });
+
+        $bbcode->addTag('verse', function ($tag, &$html, $openingTag) {
+            if ($tag->opening) {
+                return '<span>';
+            } else {
+                return '</span>';
+            }
+        });
+
+        $bbcode->addTag('num', function ($tag, &$html, $openingTag) {
+            if ($tag->opening) {
+                return '<strong>';
+            } else {
+                return '</strong>';
+            }
+        });
+
+        $bbcode->addTag('note', function ($tag, &$html, $openingTag) {
+            if ($tag->opening) {
+                if ($tag->property) {
+                    return '<strong><a title="' . $tag->property . '">*';
+                } else {
+                    return "</a></strong>";
+                }
+            } else {
+                return '</strong>';
+            }
+        });
+
+        return $bbcode->render($this->content);
+
+    }
 
     /**
      * @return string
@@ -150,21 +220,5 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
         return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default/book', 'post' => $this->post->slug, 'slug' => $this->slug]);
     }
 
-
-    /**
-     * @return string
-     */
-    public function getCreatedRelativeTime()
-    {
-        return Yii::$app->formatter->format($this->created_at, 'relativeTime');
-    }
-
-    /**
-     * @return string
-     */
-    public function getUpdatedRelativeTime()
-    {
-        return Yii::$app->formatter->format($this->updated_at, 'relativeTime');
-    }
 
 }

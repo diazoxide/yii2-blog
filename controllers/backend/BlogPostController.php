@@ -328,7 +328,7 @@ class BlogPostController extends BaseAdminController
         $model = $this->findBookChapterModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['update-book', 'id' => $model->id]);
+            return $this->redirect(['update-book-chapter', 'id' => $model->id]);
         }
 
         return $this->render('updateBookChapter', [
@@ -358,15 +358,27 @@ class BlogPostController extends BaseAdminController
 
     public function actionFix()
     {
-        $model = BlogPostBookChapter::find()->where('content!=""')->limit(10)->offset(0);
+        $model = BlogPostBookChapter::find()->where('content!=""')->limit(50)->offset(0);
         //echo $model;
         //die();
         foreach ($model->all() as $key => $item) {
             $content = $item->content;
-            $content = preg_replace('/(\<)(\/?\w+)(.*?)(>)/m', '[$2$3]', $content);
 
-            //bbcode_parse($content)
-            echo "<textarea cols='100' rows='20'>$content</textarea>";
+            $content = trim(preg_replace('/\s+/', ' ', $content));
+
+//            $content = preg_replace("/(<verse)( id=\")(\d+)(\">)/m", '$1><num>$3</num>', $content);
+//            $content = preg_replace("/(\[note\])(.*?)(\[\/note\])/m", '[note=$2]$3', $content);
+//            $content = preg_replace('/(\<)(\/?\w+)(.*?)(>)/m', '[$2$3]', $content);
+
+//            $item->content = $content;
+//            if ($item->save()) {
+//                echo $key;
+//            }
+
+
+//            echo "<textarea cols='100' rows='20'>";
+            echo "$content";
+//            echo "</textarea>";
         }
     }
 

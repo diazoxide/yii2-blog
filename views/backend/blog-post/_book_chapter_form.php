@@ -13,7 +13,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model diazoxide\blog\models\BlogPost */
+/* @var $model diazoxide\blog\models\BlogPostBookChapter */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -44,16 +44,26 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'brief')->textarea(['rows' => 4]) ?>
 
-            <?= $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
-                'moduleId' => $model->module->redactorModule,
-                'clientOptions' => [
-                    'plugins' => ['clips', 'fontcolor', 'imagemanager']
-                ]
-            ]); ?>
+            <?php
+
+            if($model->isBBcode()){
+                echo $form->field($model, 'content')->textarea(['rows' => 10]);
+
+            } else {
+                echo $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
+                    'moduleId' => $model->module->redactorModule,
+                    'clientOptions' => [
+                        'plugins' => ['clips', 'fontcolor', 'imagemanager']
+                    ]
+                ]);
+            }?>
 
         </div>
 
         <div class="col-md-4">
+
+            <?= $form->field($model, 'bbcode')->dropDownList([0=>'Disabled',1=>'Enabled'],['prompt'=>"Select"]) ?>
+
 
             <?= $form->field($model, 'banner')->fileInput() ?>
 
