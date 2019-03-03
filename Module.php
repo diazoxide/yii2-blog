@@ -180,9 +180,39 @@ class Module extends \yii\base\Module
         ];
     }
 
-    public function getOpenGraph(){
+    public function getOpenGraph()
+    {
         $opengraph = new OpenGraph();
         $opengraph->title = $this->homeTitle;
         return $opengraph;
     }
+
+
+    public function getCategoriesUrl()
+    {
+
+        if ($this->getIsBackend()) {
+            return Yii::$app->getUrlManager()->createUrl(['blog/blog-category']);
+        }
+        return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default']);
+
+    }
+
+    public function getHomeUrl()
+    {
+
+        if ($this->getIsBackend()) {
+            return Yii::$app->getUrlManager()->createUrl(['blog/default/index']);
+        }
+        return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default/index']);
+
+    }
+
+    public function getBreadcrumbs()
+    {
+        $result = [];
+        $result[] = ['label' => Module::t('blog', 'Blog'), 'url' => $this->homeUrl];
+        return $result;
+    }
+
 }

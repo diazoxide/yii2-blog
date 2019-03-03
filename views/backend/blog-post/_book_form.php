@@ -21,11 +21,8 @@ use yii\widgets\ActiveForm;
 
 
     <?php $form = ActiveForm::begin([
-        'options' => ['class' => 'form-horizontal', 'enctype' => 'multipart/form-data'],
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-8\">{input}{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-4 control-label'],
-        ],
+        'options' => [
+            'enctype' => 'multipart/form-data'],
     ]); ?>
 
     <?= $form->errorSummary($model); ?>
@@ -44,16 +41,22 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'slug')->textInput(['maxlength' => 128, 'class' => 'form-control input-sm', 'readonly' => true, 'onclick' => "this.removeAttribute('readonly')"]) ?>
 
-
             <?= $form->field($model, 'brief')->textarea(['rows' => 4]) ?>
 
         </div>
 
         <div class="col-md-4">
 
-            <?= $form->field($model, 'banner')->fileInput() ?>
+            <?= $form->field($model, 'bbcode')->dropDownList([0 => 'Disabled', 1 => 'Enabled'], ['prompt' => "Select"]) ?>
 
-            <?= $form->field($model, 'bbcode')->dropDownList([0=>'Disabled',1=>'Enabled'],['prompt'=>"Select"]) ?>
+            <div class="row">
+                <div class="col-md-2">
+                    <?= Html::img($model->getThumbFileUrl('banner', 'sthumb'), ['class' => 'img-responsive']) ?>
+                </div>
+                <div class="col-md-10">
+                    <?= $form->field($model, 'banner')->fileInput() ?>
+                </div>
+            </div>
 
             <?= $form->field($model, 'status')->dropDownList(\diazoxide\blog\models\BlogPost::getStatusList()) ?>
 

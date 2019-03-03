@@ -11,12 +11,14 @@ use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogComment;
 use diazoxide\blog\models\BlogCommentSearch;
 use diazoxide\blog\models\BlogPost;
+use diazoxide\blog\models\BlogPostBook;
+use diazoxide\blog\models\BlogPostBookChapter;
 use diazoxide\blog\models\BlogPostSearch;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use diazoxide\blog\traits\ModuleTrait;
+use diazoxide\blog\traits\StatusTrait;
 use Yii;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -74,12 +76,12 @@ class DefaultController extends Controller
      * @param $id
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException
-     * @throws \yii\base\InvalidConfigException
      */
     public function actionView($slug)
     {
         $this->layout = Yii::$app->controller->module->blogViewLayout;
         $post = BlogPost::find()->where(['status' => IActiveStatus::STATUS_ACTIVE, 'slug' => $slug])->one();
+
         if ($post === null) {
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
@@ -92,7 +94,6 @@ class DefaultController extends Controller
             'imageHeight' => "315",
         ]);
 
-
         Yii::$app->view->registerMetaTag([
             'name' => 'description',
             'content' => $post->brief
@@ -103,13 +104,11 @@ class DefaultController extends Controller
             'content' => $post->title
         ]);
 
-
         $post->updateCounters(['click' => 1]);
 
         $searchModel = new BlogCommentSearch();
         $searchModel->scenario = BlogComment::SCENARIO_USER;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $post->id);
-
 
         $comment = new BlogComment();
         $comment->scenario = BlogComment::SCENARIO_USER;
@@ -125,6 +124,39 @@ class DefaultController extends Controller
             'comment' => $comment,
             'banners' => $this->getModule()->banners,
 
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionBook($slug){
+        $book = BlogPostBook::findOne(['slug'=>$slug]);
+        if($book->status != IActiveStatus::STATUS_ACTIVE){
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        return $this->render('viewBook',[
+            'book'=>$book
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionChapter($id){
+
+        $chapter = BlogPostBookChapter::findOne($id);
+        if(!$chapter){
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        return $this->render('viewChapter',[
+            'chapter'=>$chapter
         ]);
     }
 }

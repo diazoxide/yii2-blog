@@ -18,12 +18,9 @@ use kartik\social\FacebookPlugin;
 $this->title = $post->title;
 
 
-$this->params['breadcrumbs'][] = [
-    'label' => Module::t('blog', 'Blog'),
-    'url' => ['default/index']
-];
-$this->params['breadcrumbs'][] = ['label' => $post->category->title, 'url' => ['default/index', 'category_id' => $post->category->id, 'slug' => $post->category->slug]];
-$this->params['breadcrumbs'][] = yii\helpers\StringHelper::truncate(Html::encode($this->title), 30, '...');
+$this->params['breadcrumbs'] = $post->breadcrumbs;
+$this->params['breadcrumbs'][] = $this->title;
+
 $post_user = $post->user;
 $username_attribute = Module::getInstance()->userName;
 ?>
@@ -75,9 +72,10 @@ $username_attribute = Module::getInstance()->userName;
         </h1>
 
         <div class="blog-post__content" itemprop="articleBody">
-            <?php
-            echo $post->content;
-            ?>
+            <?= $post->content ?>
+
+            <?= $this->render('_books',['books'=>$post->getBooks()]) ?>
+
         </div>
         <?php if (isset($post->module->schemaOrg) && isset($post->module->schemaOrg['publisher'])) : ?>
             <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" class="blog-post__publisher">

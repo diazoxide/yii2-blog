@@ -11,9 +11,8 @@ use diazoxide\blog\Module;
 /* @var $model diazoxide\blog\models\BlogCategory */
 
 $this->title = Module::t('blog', 'Update ') . Module::t('blog', 'Blog Category') . ' ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => Module::t('blog', 'Blog Categorys'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Module::t('blog', 'Update');
+$this->params['breadcrumbs'] = $model->breadcrumbs;
+$this->params['breadcrumbs'][] = $model->title;
 ?>
 <div class="blog-category-update">
 

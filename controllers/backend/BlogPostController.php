@@ -106,7 +106,7 @@ class BlogPostController extends BaseAdminController
                         'actions' => ['create-book-chapter'],
                         'allow' => true,
                         'matchCallback' => function () {
-                            return Yii::$app->user->can('BLOG_CREATE_OWN_POST_BOOK_CHAPTER', ['model' => $this->findBookChapterModel(Yii::$app->request->getQueryParam('book_id'))->book->post])
+                            return Yii::$app->user->can('BLOG_CREATE_OWN_POST_BOOK_CHAPTER', ['model' => $this->findBookModel(Yii::$app->request->getQueryParam('book_id'))->post])
                                 || Yii::$app->user->can('BLOG_CREATE_POST_BOOK_CHAPTER');
                         },
                     ],
@@ -212,7 +212,7 @@ class BlogPostController extends BaseAdminController
         $model = new BlogPost();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['update', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -245,7 +245,7 @@ class BlogPostController extends BaseAdminController
         ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['update', 'id' => $model->id]);
         }
 
         return $this->render('update', [

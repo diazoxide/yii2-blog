@@ -260,20 +260,11 @@ class BlogCategory extends \yii\db\ActiveRecord
         }
     }
 
-    /**
-     * @param int $id
-     * @param array $array
-     * @return array|void
-     */
-    static public function getBreadcrumbs($id = 0, $array = array())
+    public function getBreadcrumbs()
     {
-        if (0 == $id) {
-            return;
-        }
-
-        $arrayResult = self::getPathToRoot($id, $array);
-
-        return array_reverse($arrayResult);
+        $result = $this->getModule()->breadcrumbs;
+        $result[] = ['label' => Module::t('blog', 'Blog Categories'), 'url' => [$this->getModule()->categoriesUrl]];
+        return $result;
     }
 
     /**
@@ -453,6 +444,7 @@ class BlogCategory extends \yii\db\ActiveRecord
         return Yii::$app->getUrlManager()->createUrl(['blog/default/archive', 'slug' => $this->slug]);
 
     }
+
 
     /**
      * @return \yii\db\ActiveQuery

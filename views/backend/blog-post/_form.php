@@ -21,11 +21,7 @@ use yii\widgets\ActiveForm;
 
 
     <?php $form = ActiveForm::begin([
-        'options' => ['class' => 'form-horizontal', 'enctype' => 'multipart/form-data'],
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-8\">{input}{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-4 control-label'],
-        ],
+        'options' => ['enctype' => 'multipart/form-data'],
     ]); ?>
 
     <?= $form->errorSummary($model); ?>

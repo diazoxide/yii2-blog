@@ -8,18 +8,12 @@
 namespace diazoxide\blog\models;
 
 use diazoxide\blog\Module;
-use diazoxide\blog\traits\IActiveStatus;
 use diazoxide\blog\traits\ModuleTrait;
 use diazoxide\blog\traits\StatusTrait;
 use Yii;
-use yii\behaviors\AttributeBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yiidreamteam\upload\ImageUploadBehavior;
-
 
 /**
  * This is the model class for table "blog_post".
@@ -36,8 +30,9 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @property integer $created_at
  * @property integer $updated_at
  *
+ * @property BlogPost $post
  * @property BlogComment[] $blogComments
- * @property BlogCategory $category
+ * @property Module module
  */
 class BlogPostBook extends \yii\db\ActiveRecord
 {
@@ -146,21 +141,35 @@ class BlogPostBook extends \yii\db\ActiveRecord
     public function getUrl()
     {
         if ($this->getModule()->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createUrl(['blog/blog-post-book/update', 'id' => $this->id]);
+            return Yii::$app->getUrlManager()->createUrl(['blog/blog-post/update-book', 'id' => $this->id]);
         }
+        $year = date('Y', $this->post->created_at);
+        $month = date('m', $this->post->created_at);
+        $day = date('d', $this->post->created_at);
 
-        return Yii::$app->getUrlManager()->createUrl(['blog/default/book', 'post' => $this->post->slug, 'slug' => $this->slug]);
+        return Yii::$app->getUrlManager()->createUrl(['blog/default/book', 'post' => $this->post->slug, 'slug' => $this->slug, 'year' => $year, 'month' => $month, 'day' => $day]);
     }
 
     public function getAbsoluteUrl()
     {
         if ($this->getModule()->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/blog-post-book/update', 'id' => $this->id]);
+            return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/blog-post/update-book', 'id' => $this->id]);
         }
+        $year = date('Y', $this->post->created_at);
+        $month = date('m', $this->post->created_at);
+        $day = date('d', $this->post->created_at);
 
-        return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default/book', 'post' => $this->post->slug, 'slug' => $this->slug]);
+        return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default/book', 'post' => $this->post->slug, 'slug' => $this->slug, 'year' => $year, 'month' => $month, 'day' => $day]);
     }
 
+
+    public function getBreadcrumbs()
+    {
+
+        $result = $this->post->breadcrumbs;
+        $result[] = ['label' => $this->post->title, 'url' => $this->post->url];
+        return $result;
+    }
 
     public function getCreatedRelativeTime()
     {

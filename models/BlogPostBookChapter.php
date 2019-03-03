@@ -37,6 +37,10 @@ use yiidreamteam\upload\ImageUploadBehavior;
  *
  * @property BlogComment[] $blogComments
  * @property BlogCategory $category
+ * @property Module module
+ * @property BlogPost post
+ * @property BlogPostBookChapter parent
+ * @property array breadcrumbs
  */
 class BlogPostBookChapter extends \yii\db\ActiveRecord
 {
@@ -57,6 +61,7 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
     /**
      * created_at, updated_at to now()
      * crate_user_id, update_user_id to current login user id
+     * @throws \yii\base\InvalidConfigException
      */
     public function behaviors()
     {
@@ -86,10 +91,10 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
         return [
             [['title', 'book_id'], 'required'],
             [['book_id', 'parent_id'], 'integer'],
-            [['brief'], 'string'],
+            [['brief','keywords'], 'string'],
             [['bbcode'], 'boolean'],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
-            [['title'], 'string', 'max' => 255],
+            [['title','keywords'], 'string', 'max' => 255],
             [['content'], 'string'],
 
         ];
@@ -107,6 +112,7 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
             'bbcode' => Module::t('blog', 'BBCode'),
             'banner' => Module::t('blog', 'Banner'),
             'book_id' => Module::t('blog', 'Book'),
+            'keywords' => Module::t('blog', 'Keywords'),
             'content' => Module::t('blog', 'Content'),
         ];
     }
@@ -120,6 +126,9 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
     }
 
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getParent()
     {
         return $this->hasOne(BlogPostBookChapter::className(), ['id' => 'parent_id']);
@@ -150,7 +159,7 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
      */
     public function getParsedContent()
     {
-        if(!$this->isBBcode()) {
+        if (!$this->isBBcode()) {
             return $this->content;
         }
 
@@ -185,10 +194,10 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
                 if ($tag->property) {
                     return '<strong><a title="' . $tag->property . '">*';
                 } else {
-                    return "</a></strong>";
+                    return "<strong><a>*";
                 }
             } else {
-                return '</strong>';
+                return '</a></strong>';
             }
         });
 
@@ -205,7 +214,12 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
             return Yii::$app->getUrlManager()->createUrl(['blog/blog-post-book-chapter/update', 'id' => $this->id]);
         }
 
-        return Yii::$app->getUrlManager()->createUrl(['blog/default/book', 'post' => $this->post->slug, 'slug' => $this->slug]);
+        $year = date('Y', $this->book->post->created_at);
+        $month = date('m', $this->book->post->created_at);
+        $day = date('d', $this->book->post->created_at);
+
+        return Yii::$app->getUrlManager()->createUrl(['blog/default/chapter', 'id' => $this->id, 'post' => $this->book->post->slug, 'book' => $this->book->slug, 'year' => $year, 'month' => $month, 'day' => $day]);
+
     }
 
     /**
@@ -214,11 +228,29 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
     public function getAbsoluteUrl()
     {
         if ($this->getModule()->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/blog-post-book/update', 'id' => $this->id]);
+            return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/blog-post-book-chapter/update', 'id' => $this->id]);
         }
 
-        return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default/book', 'post' => $this->post->slug, 'slug' => $this->slug]);
+        $year = date('Y', $this->book->post->created_at);
+        $month = date('m', $this->book->post->created_at);
+        $day = date('d', $this->book->post->created_at);
+
+        return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default/chapter', 'id' => $this->id, 'post' => $this->book->post->slug, 'book' => $this->book->slug, 'year' => $year, 'month' => $month, 'day' => $day]);
+
     }
 
+    public function getBreadcrumbs()
+    {
+        $result = [];
+        if ($this->parent_id == null) {
+            $result = $this->book->breadcrumbs;
+            $result[] = ['label' => $this->book->title, 'url' => $this->book->url];
+
+        } else {
+            $result = array_merge($result, $this->parent->breadcrumbs);
+            $result[] = ['label' => $this->parent->title, 'url' => $this->parent->url];
+        }
+        return $result;
+    }
 
 }

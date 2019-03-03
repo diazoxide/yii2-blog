@@ -43,6 +43,7 @@ use yiidreamteam\upload\ImageUploadBehavior;
  *
  * @property BlogComment[] $blogComments
  * @property BlogCategory $category
+ * @property BlogPostBook $books
  */
 class BlogPost extends \yii\db\ActiveRecord
 {
@@ -278,6 +279,8 @@ class BlogPost extends \yii\db\ActiveRecord
 
     /**
      * comment need approval
+     * @param BlogComment $comment
+     * @return
      */
     public function addComment($comment)
     {
@@ -294,6 +297,13 @@ class BlogPost extends \yii\db\ActiveRecord
     public function getUpdatedRelativeTime()
     {
         return Yii::$app->formatter->format($this->updated_at, 'relativeTime');
+    }
+
+    public function getBreadcrumbs()
+    {
+        $result = $this->category->breadcrumbs;
+        $result[] = ['label' => $this->category->title, 'url' => $this->category->url];
+        return $result;
     }
 
     public function getSluga()
