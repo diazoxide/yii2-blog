@@ -13,6 +13,7 @@ use diazoxide\blog\models\BlogCommentSearch;
 use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\models\BlogPostBook;
 use diazoxide\blog\models\BlogPostBookChapter;
+use diazoxide\blog\models\BlogPostBookChapterSearch;
 use diazoxide\blog\models\BlogPostSearch;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
@@ -41,12 +42,12 @@ class DefaultController extends Controller
 
     public function actionIndex()
     {
-        $featuredCategories = BlogCategory::find()->where(['is_featured' => true,'status' => IActiveStatus::STATUS_ACTIVE])->orderBy(['sort_order' => SORT_DESC]);
+        $featuredCategories = BlogCategory::find()->where(['is_featured' => true, 'status' => IActiveStatus::STATUS_ACTIVE])->orderBy(['sort_order' => SORT_DESC]);
 
         return $this->render('index', [
             'title' => $this->getModule()->homeTitle,
             'banners' => $this->getModule()->banners,
-            'featuredCategories'=>$featuredCategories,
+            'featuredCategories' => $featuredCategories,
         ]);
 
     }
@@ -132,14 +133,15 @@ class DefaultController extends Controller
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionBook($slug){
-        $book = BlogPostBook::findOne(['slug'=>$slug]);
-        if($book->status != IActiveStatus::STATUS_ACTIVE){
+    public function actionBook($slug)
+    {
+        $book = BlogPostBook::findOne(['slug' => $slug]);
+        if ($book->status != IActiveStatus::STATUS_ACTIVE) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        return $this->render('viewBook',[
-            'book'=>$book
+        return $this->render('viewBook', [
+            'book' => $book
         ]);
     }
 
@@ -148,15 +150,30 @@ class DefaultController extends Controller
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionChapter($id){
+    public function actionChapter($id)
+    {
 
         $chapter = BlogPostBookChapter::findOne($id);
-        if(!$chapter){
+        if (!$chapter) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        return $this->render('viewChapter',[
-            'chapter'=>$chapter
+        return $this->render('viewChapter', [
+            'chapter' => $chapter
         ]);
+    }
+
+    public function actionChapterSearch($book_id)
+    {
+        $searchModel = new BlogPostBookChapterSearch();
+        $searchModel->scenario = BlogPostSearch::SCENARIO_USER;
+        $searchModel->book_id = $book_id;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('searchBookChapter', [
+            'dataProvider' => $dataProvider,
+            'searchModel'=>$searchModel,
+        ]);
+
     }
 }

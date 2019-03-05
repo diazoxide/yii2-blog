@@ -12,16 +12,6 @@ use yii\helpers\Html;
 
 ?>
 
+<h5><?= Html::a($model->title, $model->url) ?></h5>
+<p class="small"><?= $model->brief ?></p>
 
-<div class="col-sm-3">
-
-    <div class="col-xs-4">
-        <?= Html::a(Html::img($model->getThumbFileUrl('banner', 'xsthumb'), ['class' => 'img-responsive']), $model->url) ?>
-    </div>
-
-    <div class="col-xs-8">
-        <?= Html::a($model->title, $model->url) ?>
-    </div>
-
-
-</div>

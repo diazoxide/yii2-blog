@@ -30,6 +30,9 @@ $dataProvider = new ActiveDataProvider([
 echo ListView::widget([
     'dataProvider' => $dataProvider,
     'itemView' => '_chapter',
+    'itemOptions'=>[
+        'class'=>'col-sm-3 top-buffer-20'
+    ],
     'emptyText' => '',
     'layout' => "{summary}<div class='col-xs-12'>{items}</div>{pager}",
 ]);

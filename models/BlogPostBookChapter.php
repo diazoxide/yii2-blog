@@ -211,7 +211,7 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
     public function getUrl()
     {
         if ($this->getModule()->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createUrl(['blog/blog-post-book-chapter/update', 'id' => $this->id]);
+            return Yii::$app->getUrlManager()->createUrl(['blog/blog-post/update-book-chapter', 'id' => $this->id]);
         }
 
         $year = date('Y', $this->book->post->created_at);
@@ -228,7 +228,7 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
     public function getAbsoluteUrl()
     {
         if ($this->getModule()->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/blog-post-book-chapter/update', 'id' => $this->id]);
+            return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/blog-post/update-chapter', 'id' => $this->id]);
         }
 
         $year = date('Y', $this->book->post->created_at);
