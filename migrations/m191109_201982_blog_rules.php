@@ -20,7 +20,7 @@ use yii\db\Schema;
  * - `{{%blog_comment}}` -
  * - `{{%blog_tag}}` -
  */
-class m180408_201482_blog_rules extends Migration
+class m191109_201982_blog_rules extends Migration
 {
     use \diazoxide\blog\traits\ModuleTrait;
 
@@ -52,6 +52,25 @@ class m180408_201482_blog_rules extends Migration
         ['BLOG_VIEW_POSTS', 'View blog posts'],
         ['BLOG_VIEW_TAG', 'View blog tag'],
         ['BLOG_VIEW_TAGS', 'View blog tags'],
+
+        ['BLOG_VIEW_WIDGET_TYPES','View widget types'],
+        ['BLOG_CREATE_WIDGET_TYPE','Create widget type'],
+        ['BLOG_UPDATE_WIDGET_TYPE','Update widget type'],
+        ['BLOG_DELETE_WIDGET_TYPE','Delete widget type'],
+
+        ['BLOG_UPDATE_OWN_POST_BOOK_CHAPTER', 'Update own post book chapter', ['blogIsAuthor']],
+        ['BLOG_UPDATE_POST_BOOK_CHAPTER', 'Update post book chapter'],
+        ['BLOG_CREATE_OWN_POST_BOOK_CHAPTER', 'Create own post book chapter', ['blogIsAuthor']],
+        ['BLOG_CREATE_POST_BOOK_CHAPTER', 'Create post book chapter'],
+        ['BLOG_DELETE_OWN_POST_BOOK_CHAPTER', 'Delete own post book chapter', ['blogIsAuthor']],
+        ['BLOG_DELETE_POST_BOOK_CHAPTER', 'Delete post book chapter'],
+
+        ['BLOG_UPDATE_OWN_POST_BOOK', 'Update own post book', ['blogIsAuthor']],
+        ['BLOG_UPDATE_POST_BOOK', 'Update post book'],
+        ['BLOG_CREATE_OWN_POST_BOOK', 'Create own post book', ['blogIsAuthor']],
+        ['BLOG_CREATE_POST_BOOK', 'Create post book'],
+        ['BLOG_DELETE_OWN_POST_BOOK', 'Delete own post book', ['blogIsAuthor']],
+        ['BLOG_DELETE_POST_BOOK', 'Delete post book'],
     ];
 
     public $roles = [
@@ -80,6 +99,19 @@ class m180408_201482_blog_rules extends Migration
             'BLOG_VIEW_POSTS',
             'BLOG_VIEW_TAG',
             'BLOG_VIEW_TAGS',
+            'BLOG_UPDATE_OWN_POST_BOOK_CHAPTER',
+            'BLOG_CREATE_OWN_POST_BOOK_CHAPTER',
+            'BLOG_DELETE_OWN_POST_BOOK_CHAPTER',
+            'BLOG_UPDATE_OWN_POST_BOOK',
+            'BLOG_UPDATE_POST_BOOK',
+            'BLOG_CREATE_OWN_POST_BOOK',
+            'BLOG_CREATE_POST_BOOK',
+            'BLOG_DELETE_OWN_POST_BOOK',
+            'BLOG_DELETE_POST_BOOK',
+            'BLOG_VIEW_WIDGET_TYPES',
+            'BLOG_CREATE_WIDGET_TYPE',
+            'BLOG_UPDATE_WIDGET_TYPE',
+            'BLOG_DELETE_WIDGET_TYPE',
         ]],
         ['BLOG_MANAGER', 'Blog Manager', [
             'BLOG_BULK_COMMENTS',
@@ -106,6 +138,15 @@ class m180408_201482_blog_rules extends Migration
             'BLOG_VIEW_POSTS',
             'BLOG_VIEW_TAG',
             'BLOG_VIEW_TAGS',
+            'BLOG_UPDATE_OWN_POST_BOOK_CHAPTER',
+            'BLOG_CREATE_OWN_POST_BOOK_CHAPTER',
+            'BLOG_DELETE_OWN_POST_BOOK_CHAPTER',
+            'BLOG_UPDATE_OWN_POST_BOOK',
+            'BLOG_UPDATE_POST_BOOK',
+            'BLOG_CREATE_OWN_POST_BOOK',
+            'BLOG_CREATE_POST_BOOK',
+            'BLOG_DELETE_OWN_POST_BOOK',
+            'BLOG_DELETE_POST_BOOK',
         ]],
         ['BLOG_EDITOR', 'Blog Editor', [
             'BLOG_CREATE_POST',
@@ -127,16 +168,10 @@ class m180408_201482_blog_rules extends Migration
      */
     public function up()
     {
-
-
         //$this->removeAllAuthItems();
-
         $this->registerRules();
-
         $this->registerPermissions();
-
         $this->registerRoles();
-
     }
 
     /**
@@ -214,6 +249,6 @@ class m180408_201482_blog_rules extends Migration
      */
     public function down()
     {
-        
+
     }
 }

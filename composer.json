@@ -38,7 +38,8 @@
     "yii-dream-team/yii2-upload-behavior": "*",
     "lesha724/yii2-math-captcha": "*",
     "kartik-v/yii2-social": "@dev",
-    "chriskonnertz/bbcode": "dev-master"
+    "chriskonnertz/bbcode": "dev-master",
+    "paulzi/yii2-json-behavior" : "~1.0.0"
   },
   "repositories": [
     {

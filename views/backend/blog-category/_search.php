@@ -48,8 +48,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'update_time') ?>
     
     <div class="form-group">
-        <?= Html::submitButton(Module::t('blog', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Module::t('blog', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton(Module::t('Search'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Module::t('Reset'), ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

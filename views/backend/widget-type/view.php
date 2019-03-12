@@ -1,22 +1,17 @@
 <?php
-/**
- * Project: yii2-blog for internal using
- * Author: diazoxide
- * Copyright (c) 2018.
- */
 
 use diazoxide\blog\Module;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
+/* @var $model diazoxide\blog\models\BlogCategory */
 
-/** @var \diazoxide\blog\models\BlogPost $model */
 $this->title = $model->title;
-$this->params['breadcrumbs'] = $model->breadcrumbs;
+$this->params['breadcrumbs'][] = ['label' => Module::t('Blog Categorys'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="blog-post-view">
+<div class="blog-category-view">
     
     <p>
         <?= Html::a(Module::t('Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -34,23 +29,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             [
-                'attribute' => 'category_id',
-                'value' => $model->category->title,
+                'attribute' => 'parent_id',
+                'value' => $model->parent_id ? $model->parent->title : Module::t('Root Category'),
             ],
             'title',
-            'brief:ntext',
-            'content:html',
-            'tags',
             'slug',
+            'banner',
             [
-                'attribute' => 'banner',
-                'value' => $model->getThumbFileUrl('banner', 'thumb'),
+                'attribute' => 'is_nav',
+                'value' => $model->isNavLabel,
             ],
-            'click',
-            [
-                'attribute' => 'user',
-                'value' => ($model->user) ? $model->user->{Module::getInstance()->userName} : 'Отсутствует',
-            ],
+            'sort_order',
+            'page_size',
+            'template',
+            'redirect_url:url',
             [
                 'attribute' => 'status',
                 'value' => $model->getStatus(),

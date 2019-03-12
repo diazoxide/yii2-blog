@@ -50,9 +50,9 @@ class BlogTag extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Module::t('blog', 'ID'),
-            'name' => Module::t('blog', 'Name'),
-            'frequency' => Module::t('blog', 'Frequency'),
+            'id' => Module::t('ID'),
+            'name' => Module::t('Name'),
+            'frequency' => Module::t('Frequency'),
         ];
     }
 

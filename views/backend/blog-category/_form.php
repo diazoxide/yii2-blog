@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 
 //fix the issue that it can assign itself as parent
-$parentCategory = ArrayHelper::merge([0 => Module::t('blog', 'Root Category')], ArrayHelper::map(BlogCategory::get(0, BlogCategory::find()->all()), 'id', 'str_label'));
+$parentCategory = ArrayHelper::merge([0 => Module::t('Root Category')], ArrayHelper::map(BlogCategory::get(0, BlogCategory::find()->all()), 'id', 'str_label'));
 unset($parentCategory[$model->id]);
 
 ?>
@@ -41,9 +41,15 @@ unset($parentCategory[$model->id]);
 
     <?= $form->field($model, 'icon_class')->textInput(['maxlength' => 60]) ?>
 
+    <?= $form->field($model, 'read_icon_class')->textInput(['maxlength' => 60]) ?>
+
+    <?= $form->field($model, 'read_more_text')->textInput(['maxlength' => 60]) ?>
+
     <?= $form->field($model, 'is_nav')->dropDownList(BlogCategory::getArrayIsNav()) ?>
 
     <?= $form->field($model, 'is_featured')->dropDownList(BlogCategory::getArrayIsFeatured()) ?>
+
+    <?= $form->field($model, 'widget_type')->textInput(['type' => 'number']) ?>
 
     <?= $form->field($model, 'sort_order')->textInput() ?>
 
@@ -57,7 +63,7 @@ unset($parentCategory[$model->id]);
 
     <div class="form-group">
         <label class="col-lg-2 control-label" for="">&nbsp;</label>
-        <?= Html::submitButton($model->isNewRecord ? Module::t('blog', 'Create') : Module::t('blog', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Module::t('Create') : Module::t('Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

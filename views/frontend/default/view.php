@@ -38,15 +38,15 @@ $username_attribute = Module::getInstance()->userName;
         <meta itemprop="discussionUrl" content="<?= $post->getAbsoluteUrl(); ?>">
         <div class="blog-post__nav">
             <p class="blog-post__category">
-                <?= Module::t('blog', 'Category'); ?>
+                <?= Module::t('Category'); ?>
                 : <?= Html::a($post->category->title, $post->category->url); ?>
             </p>
             <p class="blog-post__info">
-                <time title="<?= Module::t('blog', 'Create Time'); ?>" itemprop="datePublished"
+                <time title="<?= Module::t('Create Time'); ?>" itemprop="datePublished"
                       datetime="<?= date_format(date_timestamp_set(new DateTime(), $post->created_at), 'c') ?>">
                     <i class="fa fa-calendar-alt"></i> <?= Yii::$app->formatter->asDateTime($post->created_at); ?>
                 </time>
-                <span title="<?= Module::t('blog', 'Click'); ?>">
+                <span title="<?= Module::t('Click'); ?>">
                     <i class="fa fa-eye"></i> <?= $post->click; ?>
                 </span>
                 <?php if ($post->tagLinks): ?>
@@ -96,7 +96,7 @@ $username_attribute = Module::getInstance()->userName;
 
 <?php if ($post->module->enableShareButtons) : ?>
     <section id="share" class="blog-share">
-        <h2 class="blog-share__header title title--2"><?= Module::t('blog', 'Share'); ?></h2>
+        <h2 class="blog-share__header title title--2"><?= Module::t('Share'); ?></h2>
 
         <div class="row">
             <div class="col-md-12">
@@ -123,7 +123,7 @@ $username_attribute = Module::getInstance()->userName;
 
 <?php if ($post->module->enableComments && $post->show_comments) : ?>
     <section id="comments" class="blog-comments">
-        <h2 class="blog-comments__header title title--2"><?= Module::t('blog', 'Comments'); ?></h2>
+        <h2 class="blog-comments__header title title--2"><?= Module::t('Comments'); ?></h2>
 
         <?php if ($post->module->enableFacebookComments): ?>
             <div class="row">
@@ -153,7 +153,7 @@ $username_attribute = Module::getInstance()->userName;
 
             <div class="row">
                 <div class="col-sm-12">
-                    <h3><?= Module::t('blog', 'Write comments'); ?></h3>
+                    <h3><?= Module::t('Write comments'); ?></h3>
                     <?= $this->render('_form', [
                         'model' => $comment,
                     ]); ?>

@@ -11,9 +11,7 @@ use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\models\BlogPostBook;
 use diazoxide\blog\models\BlogPostBookChapter;
 use diazoxide\blog\models\BlogPostSearch;
-use diazoxide\blog\models\Status;
 use diazoxide\blog\traits\IActiveStatus;
-use DOMDocument;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -81,7 +79,7 @@ class BlogPostController extends BaseAdminController
                         'actions' => ['create-book'],
                         'allow' => true,
                         'matchCallback' => function () {
-                            return Yii::$app->user->can('BLOG_CREATE_OWN_POST_BOOK', ['model' => $this->findBookModel(Yii::$app->request->getQueryParam('post_id'))->post])
+                            return Yii::$app->user->can('BLOG_CREATE_OWN_POST_BOOK', ['model' => $this->findModel(Yii::$app->request->getQueryParam('post_id'))])
                                 || Yii::$app->user->can('BLOG_CREATE_POST_BOOK');
                         },
                     ],

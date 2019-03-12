@@ -13,7 +13,7 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 
-$this->title = Module::t('blog', 'Update ') . Module::t('blog', 'Chapter') . ' ' . $model->title;
+$this->title = Module::t('Update ') . Module::t('Chapter') . ' ' . $model->title;
 $this->params['breadcrumbs'] = $model->breadcrumbs;
 $this->params['breadcrumbs'][] = ['label' => $model->title];
 ?>

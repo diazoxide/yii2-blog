@@ -128,22 +128,22 @@ class BlogPost extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Module::t('blog', 'ID'),
-            'category_id' => Module::t('blog', 'Category'),
-            'title' => Module::t('blog', 'Title'),
-            'brief' => Module::t('blog', 'Brief'),
-            'content' => Module::t('blog', 'Content'),
-            'tags' => Module::t('blog', 'Tags'),
-            'slug' => Module::t('blog', 'Slug'),
-            'banner' => Module::t('blog', 'Banner'),
-            'show_comments' => Module::t('blog', 'Show Comments'),
-            'click' => Module::t('blog', 'Click'),
-            'user_id' => Module::t('blog', 'Author'),
-            'status' => Module::t('blog', 'Status'),
-            'created_at' => Module::t('blog', 'Created At'),
-            'updated_at' => Module::t('blog', 'Updated At'),
-            'is_slide' => Module::t('blog', 'Show In Slider'),
-            'commentsCount' => Module::t('blog', 'Comments Count'),
+            'id' => Module::t('ID'),
+            'category_id' => Module::t('Category'),
+            'title' => Module::t('Title'),
+            'brief' => Module::t('Brief'),
+            'content' => Module::t('Content'),
+            'tags' => Module::t('Tags'),
+            'slug' => Module::t('Slug'),
+            'banner' => Module::t('Banner'),
+            'show_comments' => Module::t('Show Comments'),
+            'click' => Module::t('Click'),
+            'user_id' => Module::t('Author'),
+            'status' => Module::t('Status'),
+            'created_at' => Module::t('Created At'),
+            'updated_at' => Module::t('Updated At'),
+            'is_slide' => Module::t('Show In Slider'),
+            'commentsCount' => Module::t('Comments Count'),
         ];
     }
 

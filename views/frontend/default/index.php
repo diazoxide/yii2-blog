@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-
+use \diazoxide\blog\widgets\Feed;
+use \diazoxide\blog\widgets\Posts;
 /** @var String $title */
 /** @var array $banners */
 $this->title = $title;
@@ -14,24 +15,24 @@ $this->title = $title;
                 <div class="row">
                     <div class="col-lg-10 nopadding-xs">
                         <div class="widget_title hidden-xs"><i
-                                    class="fa fa-star"></i> <?= \diazoxide\blog\Module::t('blog', 'General') ?></div>
+                                    class="fa fa-star"></i> <?= \diazoxide\blog\Module::t('General') ?></div>
 
                         <?= \diazoxide\blog\widgets\Slider::widget(
                             ['itemsCount' => 5]
                         ) ?>
                     </div>
                     <div class="col-lg-2 nopadding-xs">
-                        <?= isset($banners[0]) ? $banners[0] : \diazoxide\blog\Module::t('blog', "Insert banner code"); ?>
+                        <?= isset($banners[0]) ? $banners[0] : \diazoxide\blog\Module::t("Insert banner code"); ?>
                     </div>
                 </div>
 
                 <!--Popular posts-->
                 <div class="row top-buffer-20-xs home-white-content">
                     <div class="widget_title"><i
-                                class="fa fa-eye"></i> <?= \diazoxide\blog\Module::t('blog', 'Popular posts') ?></div>
+                                class="fa fa-eye"></i> <?= \diazoxide\blog\Module::t('Popular posts') ?></div>
                     <div class="col-md-6">
                         <div class="top-buffer-20-xs">
-                            <?= \diazoxide\blog\widgets\Posts::widget([
+                            <?= Posts::widget([
                                 'itemsCount' => 1,
                                 'type' => 'hot',
                                 'daysInterval' => 7,
@@ -45,12 +46,12 @@ $this->title = $title;
                     </div>
                     <div class="col-md-6">
                         <div class="top-buffer-20-xs">
-                            <?= \diazoxide\blog\widgets\Feed::widget([
+                            <?= Feed::widget([
                                 'itemsCount' => 6,
                                 'showBrief' => false,
                                 'showPager' => false,
                                 'id' => 'home-page-hot-posts',
-                                'type' => 'hot',
+                                'type' => Feed::TYPE_POPULAR,
                                 'showItemViews' => true,
                                 'showItemCategory' => false,
                                 'daysInterval' => 7,
@@ -83,25 +84,25 @@ $this->title = $title;
                 <div class="row top-buffer-20-xs home-videos-content">
 
                     <div class="widget_title"><i
-                                class="fa fa-youtube-play"></i> <?= \diazoxide\blog\Module::t('blog', 'Videos') ?>
+                                class="fa fa-youtube-play"></i> <?= \diazoxide\blog\Module::t('Videos') ?>
                     </div>
 
                     <div class="col-md-6">
                         <div class="top-buffer-20-xs">
-                            <?= \diazoxide\blog\widgets\Posts::widget([
+                            <?= Posts::widget([
                                 'itemsCount' => 1,
                                 'categoryId' => 139,
                                 'briefLength' => 200,
                                 'showItemReadMoreButton' => true,
                                 'showCategoryTitle' => false,
                                 'itemImageType' => 'xthumb',
-                                'itemReadMoreText' => '<i class="fa fa-play"></i> ' . \diazoxide\blog\Module::t('blog', 'Play video'),
+                                'itemReadMoreText' => '<i class="fa fa-play"></i> ' . \diazoxide\blog\Module::t('Play video'),
                             ]) ?>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="top-buffer-20-xs">
-                            <?= \diazoxide\blog\widgets\Feed::widget([
+                            <?= Feed::widget([
                                 'itemsCount' => 5,
                                 'categoryId' => 139,
                                 'showBrief' => false,
@@ -121,7 +122,7 @@ $this->title = $title;
                     <?php foreach ($featuredCategories->limit(3)->offset(3)->all() as $category): ?>
                         <div class="col-md-4 home_posts_widget">
 
-                            <?= \diazoxide\blog\widgets\Posts::widget([
+                            <?= Posts::widget([
                                 'itemsCount' => 2,
                                 'categoryId' => $category->id,
                                 'showCategoryTitle' => true
@@ -143,14 +144,14 @@ $this->title = $title;
                                 $banner = $banners[1];
                                 echo Html::a(Html::img($banner['src'], ['class' => 'img-responsive']), $banner['href']);
                             } else {
-                                echo \diazoxide\blog\Module::t('blog', "Insert Banner Code");
+                                echo \diazoxide\blog\Module::t("Insert Banner Code");
                             }
                             ?>
                         </div>
                         <div class="widget_title"><i
-                                    class="fa fa-newspaper-o"></i> <?= \diazoxide\blog\Module::t('blog', 'News Feed') ?>
+                                    class="fa fa-newspaper-o"></i> <?= \diazoxide\blog\Module::t('News Feed') ?>
                         </div>
-                        <?= \diazoxide\blog\widgets\Feed::widget([
+                        <?= Feed::widget([
                             'itemsCount' => 15,
                             'showBrief' => false,
                             'briefLength' => 50,

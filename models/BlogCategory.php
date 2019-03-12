@@ -87,8 +87,8 @@ class BlogCategory extends \yii\db\ActiveRecord
     public static function getArrayIsNav()
     {
         return [
-            self::IS_NAV_YES => Module::t('blog', 'YES'),
-            self::IS_NAV_NO => Module::t('blog', 'NO'),
+            self::IS_NAV_YES => Module::t('YES'),
+            self::IS_NAV_NO => Module::t('NO'),
         ];
     }
 
@@ -98,8 +98,8 @@ class BlogCategory extends \yii\db\ActiveRecord
     public static function getArrayIsFeatured()
     {
         return [
-            self::IS_FEATURED_YES => Module::t('blog', 'YES'),
-            self::IS_FEATURED_NO => Module::t('blog', 'NO'),
+            self::IS_FEATURED_YES => Module::t('YES'),
+            self::IS_FEATURED_NO => Module::t('NO'),
         ];
     }
 
@@ -178,8 +178,8 @@ class BlogCategory extends \yii\db\ActiveRecord
         foreach ((array)$array as $v) {
             if ($v['parent_id'] == $parentId) {
                 $newArray[$v['id']] = array(
-                    'text' => $v['title'] . ' 导航[' . ($v['is_nav'] ? Module::t('blog', 'CONSTANT_YES') : Module::t('blog', 'CONSTANT_NO')) . '] 排序[' . $v['sort_order'] .
-                        '] 类型[' . ($v['page_type'] == 'list' ? Module::t('blog', 'PAGE_TYPE_LIST') : Module::t('blog', 'PAGE_TYPE_PAGE')) . '] 状态[' .
+                    'text' => $v['title'] . ' 导航[' . ($v['is_nav'] ? Module::t('CONSTANT_YES') : Module::t('CONSTANT_NO')) . '] 排序[' . $v['sort_order'] .
+                        '] 类型[' . ($v['page_type'] == 'list' ? Module::t('PAGE_TYPE_LIST') : Module::t('PAGE_TYPE_PAGE')) . '] 状态[' .
                         F::getStatus2($v['status']) . '] [<a href="' . Yii::app()->createUrl('/category/update', array('id' => $v['id'])) . '">修改</a>][<a href="'
                         . Yii::app()->createUrl('/category/create', array('id' => $v['id'])) . '">增加子菜单</a>]&nbsp;&nbsp[<a href="' .
                         Yii::app()->createUrl('/category/delete', array('id' => $v['id'])) . '">删除</a>]',
@@ -263,7 +263,7 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function getBreadcrumbs()
     {
         $result = $this->getModule()->breadcrumbs;
-        $result[] = ['label' => Module::t('blog', 'Blog Categories'), 'url' => [$this->getModule()->categoriesUrl]];
+        $result[] = ['label' => Module::t('Blog Categories'), 'url' => [$this->getModule()->categoriesUrl]];
         return $result;
     }
 
@@ -275,7 +275,7 @@ class BlogCategory extends \yii\db\ActiveRecord
     static public function getPathToRoot($id = 0, $array = array())
     {
         if (0 == $id) {
-            return array();
+            return [];
         }
 
         $arrayResult = array();
@@ -339,10 +339,11 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'is_nav','is_featured', 'sort_order', 'page_size', 'status'], 'integer'],
+            [['parent_id', 'is_nav', 'is_featured', 'sort_order', 'widget_type', 'page_size', 'status'], 'integer'],
             [['title'], 'required'],
             [['sort_order', 'page_size'], 'default', 'value' => 0],
-            [['title', 'template', 'redirect_url', 'slug', 'icon_class'], 'string', 'max' => 255],
+            [['icon_class', 'read_icon_class', 'read_more_text'], 'string', 'max' => 60],
+            [['title', 'template', 'redirect_url', 'slug'], 'string', 'max' => 255],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
         ];
     }
@@ -353,21 +354,23 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Module::t('blog', 'ID'),
-            'parent_id' => Module::t('blog', 'Parent ID'),
-            'title' => Module::t('blog', 'Title'),
-            'slug' => Module::t('blog', 'Slug'),
-            'banner' => Module::t('blog', 'Banner'),
-            'icon_class' => Module::t('blog', 'Icon Class'),
-            'is_nav' => Module::t('blog', 'Is Nav'),
-            'is_featured' => Module::t('blog', 'Is Featured'),
-            'sort_order' => Module::t('blog', 'Sort Order'),
-            'page_size' => Module::t('blog', 'Page Size'),
-            'template' => Module::t('blog', 'Template'),
-            'redirect_url' => Module::t('blog', 'Redirect Url'),
-            'status' => Module::t('blog', 'Status'),
-            'created_at' => Module::t('blog', 'Created At'),
-            'updated_at' => Module::t('blog', 'Updated At'),
+            'id' => Module::t('ID'),
+            'parent_id' => Module::t('Parent ID'),
+            'title' => Module::t('Title'),
+            'slug' => Module::t('Slug'),
+            'banner' => Module::t('Banner'),
+            'icon_class' => Module::t('Icon Class'),
+            'read_icon_class' => Module::t('Read Icon Class'),
+            'read_more_text' => Module::t('Read More Text'),
+            'is_nav' => Module::t('Is Nav'),
+            'is_featured' => Module::t('Is Featured'),
+            'sort_order' => Module::t('Sort Order'),
+            'page_size' => Module::t('Page Size'),
+            'template' => Module::t('Template'),
+            'redirect_url' => Module::t('Redirect Url'),
+            'status' => Module::t('Status'),
+            'created_at' => Module::t('Created At'),
+            'updated_at' => Module::t('Updated At'),
         ];
     }
 

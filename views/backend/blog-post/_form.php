@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-12 text-right">
-            <?= Html::submitButton($model->isNewRecord ? Module::t('blog', 'Create') : Module::t('blog', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-warning']) ?>
+            <?= Html::submitButton($model->isNewRecord ? Module::t('Create') : Module::t('Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-warning']) ?>
         </div>
     </div>
 
@@ -55,9 +55,9 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'category_id')->dropDownList(ArrayHelper::map(BlogCategory::get(0, BlogCategory::find()->all()), 'id', 'str_label')) ?>
 
-            <?= $form->field($model, 'is_slide')->dropDownList([0 => Module::t('blog', 'No'), 1 => Module::t('blog', 'Yes')], ['prompt' => Module::t('blog', 'Select value')]) ?>
+            <?= $form->field($model, 'is_slide')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')], ['prompt' => Module::t('Select value')]) ?>
 
-            <?= $form->field($model, 'show_comments')->dropDownList([0 => Module::t('blog', 'No'), 1 => Module::t('blog', 'Yes')], ['prompt' => Module::t('blog', 'Select value')]) ?>
+            <?= $form->field($model, 'show_comments')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')], ['prompt' => Module::t('Select value')]) ?>
 
             <?= $form->field($model, 'tags')->textInput(['maxlength' => 128]) ?>
 

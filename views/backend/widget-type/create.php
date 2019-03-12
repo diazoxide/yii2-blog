@@ -7,15 +7,14 @@
 
 use diazoxide\blog\Module;
 
-
 /* @var $this yii\web\View */
-/* @var $model backend\modules\blog\models\BlogPost */
+/* @var $model diazoxide\blog\models\BlogWidgetType */
 
-$this->title = Module::t('Create ') . Module::t('Blog Post');
-$this->params['breadcrumbs'][] = ['label' => Module::t('Blog Posts'), 'url' => ['index']];
+$this->title = Module::t('Create ') . Module::t('Widget Type');
+$this->params['breadcrumbs'] = $model->breadcrumbs;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="blog-post-create">
+<div class="blog-widget-type-create">
 
     <?= $this->render('_form', [
         'model' => $model,

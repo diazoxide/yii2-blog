@@ -22,9 +22,9 @@ trait StatusTrait
     public static function getStatusList()
     {
         return [
-            IActiveStatus::STATUS_INACTIVE => Module::t('blog', 'STATUS_INACTIVE'),
-            IActiveStatus::STATUS_ACTIVE => Module::t('blog', 'STATUS_ACTIVE'),
-            IActiveStatus::STATUS_ARCHIVE => Module::t('blog', 'STATUS_DELETED')
+            IActiveStatus::STATUS_INACTIVE => Module::t('STATUS_INACTIVE'),
+            IActiveStatus::STATUS_ACTIVE => Module::t('STATUS_ACTIVE'),
+            IActiveStatus::STATUS_ARCHIVE => Module::t('STATUS_DELETED')
         ];
     }
 

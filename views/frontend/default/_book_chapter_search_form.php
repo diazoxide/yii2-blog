@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'q')->textInput((['maxlength' => 255])); ?>
 
 
-    <?= Html::submitButton(Module::t('blog', 'Search'), ['class' => 'btn btn-primary']) ?>
+    <?= Html::submitButton(Module::t('Search'), ['class' => 'btn btn-primary']) ?>
 
     <?php ActiveForm::end(); ?>
 </div>

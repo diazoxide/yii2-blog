@@ -13,7 +13,7 @@ use yii\helpers\Html;
 /* @var $searchModel diazoxide\blog\models\BlogCategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Module::t('blog', 'Blog Categorys');
+$this->title = Module::t('Blog Categorys');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-category-index">
@@ -21,20 +21,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     
     <p>
-        <?= Html::a(Module::t('blog', 'Create ') . Module::t('blog', 'Blog Category'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Module::t('Create ') . Module::t('Blog Category'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     
     <table class="table table-striped table-bordered">
         <thead>
         <tr>
             <th>ID</th>
-            <th><?= Module::t('blog', 'Banner') ?></th>
-            <th><?= Module::t('blog', 'Title') ?> </th>
-            <th><?= Module::t('blog', 'Sort Order') ?></th>
-            <th><?= Module::t('blog', 'Template') ?></th>
-            <th><?= Module::t('blog', 'Is Nav') ?></th>
-            <th><?= Module::t('blog', 'Status') ?></th>
-            <th><?= Module::t('blog', 'Actions') ?></th>
+            <th><?= Module::t('Banner') ?></th>
+            <th><?= Module::t('Title') ?> </th>
+            <th><?= Module::t('Sort Order') ?></th>
+            <th><?= Module::t('Template') ?></th>
+            <th><?= Module::t('Is Nav') ?></th>
+            <th><?= Module::t('Status') ?></th>
+            <th><?= Module::t('Actions') ?></th>
         
         </tr>
         </thead>
@@ -49,14 +49,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <td><?= BlogCategory::getOneIsNavLabel($item['is_nav']); ?></td>
                 <td><?= $item['status']; ?></td>
                 <td>
-                    <a href="<?= \Yii::$app->getUrlManager()->createUrl(['blog/blog-category/create', 'parent_id' => $item['id']]); ?>" title="<?= Module::t('blog', 'Add Sub Catelog'); ?>"
+                    <a href="<?= \Yii::$app->getUrlManager()->createUrl(['blog/blog-category/create', 'parent_id' => $item['id']]); ?>" title="<?= Module::t('Add Sub Catelog'); ?>"
                        data-pjax="0"><span class="glyphicon glyphicon-plus-sign"></span></a>
-                    <a href="<?= \Yii::$app->getUrlManager()->createUrl(['blog/blog-category/view', 'id' => $item['id']]); ?>"" title="<?= Module::t('blog', 'View'); ?>" data-pjax="0"><span
+                    <a href="<?= \Yii::$app->getUrlManager()->createUrl(['blog/blog-category/view', 'id' => $item['id']]); ?>"" title="<?= Module::t('View'); ?>" data-pjax="0"><span
                         class="glyphicon glyphicon-eye-open"></span></a>
-                    <a href="<?= \Yii::$app->getUrlManager()->createUrl(['blog/blog-category/update', 'id' => $item['id']]); ?>"" title="<?= Module::t('blog', 'Update'); ?>" data-pjax="0"><span
+                    <a href="<?= \Yii::$app->getUrlManager()->createUrl(['blog/blog-category/update', 'id' => $item['id']]); ?>"" title="<?= Module::t('Update'); ?>" data-pjax="0"><span
                         class="glyphicon glyphicon-pencil"></span></a>
-                    <a href="<?= \Yii::$app->getUrlManager()->createUrl(['blog/blog-category/delete', 'id' => $item['id']]); ?>"" title="<?= Module::t('blog', 'Delete'); ?>"
-                    data-confirm="<?= Module::t('blog', 'Are you sure you want to delete this item?'); ?>" data-method="post" data-pjax="0"><span class="glyphicon glyphicon-trash"></span></a>
+                    <a href="<?= \Yii::$app->getUrlManager()->createUrl(['blog/blog-category/delete', 'id' => $item['id']]); ?>"" title="<?= Module::t('Delete'); ?>"
+                    data-confirm="<?= Module::t('Are you sure you want to delete this item?'); ?>" data-method="post" data-pjax="0"><span class="glyphicon glyphicon-trash"></span></a>
                 </td>
             </tr>
         <?php } ?>

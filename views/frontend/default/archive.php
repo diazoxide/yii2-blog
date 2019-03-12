@@ -14,17 +14,17 @@ $this->title = $title;
 
 Yii::$app->view->registerMetaTag([
     'name' => 'description',
-    'content' => Yii::$app->name . ' ' . Module::t('blog', 'Blog')
+    'content' => Yii::$app->name . ' ' . Module::t('Blog')
 ]);
 Yii::$app->view->registerMetaTag([
     'name' => 'keywords',
-    'content' => Yii::$app->name . ', ' . Module::t('blog', 'Blog')
+    'content' => Yii::$app->name . ', ' . Module::t('Blog')
 ]);
 
 if (Yii::$app->get('opengraph', false)) {
     Yii::$app->opengraph->set([
         'title' => $this->title,
-        'description' => Module::t('blog', 'Blog'),
+        'description' => Module::t('Blog'),
         //'image' => '',
     ]);
 }

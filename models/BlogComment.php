@@ -97,16 +97,16 @@ class BlogComment extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Module::t('blog', 'ID'),
-            'post_id' => Module::t('blog', 'Post ID'),
-            'content' => Module::t('blog', 'Content'),
-            'author' => Module::t('blog', 'Author'),
-            'email' => Module::t('blog', 'Email'),
-            'url' => Module::t('blog', 'Url'),
-            'status' => Module::t('blog', 'Status'),
-            'created_at' => Module::t('blog', 'Created At'),
-            'updated_at' => Module::t('blog', 'Updated At'),
-            'captcha' => Module::t('blog', 'Verify code'),
+            'id' => Module::t('ID'),
+            'post_id' => Module::t('Post ID'),
+            'content' => Module::t('Content'),
+            'author' => Module::t('Author'),
+            'email' => Module::t('Email'),
+            'url' => Module::t('Url'),
+            'status' => Module::t('Status'),
+            'created_at' => Module::t('Created At'),
+            'updated_at' => Module::t('Updated At'),
+            'captcha' => Module::t('Verify code'),
         ];
     }
 

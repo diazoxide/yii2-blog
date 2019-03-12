@@ -13,17 +13,17 @@ use yii\widgets\DetailView;
 /* @var $model backend\modules\blog\models\BlogComment */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Module::t('blog', 'Blog Comments'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Module::t('Blog Comments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-comment-view">
 
     <p>
-        <?= Html::a(Module::t('blog', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Module::t('blog', 'Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Module::t('Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Module::t('Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Module::t('blog', 'Are you sure you want to delete this item?'),
+                'confirm' => Module::t('Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>

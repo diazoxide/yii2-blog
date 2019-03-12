@@ -67,7 +67,7 @@ class DefaultController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('archive', [
-            'title' => isset($category) ? $category->title : Module::t('blog', "Գրառումներ"),
+            'title' => isset($category) ? $category->title : Module::t("Գրառումներ"),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -115,7 +115,7 @@ class DefaultController extends Controller
         $comment->scenario = BlogComment::SCENARIO_USER;
 
         if ($comment->load(Yii::$app->request->post()) && $post->addComment($comment)) {
-            Yii::$app->session->setFlash('success', Module::t('blog', 'A comment has been added and is awaiting validation'));
+            Yii::$app->session->setFlash('success', Module::t('A comment has been added and is awaiting validation'));
             return $this->redirect(['view', 'id' => $post->id, '#' => $comment->id]);
         }
 

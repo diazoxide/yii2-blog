@@ -16,23 +16,24 @@ class m190309_070611_blog_post_book extends Migration
     {
         $tableOptions = 'ENGINE=InnoDB';
 
-        $this->createTable(
-            '{{%blog_post_book}}',
-            [
-                'id'=> $this->primaryKey(11),
-                'post_id'=> $this->integer(11)->notNull(),
-                'title'=> $this->string(255)->notNull(),
-                'brief'=> $this->string(255)->notNull(),
-                'banner'=> $this->string(255)->notNull(),
-                'slug'=> $this->string(128)->notNull(),
-                'bbcode'=> $this->tinyInteger(1)->null()->defaultValue(null),
-                'created_at'=> $this->integer(11)->notNull(),
-                'updated_at'=> $this->integer(11)->notNull(),
-                'status'=> $this->tinyInteger(1)->notNull(),
-            ],$tableOptions
-        );
-        $this->createIndex('post_id','{{%blog_post_book}}',['post_id'],false);
-
+        if (Yii::$app->db->getTableSchema('{{%blog_post_book}}', true) === null) {
+            $this->createTable(
+                '{{%blog_post_book}}',
+                [
+                    'id' => $this->primaryKey(11),
+                    'post_id' => $this->integer(11)->notNull(),
+                    'title' => $this->string(255)->notNull(),
+                    'brief' => $this->string(255)->notNull(),
+                    'banner' => $this->string(255)->notNull(),
+                    'slug' => $this->string(128)->notNull(),
+                    'bbcode' => $this->tinyInteger(1)->null()->defaultValue(null),
+                    'created_at' => $this->integer(11)->notNull(),
+                    'updated_at' => $this->integer(11)->notNull(),
+                    'status' => $this->tinyInteger(1)->notNull(),
+                ], $tableOptions
+            );
+            $this->createIndex('post_id', '{{%blog_post_book}}', ['post_id'], false);
+        }
     }
 
     public function safeDown()

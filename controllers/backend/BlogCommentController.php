@@ -189,16 +189,16 @@ class BlogCommentController extends BaseAdminController
         switch ($action) {
             case 'd':
                 if ($this->deleteAll($selection)) {
-                    $message = Module::t('blog', 'Successfully delete');
+                    $message = Module::t('Successfully delete');
                 }
                 break;
             case 'c':
                 if ($this->confirmAll($selection)) {
-                    $message = Module::t('blog', 'Successfully confirm');
+                    $message = Module::t('Successfully confirm');
                 }
                 break;
             default:
-                $message = Module::t('blog', 'Action not found');
+                $message = Module::t('Action not found');
         }
 
         Yii::$app->session->setFlash('warning', $message);

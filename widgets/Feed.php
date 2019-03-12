@@ -4,11 +4,10 @@ namespace diazoxide\blog\widgets;
 
 use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogPost;
-use diazoxide\blog\models\BlogPostSearch;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
+use diazoxide\blog\traits\FeedTrait;
 use kop\y2sp\ScrollPager;
-use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
 use yii\helpers\Html;
@@ -16,41 +15,15 @@ use yii\widgets\ListView;
 
 class Feed extends \yii\bootstrap\Widget
 {
-    const TYPE_RANDOM = 'random';
-    const TYPE_POPULAR = 'hot';
-    const TYPE_RECENT = 'recent';
-
-    public $categoryId;
-    public $showCategoryTitle = false;
-
-    public $type = self::TYPE_RECENT;
-    public $itemsCount = 10;
-    public $offset = 0;
-    public $itemImageType = 'mthumb';
-
-    public $itemImageContainerOptions = ['class' => 'col-xs-3'];
-    public $itemContentContainerOptions = ['class' => 'col-xs-9'];
-    public $articleOptions = ['tag'=>'article','class' => 'item row top-buffer-20-xs'];
-    public $listOptions = ['tag'=>'div','class' => 'feed-widget-listview row'];
+    use FeedTrait;
+    const TYPE_RANDOM = 1;
+    const TYPE_POPULAR = 2;
+    const TYPE_RECENT = 3;
 
 
-    public $showBrief = false;
-    public $briefLength = 100;
-
-
-    public $infiniteScroll = false;
-    public $showPager = false;
-    public $loadMoreButton = false;
-
-
-    public $showItemCategory = false;
-    public $showItemCategoryIcon = false;
-    public $showItemCategoryWithIcon = false;
-    public $showItemViews = false;
-    public $showItemDate = true;
-
-    public $daysInterval = 0;
-
+    /**
+     * @throws \Exception
+     */
     public function init()
     {
         parent::init();
@@ -63,73 +36,73 @@ class Feed extends \yii\bootstrap\Widget
             ->orderBy($this->getOrderFromType());
 
 
-        if ($this->daysInterval) {
-            $query->andWhere('FROM_UNIXTIME(created_at) > NOW() - INTERVAL ' . $this->daysInterval . ' DAY');
+        if ($this->days_interval) {
+            $query->andWhere('FROM_UNIXTIME(created_at) > NOW() - INTERVAL ' . $this->days_interval . ' DAY');
         }
 
-        if ($this->categoryId) {
-            $category = BlogCategory::findOne($this->categoryId);
+        if ($this->category_id) {
+            $category = BlogCategory::findOne($this->category_id);
             if ($category) {
-                if ($this->showCategoryTitle) {
+                if ($this->show_category_title) {
                     echo Html::tag('div', $category->icon . ' ' . $category->title, ['class' => 'widget_title']);
                 }
-                $query->andWhere(['category_id' => $this->categoryId]);
+                $query->andWhere(['category_id' => $this->category_id]);
             }
 
         }
 
         $pager = null;
 
-        if ($this->infiniteScroll || $this->loadMoreButton) {
-            $this->showPager = true;
+        if ($this->infinite_scroll || $this->load_more_button) {
+            $this->show_pager = true;
             $pager = [
                 'class' => ScrollPager::className(),
                 'container' => "#$listViewId",
-                'triggerText' => Module::t('blog','Load more...')
+                'triggerText' => Module::t('Load more...')
             ];
         }
 
-        if (!$this->showPager) {
+        if (!$this->show_pager) {
             $query->offset($this->offset);
-            $query->limit($this->itemsCount);
+            $query->limit($this->items_count);
         }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => $this->showPager ? [
-                'pageSize' => $this->itemsCount,
+            'pagination' => $this->show_pager ? [
+                'pageSize' => $this->items_count,
                 'pageParam' => $this->id . '_page',
                 'pageSizeParam' => $this->id . '_page_size',
             ] : false
         ]);
 
 
-        if ($this->infiniteScroll) {
+        if ($this->infinite_scroll) {
             $pager['enabledExtensions'] = [ScrollPager::EXTENSION_SPINNER, ScrollPager::EXTENSION_NONE_LEFT, ScrollPager::EXTENSION_PAGING];
             $pager['overflowContainer'] = "#$listViewId";
         }
-        $this->listOptions['id']=$listViewId;
+        $this->list_options['id'] = $listViewId;
         echo ListView::widget([
             'dataProvider' => $dataProvider,
             'options' => [
                 'id' => $listViewId,
                 'class' => 'feed-widget-listview'
             ],
-            'itemOptions' =>$this->articleOptions,
-            'layout' => "{items}" . ($this->showPager ? "{pager}" : ""),
+            'itemOptions' => $this->article_options,
+            'layout' => "{items}" . ($this->show_pager ? "{pager}" : ""),
             'itemView' => '@vendor/diazoxide/yii2-blog/widgets/views/_feed_item',
             'viewParams' => [
-                'showBrief' => $this->showBrief,
-                'imageType' => $this->itemImageType,
-                'briefLength' => $this->briefLength,
-                'showCategory' => $this->showItemCategory,
-                'showCategoryIcon' => $this->showItemCategoryIcon,
-                'showCategoryWithIcon' => $this->showItemCategoryWithIcon,
-                'showDate' => $this->showItemDate,
-                'showViews' => $this->showItemViews,
-                'imageContainerOptions'=>$this->itemImageContainerOptions,
-                'contentContainerOptions'=>$this->itemContentContainerOptions,
-                'articleOptions'=>$this->articleOptions
+                'showBrief' => $this->show_brief,
+                'imageType' => $this->item_image_type,
+                'briefLength' => $this->brief_length,
+                'showCategory' => $this->show_item_category,
+                'showCategoryIcon' => $this->show_item_category_icon,
+                'showCategoryWithIcon' => $this->show_item_category_with_icon,
+                'showDate' => $this->show_item_date,
+                'showViews' => $this->show_item_views,
+                'imageContainerOptions' => $this->item_image_container_options,
+                'contentContainerOptions' => $this->item_content_container_options,
+                'articleOptions' => $this->article_options
             ],
 
 

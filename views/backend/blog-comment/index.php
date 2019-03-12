@@ -14,7 +14,7 @@ use yii\helpers\Html;
 /* @var $searchModel \diazoxide\blog\models\BlogCommentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Module::t('blog', 'Blog Comments');
+$this->title = Module::t('Blog Comments');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-comment-index">
@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     
     <p>
-        <?= Html::a(Module::t('blog', 'Create ') . Module::t('blog', 'Blog Comment'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Module::t('Create ') . Module::t('Blog Comment'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= Html::beginForm(['bulk'], 'post'); ?>
     <?= GridView::widget([
@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $searchModel,
                     'status',
                     \diazoxide\blog\models\BlogPost::getStatusList(),
-                    ['class' => 'form-control', 'prompt' => Module::t('blog', 'PROMPT_STATUS')]
+                    ['class' => 'form-control', 'prompt' => Module::t('PROMPT_STATUS')]
                 )
             ],
 
@@ -86,12 +86,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::dropDownList('action', '',
                 [
                     '' => 'Choose',
-                    'c' => Module::t('blog', 'Confirm'),
-                    'd' => Module::t('blog', 'Delete')
+                    'c' => Module::t('Confirm'),
+                    'd' => Module::t('Delete')
                 ], ['class' => 'form-control dropdown',]) ?>
         </div>
         <div class="col-md-4">
-            <?= Html::submitButton(Module::t('blog', 'Send'), ['class' => 'btn btn-info',]); ?>
+            <?= Html::submitButton(Module::t('Send'), ['class' => 'btn btn-info',]); ?>
         </div>
     </div>
 
