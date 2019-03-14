@@ -52,6 +52,10 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="col-md-4">
+            <?= $form->field($model, 'category_ids')->dropDownList(ArrayHelper::map(BlogCategory::find()->all(), 'id', 'title'),
+                [
+                    'multiple' => 'multiple',
+                ]); ?>
 
             <?= $form->field($model, 'category_id')->dropDownList(ArrayHelper::map(BlogCategory::get(0, BlogCategory::find()->all()), 'id', 'str_label')) ?>
 

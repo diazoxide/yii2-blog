@@ -85,6 +85,13 @@ class BlogPost extends \yii\db\ActiveRecord
                 },
             ],
             [
+                'class' => \voskobovich\behaviors\ManyToManyBehavior::className(),
+                'relations' => [
+                    'category_ids' => 'categories',
+                ],
+            ],
+
+            [
                 'class' => ImageUploadBehavior::class,
                 'attribute' => 'banner',
                 'thumbs' => [
@@ -109,6 +116,8 @@ class BlogPost extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['category_ids'], 'each', 'rule' => ['integer']],
+
             [['category_id', 'title', 'content'], 'required'],
             [['category_id', 'click', 'user_id', 'status'], 'integer'],
             [['brief', 'content'], 'string'],
@@ -130,6 +139,7 @@ class BlogPost extends \yii\db\ActiveRecord
         return [
             'id' => Module::t('ID'),
             'category_id' => Module::t('Category'),
+            'category_ids' => Module::t('Categories'),
             'title' => Module::t('Title'),
             'brief' => Module::t('Brief'),
             'content' => Module::t('Content'),
@@ -175,6 +185,18 @@ class BlogPost extends \yii\db\ActiveRecord
     {
         return $this->hasOne(BlogCategory::className(), ['id' => 'category_id']);
     }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getCategories()
+    {
+        return $this->hasMany(BlogCategory::className(), ['id' => 'category_id'])
+            ->viaTable('{{%blog_category_map}}', ['post_id' => 'id']);
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery
