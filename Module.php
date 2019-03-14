@@ -7,6 +7,7 @@
 
 namespace diazoxide\blog;
 
+use diazoxide\blog\assets\AdminAsset;
 use diazoxide\blog\assets\AppAsset;
 use diazoxide\blog\components\OpenGraph;
 use Yii;
@@ -74,6 +75,7 @@ class Module extends \yii\base\Module
         parent::init();
         if ($this->getIsBackend() === true) {
             $this->setViewPath('@vendor/diazoxide/yii2-blog/views/backend');
+            AdminAsset::register(Yii::$app->view);
         } else {
             $this->setViewPath('@vendor/diazoxide/yii2-blog/views/frontend');
             $this->setLayoutPath('@vendor/diazoxide/yii2-blog/views/frontend/layouts');
@@ -157,6 +159,7 @@ class Module extends \yii\base\Module
             ['label' => 'Categories', 'url' => ['/blog/blog-category', 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")]],
             ['label' => 'Comments', 'url' => ['/blog/blog-comment'], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
             ['label' => 'Tags', 'url' => ['/blog/blog-tag'], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
+            ['label' => 'Widget Types', 'url' => ['/blog/widget-type/index'], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
         ];
     }
 

@@ -10,6 +10,7 @@ namespace diazoxide\blog\models;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\ModuleTrait;
 use diazoxide\blog\traits\StatusTrait;
+use diazoxide\blog\widgets\Feed;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -33,14 +34,16 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @property string $redirect_url
  * @property string icon_class
  * @property string icon
+ * @property string read_more_text
+ * @property string read_icon_class
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
- *
  * @property BlogPost[] $blogPosts
  * @property string titleWithIcon
  * @property string url
  * @property BlogCategory childs
+ * @property BlogWidgetType widgetType
  */
 class BlogCategory extends \yii\db\ActiveRecord
 {
@@ -339,7 +342,7 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'is_nav', 'is_featured', 'sort_order', 'widget_type', 'page_size', 'status'], 'integer'],
+            [['parent_id', 'is_nav', 'is_featured', 'sort_order', 'widget_type_id', 'page_size', 'status'], 'integer'],
             [['title'], 'required'],
             [['sort_order', 'page_size'], 'default', 'value' => 0],
             [['icon_class', 'read_icon_class', 'read_more_text'], 'string', 'max' => 60],
@@ -455,6 +458,24 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function getParent()
     {
         return $this->hasOne(BlogCategory::class, ['id' => 'parent_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWidgetType()
+    {
+        return $this->hasOne(BlogWidgetType::class, ['id' => 'widget_type_id']);
+    }
+
+    public function getWidget()
+    {
+        $config = (array) $this->widgetType->config;
+        $config = reset($config);
+        $config['category_id'] = $this->id;
+
+
+        return Feed::widget($config);
     }
 
     /**

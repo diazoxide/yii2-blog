@@ -15,11 +15,60 @@ use yii\widgets\ListView;
 
 class Feed extends \yii\bootstrap\Widget
 {
-    use FeedTrait;
     const TYPE_RANDOM = 1;
     const TYPE_POPULAR = 2;
     const TYPE_RECENT = 3;
 
+    public $category_id;
+
+    public $custom_css;
+    public $custom_js;
+
+    public $type = Feed::TYPE_RECENT;
+
+
+    public $items_count = 10;
+    public $offset = 0;
+    public $item_image_type = 'mthumb';
+    public $item_read_more_button_text = 'Read more...';
+    public $item_read_more_button_icon_class = 'fa fa-eye';
+
+    public $item_image_container_options = ['class' => 'col-xs-3'];
+    public $item_content_container_options = ['class' => 'col-xs-9'];
+
+    public $item_info_container_options = [];
+    public $item_options = ['tag' => 'article', 'class' => 'item row top-buffer-20-xs'];
+    public $item_title_options = ['tag' => 'h5', 'class' => 'nospaces-xs'];
+    public $item_brief_options = ['tag' => 'p', 'class' => 'nospaces-xs'];
+    public $item_read_more_button_options = ['class' => 'btn btn-warning'];
+    public $list_options = ['tag' => 'div', 'class' => 'feed-widget-listview'];
+    public $category_title_options = ['class' => 'row'];
+
+    public $item_brief_length = 100;
+    public $item_brief_suffix = '...';
+    public $item_title_length = 100;
+    public $item_title_suffix = '...';
+
+    public $infinite_scroll = false;
+    public $load_more_button = false;
+
+    public $show_category_title = false;
+    public $show_pager = false;
+    public $show_item_brief = false;
+    public $show_item_title = true;
+    public $show_item_info = true;
+    public $show_item_read_more_button = false;
+    public $show_item_category = false;
+    public $show_item_category_icon = false;
+    public $show_item_category_with_icon = false;
+    public $show_item_views = false;
+    public $show_item_date = true;
+
+    public $days_interval = 0;
+
+    protected $_listViewId;
+    protected $_pager = null;
+    protected $_category = null;
 
     /**
      * @throws \Exception
@@ -28,73 +77,57 @@ class Feed extends \yii\bootstrap\Widget
     {
         parent::init();
 
-        $listViewId = "Feed-widget-" . $this->id;
+        /* Init. category model */
+        $this->_category = $this->getCategory();
 
-        $query = BlogPost::find();
+        echo Html::beginTag('div', $this->options);
 
-        $query->where(['status' => IActiveStatus::STATUS_ACTIVE])
-            ->orderBy($this->getOrderFromType());
+        $this->_listViewId = "Feed-widget-" . $this->id;
 
 
-        if ($this->days_interval) {
-            $query->andWhere('FROM_UNIXTIME(created_at) > NOW() - INTERVAL ' . $this->days_interval . ' DAY');
-        }
-
-        if ($this->category_id) {
-            $category = BlogCategory::findOne($this->category_id);
-            if ($category) {
-                if ($this->show_category_title) {
-                    echo Html::tag('div', $category->icon . ' ' . $category->title, ['class' => 'widget_title']);
-                }
-                $query->andWhere(['category_id' => $this->category_id]);
+        if ($this->_category) {
+            if ($this->show_category_title) {
+                echo Html::tag('div', $this->_category->icon . ' ' . $this->_category->title, $this->category_title_options);
             }
-
+            if ($this->show_item_read_more_button) {
+                if ($this->_category->read_more_text) {
+                    $this->item_read_more_button_text = $this->_category->read_more_text;
+                }
+                if ($this->_category->read_icon_class) {
+                    $this->item_read_more_button_icon_class = $this->_category->read_icon_class;
+                }
+            }
         }
-
-        $pager = null;
 
         if ($this->infinite_scroll || $this->load_more_button) {
             $this->show_pager = true;
-            $pager = [
+            $this->_pager = [
                 'class' => ScrollPager::className(),
-                'container' => "#$listViewId",
+                'container' => "#$this->_listViewId",
                 'triggerText' => Module::t('Load more...')
             ];
         }
 
-        if (!$this->show_pager) {
-            $query->offset($this->offset);
-            $query->limit($this->items_count);
-        }
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => $this->show_pager ? [
-                'pageSize' => $this->items_count,
-                'pageParam' => $this->id . '_page',
-                'pageSizeParam' => $this->id . '_page_size',
-            ] : false
-        ]);
-
-
         if ($this->infinite_scroll) {
-            $pager['enabledExtensions'] = [ScrollPager::EXTENSION_SPINNER, ScrollPager::EXTENSION_NONE_LEFT, ScrollPager::EXTENSION_PAGING];
-            $pager['overflowContainer'] = "#$listViewId";
+            $this->_pager['enabledExtensions'] = [ScrollPager::EXTENSION_SPINNER, ScrollPager::EXTENSION_NONE_LEFT, ScrollPager::EXTENSION_PAGING];
+            $this->_pager['overflowContainer'] = "#{$this->_listViewId}";
         }
-        $this->list_options['id'] = $listViewId;
+
+        $this->list_options['id'] = $this->_listViewId;
+
         echo ListView::widget([
-            'dataProvider' => $dataProvider,
-            'options' => [
-                'id' => $listViewId,
-                'class' => 'feed-widget-listview'
-            ],
-            'itemOptions' => $this->article_options,
+            'dataProvider' => $this->getDataProvider(),
+            'options' => $this->list_options,
+            'itemOptions' => $this->item_options,
             'layout' => "{items}" . ($this->show_pager ? "{pager}" : ""),
             'itemView' => '@vendor/diazoxide/yii2-blog/widgets/views/_feed_item',
             'viewParams' => [
-                'showBrief' => $this->show_brief,
+                'showBrief' => $this->show_item_brief,
+                'briefLength' => $this->item_brief_length,
+                'briefSuffix' => $this->item_brief_suffix,
+                'titleLength' => $this->item_title_length,
+                'titleSuffix' => $this->item_title_suffix,
                 'imageType' => $this->item_image_type,
-                'briefLength' => $this->brief_length,
                 'showCategory' => $this->show_item_category,
                 'showCategoryIcon' => $this->show_item_category_icon,
                 'showCategoryWithIcon' => $this->show_item_category_with_icon,
@@ -102,16 +135,62 @@ class Feed extends \yii\bootstrap\Widget
                 'showViews' => $this->show_item_views,
                 'imageContainerOptions' => $this->item_image_container_options,
                 'contentContainerOptions' => $this->item_content_container_options,
-                'articleOptions' => $this->article_options
+                'showTitle' => $this->show_item_title,
+                'titleOptions' => $this->item_title_options,
+                'briefOptions' => $this->item_brief_options,
+                'showReadMoreButton' => $this->show_item_read_more_button,
+                'readMoreButtonOptions' => $this->item_read_more_button_options,
+                'readMoreButtonText' => $this->item_read_more_button_text,
+                'readMoreButtonIconClass'=>$this->item_read_more_button_icon_class,
+                'infoContainerOptions'=>$this->item_info_container_options
             ],
 
-
-            'pager' => $pager
+            'pager' => $this->_pager
         ]);
 
+        echo Html::endTag('div');
 
+        $this->getView()->registerJs($this->custom_js);
+        $this->getView()->registerCss($this->custom_css);
     }
 
+    /**
+     * Building Data provider
+     * @return ActiveDataProvider
+     */
+    private function getDataProvider()
+    {
+        $query = BlogPost::find();
+
+        $query->where(['status' => IActiveStatus::STATUS_ACTIVE])
+            ->orderBy($this->getOrderFromType());
+
+        if ($this->days_interval) {
+            $query->andWhere('FROM_UNIXTIME(created_at) > NOW() - INTERVAL ' . $this->days_interval . ' DAY');
+        }
+
+        if ($this->_category) {
+            $query->andWhere(['category_id' => $this->category_id]);
+        }
+
+        if (!$this->show_pager) {
+            $query->offset($this->offset);
+            $query->limit($this->items_count);
+        }
+
+        return new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => $this->show_pager ? [
+                'pageSize' => $this->items_count,
+                'pageParam' => $this->id . '_page',
+                'pageSizeParam' => $this->id . '_page_size',
+            ] : false
+        ]);
+    }
+
+    /**
+     * @return array|Expression
+     */
     protected function getOrderFromType()
     {
         switch ($this->type) {
@@ -124,5 +203,14 @@ class Feed extends \yii\bootstrap\Widget
             default:
                 return [];
         }
+    }
+
+
+    /**
+     * @return BlogCategory|null
+     */
+    public function getCategory()
+    {
+        return BlogCategory::findOne($this->category_id);
     }
 }

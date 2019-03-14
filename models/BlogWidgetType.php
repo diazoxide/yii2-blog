@@ -11,6 +11,9 @@ use diazoxide\blog\Module;
 use diazoxide\blog\traits\FeedTrait;
 use diazoxide\blog\traits\ModuleTrait;
 
+use diazoxide\blog\widgets\Feed;
+use paulzi\jsonBehavior\JsonValidator;
+use paulzi\jsonBehavior\JsonBehavior;
 
 /**
  *
@@ -21,9 +24,7 @@ use diazoxide\blog\traits\ModuleTrait;
  */
 class BlogWidgetType extends \yii\db\ActiveRecord
 {
-    use ModuleTrait, FeedTrait;
-
-    public $config_data;
+    use ModuleTrait;
 
     /**
      * @inheritdoc
@@ -41,14 +42,14 @@ class BlogWidgetType extends \yii\db\ActiveRecord
         return $result;
     }
 
-    /**
-     * created_at, updated_at to now()
-     * crate_user_id, update_user_id to current login user id
-     */
+
     public function behaviors()
     {
         return [
-
+            [
+                'class' => JsonBehavior::className(),
+                'attributes' => ['config'],
+            ],
         ];
     }
 
@@ -60,7 +61,7 @@ class BlogWidgetType extends \yii\db\ActiveRecord
         return [
             [['title'], 'required'],
             [['title'],'string','max'=>255],
-            [['config'], 'string'],
+            [['config'], JsonValidator::className()],
             [['config_data'], 'safe'],
         ];
     }
@@ -77,45 +78,13 @@ class BlogWidgetType extends \yii\db\ActiveRecord
             'config' => Module::t('Config'),
             'title' => Module::t('Title'),
         ];
-
-        array_merge($labels, $this->getLabels());
     }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if ($insert) {
-                // if new record is inserted into db
-            } else {
-                // if existing record is updated
-                // you can use something like this
-                // to prevent updating certain data
-                // $this->status = $this->oldAttributes['status'];
-            }
-
-            $this->config = json_encode($this->config_data);
-
-            return true;
-        }
-
-        return false;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getConfigData()
-    {
-        return json_decode($this->config);
-    }
-
-    /**
-     * @param mixed $config_data
-     */
-    public function setConfigData($config_data): void
-    {
-        $this->config = json_encode($config_data);
+    public function getWidget(){
+        $config = (array) $this->config;
+        $config = reset($config);
+        $config['category_id'] = $this->id;
+        return Feed::widget($config);
     }
 
 }

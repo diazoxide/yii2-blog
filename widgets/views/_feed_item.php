@@ -1,11 +1,32 @@
 <?php
-// _list_item.php
+
 use yii\helpers\Html;
-use yii\helpers\Url;
+
+/** @var array $imageContainerOptions */
+/** @var \diazoxide\blog\models\BlogPost $model */
+/** @var array $titleOptions */
+/** @var string $titleSuffix */
+/** @var string $briefSuffix */
+/** @var int $titleLength */
+/** @var string $imageType */
+/** @var string $imageType */
+/** @var boolean $showBrief */
+/** @var int $briefLength */
+/** @var array $briefOptions */
+/** @var array $readMoreButtonOptions */
+/** @var String $readMoreButtonText */
+/** @var boolean $showReadMoreButton */
+/** @var array $contentContainerOptions */
+/** @var string $readMoreButtonIconClass */
+
 ?>
 
-<?= Html::tag(
-    'div',
+<?php
+/**
+ * Building image container Html
+ */
+echo Html::tag(
+    isset($imageContainerOptions['tag']) && !empty($imageContainerOptions['tag']) ? $imageContainerOptions['tag'] : 'div',
     Html::a(
         Html::img(
             $model->getThumbFileUrl('banner', $imageType),
@@ -14,11 +35,33 @@ use yii\helpers\Url;
         $model->url
     ),
     $imageContainerOptions
-) ?>
+);
 
-<?= Html::beginTag('div', $contentContainerOptions) ?>
+echo Html::beginTag('div', $contentContainerOptions);
 
-<p class="small text-right">
+/**
+ * Building title Html
+ * @var boolean $showTitle
+ */
+if ($showTitle)
+
+    echo Html::a(
+        Html::tag(
+            isset($titleOptions['tag']) && !empty($titleOptions['tag']) ? $titleOptions['tag'] : 'div',
+            \yii\helpers\StringHelper::truncate(Html::encode($model->title), $titleLength, $titleSuffix),
+            $titleOptions
+        ),
+        $model->url
+    );
+
+?>
+
+<?php
+/** @var array $infoContainerOptions */
+echo Html::beginTag(
+    'div',
+    $infoContainerOptions);
+?>
     <?php /** @var boolean $showCategory */
     if ($showCategory): ?>
         <span class="label label-warning"><?= $model->category->title; ?></span>
@@ -40,17 +83,33 @@ use yii\helpers\Url;
         <span><i class="fa fa-eye"></i> <?= $model->click; ?></span>
     <?php endif; ?>
 
-</p>
+<?php
+echo Html::endTag('div');
+?>
 
-<h5 class="nospaces-xs"><?= Html::a(\yii\helpers\StringHelper::truncate(Html::encode($model->title), 50, "..."), $model->url) ?></h5>
-
-<?php /** @var boolean $showBrief */
+<?php
+/**
+ * Building brief content Html
+ */
 if ($showBrief) {
-    /** @var int $briefLength */
-    echo Html::tag('p', yii\helpers\StringHelper::truncate(Html::encode($model->brief), $briefLength, '...'));
-} ?>
+    echo Html::tag(
+        isset($briefOptions['tag']) && !empty($briefOptions['tag']) ? $briefOptions['tag'] : 'div',
+        \yii\helpers\StringHelper::truncate(Html::encode($model->brief), $briefLength, $briefSuffix),
+        $briefOptions
+    );
+}
 
+/**
+ * Building button html
+ */
+if ($showReadMoreButton) {
 
-
-<?= Html::endTag('div') ?>
+    echo Html::a(
+        '<i class="' . $readMoreButtonIconClass . '"></i> ' . \diazoxide\blog\Module::t($readMoreButtonText),
+        $model->url,
+        $readMoreButtonOptions
+    );
+}
+echo Html::endTag('div');
+?>
 

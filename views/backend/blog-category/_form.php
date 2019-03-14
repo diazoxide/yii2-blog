@@ -49,7 +49,7 @@ unset($parentCategory[$model->id]);
 
     <?= $form->field($model, 'is_featured')->dropDownList(BlogCategory::getArrayIsFeatured()) ?>
 
-    <?= $form->field($model, 'widget_type')->textInput(['type' => 'number']) ?>
+    <?= $form->field($model, 'widget_type_id')->dropDownList(ArrayHelper::map(\diazoxide\blog\models\BlogWidgetType::find()->all(), 'id', 'title'),['prompt'=>Module::t('Select value')]) ?>
 
     <?= $form->field($model, 'sort_order')->textInput() ?>
 

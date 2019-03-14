@@ -28,105 +28,39 @@ $this->title = $title;
 
                 <!--Popular posts-->
                 <div class="row top-buffer-20-xs home-white-content">
-                    <div class="widget_title"><i
-                                class="fa fa-eye"></i> <?= \diazoxide\blog\Module::t('Popular posts') ?></div>
-                    <div class="col-md-6">
-                        <div class="top-buffer-20-xs">
-                            <?= Posts::widget([
-                                'itemsCount' => 1,
-                                'type' => 'hot',
-                                'daysInterval' => 7,
-                                'briefLength' => 200,
-                                'showItemReadMoreButton' => true,
-                                'showCategoryTitle' => true,
-                                'showItemViews' => true,
-                                'itemImageType' => 'xthumb'
-                            ]) ?>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="top-buffer-20-xs">
-                            <?= Feed::widget([
-                                'itemsCount' => 6,
-                                'showBrief' => false,
-                                'showPager' => false,
-                                'id' => 'home-page-hot-posts',
-                                'type' => Feed::TYPE_POPULAR,
-                                'showItemViews' => true,
-                                'showItemCategory' => false,
-                                'daysInterval' => 7,
-                                'offset' => 1
-                                //'loadMoreButton'=>true,
-                            ]);
-                            ?>
-                        </div>
-                    </div>
-
-
+                    <?= \diazoxide\blog\models\BlogWidgetType::findOne(3)->widget ?>
                 </div><!--Popular posts end-->
 
                 <div class="row top-buffer-20-xs home-white-content">
 
-                    <?php foreach ($featuredCategories->limit(3)->all() as $category): ?>
+                    <?php foreach ($featuredCategories->where(['widget_type_id'=>1,'is_featured'=>true])->limit(3)->all() as $category): ?>
                         <div class="col-md-4 home_posts_widget">
 
-                            <?= \diazoxide\blog\widgets\Posts::widget([
-                                'itemsCount' => 2,
-                                'categoryId' => $category->id,
-                                'showCategoryTitle' => true
-                            ]) ?>
+                            <?= $category->widget ?>
+
                         </div>
                     <?php endforeach; ?>
 
                 </div>
 
-                <!--Popular posts-->
-                <div class="row top-buffer-20-xs home-videos-content">
+                <div class="row top-buffer-20-xs home-white-content">
 
-                    <div class="widget_title"><i
-                                class="fa fa-youtube-play"></i> <?= \diazoxide\blog\Module::t('Videos') ?>
-                    </div>
+                    <?php foreach ($featuredCategories->where(['widget_type_id'=>2,'is_featured'=>true])->limit(3)->all() as $category): ?>
+                        <div class="col-xs-12">
 
-                    <div class="col-md-6">
-                        <div class="top-buffer-20-xs">
-                            <?= Posts::widget([
-                                'itemsCount' => 1,
-                                'categoryId' => 139,
-                                'briefLength' => 200,
-                                'showItemReadMoreButton' => true,
-                                'showCategoryTitle' => false,
-                                'itemImageType' => 'xthumb',
-                                'itemReadMoreText' => '<i class="fa fa-play"></i> ' . \diazoxide\blog\Module::t('Play video'),
-                            ]) ?>
+                            <?= $category->widget ?>
+
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="top-buffer-20-xs">
-                            <?= Feed::widget([
-                                'itemsCount' => 5,
-                                'categoryId' => 139,
-                                'showBrief' => false,
-                                'showPager' => false,
-                                'id' => 'home-page-hot-posts',
-                                'showItemCategory' => false,
-                                'offset' => 1
-                                //'loadMoreButton'=>true,
-                            ]);
-                            ?>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
 
-                </div><!--Popular posts end-->
+                </div>
 
                 <div class="row top-buffer-20-xs home-white-content">
-                    <?php foreach ($featuredCategories->limit(3)->offset(3)->all() as $category): ?>
+                    <?php foreach ($featuredCategories->where(['widget_type_id'=>1,'is_featured'=>true])->offset(3)->limit(3)->all() as $category): ?>
                         <div class="col-md-4 home_posts_widget">
 
-                            <?= Posts::widget([
-                                'itemsCount' => 2,
-                                'categoryId' => $category->id,
-                                'showCategoryTitle' => true
-                            ]) ?>
+                            <?= $category->widget ?>
+
                         </div>
                     <?php endforeach; ?>
 
@@ -152,15 +86,15 @@ $this->title = $title;
                                     class="fa fa-newspaper-o"></i> <?= \diazoxide\blog\Module::t('News Feed') ?>
                         </div>
                         <?= Feed::widget([
-                            'itemsCount' => 15,
-                            'showBrief' => false,
-                            'briefLength' => 50,
-                            'infiniteScroll' => true,
+                            'items_count' => 15,
+                            'show_item_brief' => false,
+                            'item_brief_length' => 50,
+                            'infinite_scroll' => true,
                             'id' => 'home_feed_widget',
-                            'itemImageType' => 'xsthumb',
-                            'itemImageContainerOptions' => ['class' => 'col-xs-2 nospaces-xs'],
-                            'itemContentContainerOptions' => ['class' => 'col-xs-10 nospaces-xs'],
-                            'articleOptions' => ['tag' => 'article', 'class' => 'item col-xs-12 top-buffer-20-xs left-padding-0-xs right-padding-10-xs'],
+                            'item_image_type' => 'xsthumb',
+                            'item_image_container_options' => ['class' => 'col-xs-2 nospaces-xs'],
+                            'item_content_container_options' => ['class' => 'col-xs-10 nospaces-xs'],
+                            'item_options' => ['tag' => 'article', 'class' => 'item col-xs-12 top-buffer-20-xs left-padding-0-xs right-padding-10-xs'],
                         ]);
                         ?>
                     </div>
