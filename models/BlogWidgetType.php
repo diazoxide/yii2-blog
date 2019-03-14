@@ -20,6 +20,7 @@ use paulzi\jsonBehavior\JsonBehavior;
  * @property integer $id
  * @property string $config
  * @property string $title
+ * @property string $widget
  *
  */
 class BlogWidgetType extends \yii\db\ActiveRecord

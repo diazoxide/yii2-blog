@@ -48,6 +48,8 @@ use diazoxide\blog\widgets\Feed;
                             Feed::TYPE_POPULAR => Module::t('Popular'),
                             Feed::TYPE_RECENT => Module::t('Recent'),
                         ])->label(Module::t('Type')) .
+                        $form->field($model, 'config[show_title]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Title')) .
+                        $form->field($model, 'config[title]')->textInput(['maxlength' => 255])->label(Module::t('Widget Title')) .
                         $form->field($model, 'config[show_category_title]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Category Title')) .
                         $form->field($model, 'config[infinite_scroll]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Infinite Scroll')) .
                         $form->field($model, 'config[show_pager]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Pager')) .
@@ -104,10 +106,10 @@ use diazoxide\blog\widgets\Feed;
                         ],
                         [
                             'label' => 'Category Title',
-                            'content' => $form->field($model, 'config[category_title_options][tag]')->textInput(['maxlength' => 255])->label(Module::t('HTML Tag')) .
-                                $form->field($model, 'config[category_title_options][id]')->textInput(['maxlength' => 255])->label(Module::t('HTML ID')) .
-                                $form->field($model, 'config[category_title_options][class]')->textInput(['maxlength' => 255])->label(Module::t('HTML Class')) .
-                                $form->field($model, 'config[category_title_options][style]')->textInput(['maxlength' => 255])->label(Module::t('HTML Style'))
+                            'content' => $form->field($model, 'config[title_options][tag]')->textInput(['maxlength' => 255])->label(Module::t('HTML Tag')) .
+                                $form->field($model, 'config[title_options][id]')->textInput(['maxlength' => 255])->label(Module::t('HTML ID')) .
+                                $form->field($model, 'config[title_options][class]')->textInput(['maxlength' => 255])->label(Module::t('HTML Class')) .
+                                $form->field($model, 'config[title_options][style]')->textInput(['maxlength' => 255])->label(Module::t('HTML Style'))
                         ],
                         [
                             'label' => 'List',
@@ -172,11 +174,11 @@ use diazoxide\blog\widgets\Feed;
                     'items' => [
                         [
                             'label' => 'CSS',
-                            'content' => $form->field($model, 'config[custom_css]')->textarea(['rows'=>'20'])->label(Module::t('CSS Code')),
+                            'content' => $form->field($model, 'config[custom_css]')->textarea(['rows' => '20'])->label(Module::t('CSS Code')),
                         ],
                         [
                             'label' => 'JavaScript',
-                            'content' => $form->field($model, 'config[custom_js]')->textarea(['rows'=>'20'])->label(Module::t('JS Code')),
+                            'content' => $form->field($model, 'config[custom_js]')->textarea(['rows' => '20'])->label(Module::t('JS Code')),
                         ]
                     ],
                 ]

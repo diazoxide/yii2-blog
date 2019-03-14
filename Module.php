@@ -11,6 +11,7 @@ use diazoxide\blog\assets\AdminAsset;
 use diazoxide\blog\assets\AppAsset;
 use diazoxide\blog\components\OpenGraph;
 use Yii;
+use yii\db\ActiveRecord;
 use yii\i18n\PhpMessageSource;
 
 class Module extends \yii\base\Module
@@ -48,7 +49,7 @@ class Module extends \yii\base\Module
     /** @var string Name of Component for editing posts */
     public $redactorModule = 'redactorBlog';
 
-    /** @var linked user (for example, 'common\models\User::class' */
+    /** @var ActiveRecord user (for example, 'common\models\User::class' */
     public $userModel;// = \common\models\User::class;
 
     /** @var string Primary Key for user table, by default 'id' */
@@ -68,7 +69,7 @@ class Module extends \yii\base\Module
     public $htmlClass = "diazoxide_blog";
 
     /**
-     *
+     * @throws \yii\base\InvalidConfigException
      */
     public function init()
     {
@@ -88,6 +89,9 @@ class Module extends \yii\base\Module
 
     }
 
+    /**
+     * @throws \yii\base\InvalidConfigException
+     */
     protected function registerRedactorModule()
     {
         $redactorModule = $this->redactorModule;
@@ -102,6 +106,9 @@ class Module extends \yii\base\Module
         }
     }
 
+    /**
+     *
+     */
     protected function registerTranslations()
     {
         Yii::$app->i18n->translations['diazoxide/blog'] = [

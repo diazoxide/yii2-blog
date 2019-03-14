@@ -24,6 +24,8 @@ class Feed extends \yii\bootstrap\Widget
     public $custom_css;
     public $custom_js;
 
+    public $title = "Posts";
+
     public $type = Feed::TYPE_RECENT;
 
 
@@ -42,7 +44,7 @@ class Feed extends \yii\bootstrap\Widget
     public $item_brief_options = ['tag' => 'p', 'class' => 'nospaces-xs'];
     public $item_read_more_button_options = ['class' => 'btn btn-warning'];
     public $list_options = ['tag' => 'div', 'class' => 'feed-widget-listview'];
-    public $category_title_options = ['class' => 'row'];
+    public $title_options = ['tag' => 'div', 'class' => 'row'];
 
     public $item_brief_length = 100;
     public $item_brief_suffix = '...';
@@ -52,6 +54,7 @@ class Feed extends \yii\bootstrap\Widget
     public $infinite_scroll = false;
     public $load_more_button = false;
 
+    public $show_title = false;
     public $show_category_title = false;
     public $show_pager = false;
     public $show_item_brief = false;
@@ -85,9 +88,10 @@ class Feed extends \yii\bootstrap\Widget
         $this->_listViewId = "Feed-widget-" . $this->id;
 
 
+
         if ($this->_category) {
             if ($this->show_category_title) {
-                echo Html::tag('div', $this->_category->icon . ' ' . $this->_category->title, $this->category_title_options);
+                $this->title = $this->_category->icon . ' ' . $this->_category->title;
             }
             if ($this->show_item_read_more_button) {
                 if ($this->_category->read_more_text) {
@@ -99,6 +103,14 @@ class Feed extends \yii\bootstrap\Widget
             }
         }
 
+        if ($this->show_title) {
+            echo Html::tag(
+                isset($this->title_options['tag']) && !empty($this->title_options['tag']) ? $this->title_options['tag'] : 'div',
+                $this->title,
+                $this->title_options
+            );
+
+        }
         if ($this->infinite_scroll || $this->load_more_button) {
             $this->show_pager = true;
             $this->_pager = [
@@ -141,8 +153,8 @@ class Feed extends \yii\bootstrap\Widget
                 'showReadMoreButton' => $this->show_item_read_more_button,
                 'readMoreButtonOptions' => $this->item_read_more_button_options,
                 'readMoreButtonText' => $this->item_read_more_button_text,
-                'readMoreButtonIconClass'=>$this->item_read_more_button_icon_class,
-                'infoContainerOptions'=>$this->item_info_container_options
+                'readMoreButtonIconClass' => $this->item_read_more_button_icon_class,
+                'infoContainerOptions' => $this->item_info_container_options
             ],
 
             'pager' => $this->_pager

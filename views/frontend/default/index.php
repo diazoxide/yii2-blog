@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use \diazoxide\blog\widgets\Feed;
-use \diazoxide\blog\widgets\Posts;
+
 /** @var String $title */
 /** @var array $banners */
 $this->title = $title;
@@ -14,9 +14,9 @@ $this->title = $title;
 
                 <div class="row">
                     <div class="col-lg-10 nopadding-xs">
-                        <div class="widget_title hidden-xs"><i
-                                    class="fa fa-star"></i> <?= \diazoxide\blog\Module::t('General') ?></div>
-
+                        <div class="widget_title hidden-xs">
+                            <i class="fa fa-star"></i> <?= \diazoxide\blog\Module::t('General') ?>
+                        </div>
                         <?= \diazoxide\blog\widgets\Slider::widget(
                             ['itemsCount' => 5]
                         ) ?>
@@ -28,12 +28,14 @@ $this->title = $title;
 
                 <!--Popular posts-->
                 <div class="row top-buffer-20-xs home-white-content">
-                    <?= \diazoxide\blog\models\BlogWidgetType::findOne(3)->widget ?>
+                    <div class="col-xs-12">
+                        <?= \diazoxide\blog\models\BlogWidgetType::findOne(3)->widget ?>
+                    </div>
                 </div><!--Popular posts end-->
 
                 <div class="row top-buffer-20-xs home-white-content">
 
-                    <?php foreach ($featuredCategories->where(['widget_type_id'=>1,'is_featured'=>true])->limit(3)->all() as $category): ?>
+                    <?php foreach ($featuredCategories->where(['widget_type_id' => 1, 'is_featured' => true])->limit(3)->all() as $category): ?>
                         <div class="col-md-4 home_posts_widget">
 
                             <?= $category->widget ?>
@@ -45,7 +47,7 @@ $this->title = $title;
 
                 <div class="row top-buffer-20-xs home-white-content">
 
-                    <?php foreach ($featuredCategories->where(['widget_type_id'=>2,'is_featured'=>true])->limit(3)->all() as $category): ?>
+                    <?php foreach ($featuredCategories->where(['widget_type_id' => 2, 'is_featured' => true])->limit(3)->all() as $category): ?>
                         <div class="col-xs-12">
 
                             <?= $category->widget ?>
@@ -56,7 +58,7 @@ $this->title = $title;
                 </div>
 
                 <div class="row top-buffer-20-xs home-white-content">
-                    <?php foreach ($featuredCategories->where(['widget_type_id'=>1,'is_featured'=>true])->offset(3)->limit(3)->all() as $category): ?>
+                    <?php foreach ($featuredCategories->where(['widget_type_id' => 1, 'is_featured' => true])->offset(3)->limit(3)->all() as $category): ?>
                         <div class="col-md-4 home_posts_widget">
 
                             <?= $category->widget ?>
@@ -122,8 +124,6 @@ function fixFeedHeight(){
       var widget = $('#home_feed .feed-widget-listview');
       widget.height(widgetHeight);
 }
-
 $(window).on('load ready resize', fixFeedHeight);
 $(document).ready(fixFeedHeight);
-
 "); ?>
