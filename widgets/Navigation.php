@@ -46,7 +46,7 @@ class Navigation extends \yii\bootstrap\Widget
         echo Nav::widget([
             'encodeLabels' => false,
             'options' => ['class' => $class],
-            'items' => \diazoxide\blog\models\BlogCategory::getAllMenuItems()
+            'items' => \diazoxide\blog\models\BlogCategory::getAllMenuItems(true)
         ]);
     }
 }

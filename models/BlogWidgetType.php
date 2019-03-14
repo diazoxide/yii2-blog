@@ -84,7 +84,7 @@ class BlogWidgetType extends \yii\db\ActiveRecord
     public function getWidget(){
         $config = (array) $this->config;
         $config = reset($config);
-        $config['category_id'] = $this->id;
+        //$config['category_id'] = $this->id;
         return Feed::widget($config);
     }
 

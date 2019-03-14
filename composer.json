@@ -27,7 +27,7 @@
     "diazoxide/yii2-revslider": "*",
     "yiidoc/yii2-redactor": "*",
     "yii-dream-team/yii2-upload-behavior": "dev-master",
-    "masterexploder/phpthumb" : "dev-master#9a58407dca8748c3a20bc8143db56aff357bdf91",
+    "voskobovich/yii2-many-many-behavior": "^3.0",
     "dektrium/yii2-user": "^0.9.14",
     "dektrium/yii2-rbac": "^1.0",
     "yiisoft/yii2-imagine": "*",
