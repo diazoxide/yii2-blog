@@ -117,8 +117,11 @@ class Feed extends \yii\bootstrap\Widget
             $this->_pager = [
                 'class' => InfiniteScrollPager::className(),
                 'widgetId' => $this->_listViewId,
-                'itemsCssClass' => $this->item_options['class'],
+                'itemsCssClass' => $this->_listViewId,
+
                 'pluginOptions' => [
+                    'contentSelector' => '#'.$this->_listViewId,
+
                     'loading' => [
                         'msgText' => "<em>Loading next set of items...</em>",
                         'finishedMsg' => "<em>No more items to load</em>",
@@ -135,6 +138,7 @@ class Feed extends \yii\bootstrap\Widget
 //        }
 
         $this->list_options['id'] = $this->_listViewId;
+        $this->list_options['class'] .= ' '.$this->_listViewId;
 
         echo ListView::widget([
             'dataProvider' => $this->getDataProvider(),
