@@ -44,7 +44,7 @@ class DefaultController extends Controller
     {
         $featuredCategories = BlogCategory::find()->where(['is_featured' => true, 'status' => IActiveStatus::STATUS_ACTIVE])->orderBy(['sort_order' => SORT_DESC]);
 
-        return $this->render('index', [
+        return $this->render($this->module->getView(), [
             'title' => $this->getModule()->homeTitle,
             'banners' => $this->getModule()->banners,
             'featuredCategories' => $featuredCategories,
@@ -66,15 +66,20 @@ class DefaultController extends Controller
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('archive', [
+        return $this->render($this->module->getView(), [
             'title' => isset($category) ? $category->title : Module::t("Գրառումներ"),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
+    public function actionTest()
+    {
+        echo Yii::$app->controller->route;
+    }
+
     /**
-     * @param $id
+     * @param $slug
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException
      */
@@ -119,7 +124,7 @@ class DefaultController extends Controller
             return $this->redirect(['view', 'id' => $post->id, '#' => $comment->id]);
         }
 
-        return $this->render('view', [
+        return $this->render($this->module->getView(), [
             'post' => $post,
             'dataProvider' => $dataProvider,
             'comment' => $comment,
@@ -140,7 +145,7 @@ class DefaultController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        return $this->render('viewBook', [
+        return $this->render($this->module->getView(), [
             'book' => $book
         ]);
     }
@@ -158,7 +163,7 @@ class DefaultController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        return $this->render('viewChapter', [
+        return $this->render($this->module->getView(), [
             'chapter' => $chapter
         ]);
     }
@@ -170,9 +175,9 @@ class DefaultController extends Controller
         $searchModel->book_id = $book_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('searchBookChapter', [
+        return $this->render($this->module->getView(), [
             'dataProvider' => $dataProvider,
-            'searchModel'=>$searchModel,
+            'searchModel' => $searchModel,
         ]);
 
     }

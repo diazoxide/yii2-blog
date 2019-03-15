@@ -1,17 +1,13 @@
 <?php
-/**
- * Project: yii2-blog for internal using
- * Author: diazoxide
- * Copyright (c) 2018.
- */
 
 namespace diazoxide\blog\models;
 
+use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use yii\data\ActiveDataProvider;
 
 /**
- * BlogPostSearch represents the model behind the search form about `diazoxide\blog\models\BlogPost`.
+ * @property Module module
  */
 class BlogPostSearch extends BlogPost
 {
@@ -31,11 +27,18 @@ class BlogPostSearch extends BlogPost
         ];
     }
 
-    public function formName(){
-        if($this->scenario == self::SCENARIO_USER){
+    public function behaviors()
+    {
+        return [];
+    }
+
+    public function formName()
+    {
+        if ($this->scenario == self::SCENARIO_USER) {
             return '';
         } else return parent::formName();
     }
+
     /**
      * @inheritdoc
      */
@@ -57,6 +60,7 @@ class BlogPostSearch extends BlogPost
     public function search($params)
     {
         $query = BlogPost::find();
+
         $query->orderBy(['created_at' => SORT_DESC]);
 
         if ($this->scenario == self::SCENARIO_USER) {
@@ -71,25 +75,25 @@ class BlogPostSearch extends BlogPost
             ]
         ]);
 
-        if (!($this->load($params, ($this->scenario == self::SCENARIO_USER) ? '' : 'BlogPostSearch') && $this->validate())) {
+        if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-
-
+        print_r($this->slug);
         if ($this->scenario == self::SCENARIO_USER) {
-            if ($this->category_id) {
-                $query->andFilterWhere([$this::tableName() . '.category_id' => $this->category_id]);
-            }
             $query
                 ->andFilterWhere(['like', $this::tableName() . '.title', $this->q])
                 ->orFilterWhere(['like', $this::tableName() . '.content', $this->q]);
+
         }
 
+        if ($this->category_id) {
+            $query->andFilterWhere([$this::tableName() . '.category_id' => $this->category_id]);
+        }
 
         if ($this->scenario == self::SCENARIO_ADMIN) {
+
             $query->andFilterWhere([
                 $this::tableName() . '.category_id' => $this->category_id,
-
                 $this::tableName() . '.id' => $this->id,
                 $this::tableName() . '.status' => $this->status,
                 $this::tableName() . '.click' => $this->click,
@@ -97,10 +101,12 @@ class BlogPostSearch extends BlogPost
                 $this::tableName() . '.created_at' => $this->created_at,
                 $this::tableName() . '.updated_at' => $this->updated_at,
             ]);
+
             $query
-                ->andFilterWhere(['like', $this::tableName() . '.slug', $this->slug])
                 ->andFilterWhere(['like', $this::tableName() . '.title', $this->title])
-                ->andFilterWhere(['like', $this::tableName() . '.content', $this->content]);
+                ->andFilterWhere(['like', $this::tableName() . '.tags', $this->tags])
+                ->andFilterWhere(['like', $this::tableName() . '.content', $this->content])
+                ->andFilterWhere(['like', $this::tableName() . '.slug', $this->slug]);
         }
 
         return $dataProvider;

@@ -11,12 +11,28 @@ use diazoxide\blog\assets\AdminAsset;
 use diazoxide\blog\assets\AppAsset;
 use diazoxide\blog\components\OpenGraph;
 use Yii;
+use yii\base\ViewNotFoundException;
 use yii\db\ActiveRecord;
 use yii\i18n\PhpMessageSource;
 
 class Module extends \yii\base\Module
 {
     public $controllerNamespace = 'diazoxide\blog\controllers\frontend';
+
+    public $backendViewPath = '@vendor/diazoxide/yii2-blog/views/backend';
+
+    public $frontendViewPath = '@vendor/diazoxide/yii2-blog/views/frontend';
+
+    public $frontendViewsMap = [];
+
+    protected $_frontendViewsMap = [
+        'blog/default/index' => 'index',
+        'blog/default/view' => 'view',
+        'blog/default/archive' => 'archive',
+        'blog/default/book' => 'viewBook',
+        'blog/default/chapter' => 'viewChapter',
+        'blog/default/chapter-search' => 'searchBookChapter',
+    ];
 
     public $urlManager = 'urlManager';
 
@@ -69,20 +85,39 @@ class Module extends \yii\base\Module
     public $htmlClass = "diazoxide_blog";
 
     /**
+     * @return mixed|string
+     */
+    public function getView()
+    {
+        $route = Yii::$app->controller->route;
+
+        if ($this->getIsBackend() !== true) {
+
+            if (isset($this->frontendViewsMap[$route])) {
+
+                return $this->frontendViewsMap[$route];
+
+            } elseif(isset($this->_frontendViewsMap[$route] )) {
+
+                return $this->_frontendViewsMap[$route];
+
+            }
+        }
+        throw new ViewNotFoundException('The view file does not exist.');
+    }
+
+    /**
      * @throws \yii\base\InvalidConfigException
      */
     public function init()
     {
         parent::init();
         if ($this->getIsBackend() === true) {
-            $this->setViewPath('@vendor/diazoxide/yii2-blog/views/backend');
+            $this->setViewPath($this->backendViewPath);
             AdminAsset::register(Yii::$app->view);
         } else {
-            $this->setViewPath('@vendor/diazoxide/yii2-blog/views/frontend');
-            $this->setLayoutPath('@vendor/diazoxide/yii2-blog/views/frontend/layouts');
-
+            $this->setViewPath($this->frontendViewPath);
             AppAsset::register(Yii::$app->view);
-
         }
         $this->registerRedactorModule();
         $this->registerTranslations();
@@ -177,16 +212,18 @@ class Module extends \yii\base\Module
         return $opengraph;
     }
 
-    public function getModuleId(){
+    public function getModuleId()
+    {
         return Yii::$app->controller->module->id;
     }
+
     public function getCategoriesUrl()
     {
 
         if ($this->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createUrl([$this->moduleId.'/blog-category']);
+            return Yii::$app->getUrlManager()->createUrl([$this->moduleId . '/blog-category']);
         }
-        return Yii::$app->getUrlManager()->createUrl([$this->moduleId.'/default']);
+        return Yii::$app->getUrlManager()->createUrl([$this->moduleId . '/default']);
 
     }
 
@@ -194,9 +231,9 @@ class Module extends \yii\base\Module
     {
 
         if ($this->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createUrl([$this->moduleId.'/default/index']);
+            return Yii::$app->getUrlManager()->createUrl([$this->moduleId . '/default/index']);
         }
-        return Yii::$app->getUrlManager()->createUrl([$this->moduleId.'/default/index']);
+        return Yii::$app->getUrlManager()->createUrl([$this->moduleId . '/default/index']);
 
     }
 

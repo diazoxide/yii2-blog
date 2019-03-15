@@ -10,6 +10,30 @@ $this->title = $title;
     <div id="blog-container" class="container">
         <div class="row top-buffer-20-sm">
 
+            <div class="col-md-4">
+
+                <div class="home-feed nopadding-xs" id="home-feed-container">
+                    <div id="home_feed" class="top-buffer-20-xs top-buffer-0-md">
+                        <div class="widget_title"><i
+                                    class="fa fa-newspaper-o"></i> <?= \diazoxide\blog\Module::t('News Feed') ?>
+                        </div>
+                        <?= Feed::widget([
+                            'items_count' => 15,
+                            'show_item_brief' => false,
+                            'item_brief_length' => 50,
+                            'infinite_scroll' => true,
+                            'id' => 'home_feed_widget',
+                            'item_image_type' => 'xsthumb',
+                            'item_image_container_options' => ['class' => 'col-xs-2 nospaces-xs'],
+                            'item_content_container_options' => ['class' => 'col-xs-10 nospaces-xs'],
+                            'item_options' => ['tag' => 'article', 'class' => 'item col-xs-12 top-buffer-20-xs left-padding-0-xs right-padding-10-xs'],
+                        ]);
+                        ?>
+                    </div>
+                </div>
+
+            </div>
+
             <div class="col-md-8 home-slider-container">
 
                 <div class="row">
@@ -70,44 +94,11 @@ $this->title = $title;
 
             </div>
 
-            <div class="col-md-4">
-                <div class="home-feed nopadding-xs" id="home-feed-container">
-                    <div id="home_feed" class="top-buffer-20-xs top-buffer-0-md">
-
-                        <div id="home_feed_ad" class="visible-lg visible-md">
-                            <?php
-                            if (isset($banners[1])) {
-                                $banner = $banners[1];
-                                echo Html::a(Html::img($banner['src'], ['class' => 'img-responsive']), $banner['href']);
-                            } else {
-                                echo \diazoxide\blog\Module::t("Insert Banner Code");
-                            }
-                            ?>
-                        </div>
-                        <div class="widget_title"><i
-                                    class="fa fa-newspaper-o"></i> <?= \diazoxide\blog\Module::t('News Feed') ?>
-                        </div>
-                        <?= Feed::widget([
-                            'items_count' => 15,
-                            'show_item_brief' => false,
-                            'item_brief_length' => 50,
-                            'infinite_scroll' => true,
-                            'id' => 'home_feed_widget',
-                            'item_image_type' => 'xsthumb',
-                            'item_image_container_options' => ['class' => 'col-xs-2 nospaces-xs'],
-                            'item_content_container_options' => ['class' => 'col-xs-10 nospaces-xs'],
-                            'item_options' => ['tag' => 'article', 'class' => 'item col-xs-12 top-buffer-20-xs left-padding-0-xs right-padding-10-xs'],
-                        ]);
-                        ?>
-                    </div>
-                </div>
-
-            </div>
-
         </div>
     </div>
 
 <?php $this->registerJs("
+
 var sidebar = new StickySidebar('#home-feed-container', {
     containerSelector: '#blog-container',
     innerWrapperSelector: '#home_feed',
@@ -117,13 +108,12 @@ var sidebar = new StickySidebar('#home-feed-container', {
     minWidth: 991
 });
 function fixFeedHeight(){
- var titleHeight = $('#home_feed_ad').height();
-      var adBarHeight = $('#home_feed .widget_title').outerHeight();
+      var titleHeight = $('#home_feed .widget_title').outerHeight();
       var winHeight = $(window).outerHeight();
-      var widgetHeight = winHeight - titleHeight - adBarHeight;
-      var widget = $('#home_feed .feed-widget-listview');
+      var widgetHeight = winHeight - titleHeight;
+      var widget = $('#home_feed_widget > div');
       widget.height(widgetHeight);
 }
-$(window).on('load ready resize', fixFeedHeight);
-$(document).ready(fixFeedHeight);
+$(window).on('load ready resize', function(){fixFeedHeight();sidebar.updateSticky();});
+$(document).ready(function(){fixFeedHeight();sidebar.updateSticky();});
 "); ?>

@@ -52,12 +52,33 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="col-md-4">
-            <?= $form->field($model, 'category_ids')->dropDownList(ArrayHelper::map(BlogCategory::find()->all(), 'id', 'title'),
-                [
-                    'multiple' => 'multiple',
-                ]); ?>
+            <?=
+            $form->field($model, 'category_ids')->widget(\kartik\select2\Select2::classname(), [
+                'data' => ArrayHelper::map(BlogCategory::find()->all(), 'id', 'title'),
+                //'language' => 'de',
+                'options' => [
+                    'placeholder' => Module::t('Select Categories'),
+                    'multiple' => true
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);
+            ?>
 
-            <?= $form->field($model, 'category_id')->dropDownList(ArrayHelper::map(BlogCategory::get(0, BlogCategory::find()->all()), 'id', 'str_label')) ?>
+
+            <?=
+            $form->field($model, 'category_id')->widget(\kartik\select2\Select2::classname(), [
+                'data' => ArrayHelper::map(BlogCategory::find()->all(), 'id', 'title'),
+                //'language' => 'de',
+                'options' => [
+                    'placeholder' => Module::t('Select Categories'),
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);
+            ?>
 
             <?= $form->field($model, 'is_slide')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')], ['prompt' => Module::t('Select value')]) ?>
 

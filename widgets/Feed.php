@@ -106,7 +106,7 @@ class Feed extends \yii\bootstrap\Widget
         if ($this->show_title) {
             echo Html::tag(
                 isset($this->title_options['tag']) && !empty($this->title_options['tag']) ? $this->title_options['tag'] : 'div',
-                $this->title,
+                $this->title." ".$this->_listViewId,
                 $this->title_options
             );
 
@@ -114,8 +114,8 @@ class Feed extends \yii\bootstrap\Widget
         if ($this->infinite_scroll || $this->load_more_button) {
             $this->show_pager = true;
             $this->_pager = [
-                'class' => ScrollPager::className(),
-                'container' => "#$this->_listViewId",
+                'class' => ScrollPager::class,
+                'container' => "#{$this->_listViewId}",
                 'triggerText' => Module::t('Load more...')
             ];
         }
