@@ -115,20 +115,7 @@ class Feed extends \yii\bootstrap\Widget
         if ($this->infinite_scroll || $this->load_more_button) {
             $this->show_pager = true;
             $this->_pager = [
-                'class' => InfiniteScrollPager::className(),
-                'widgetId' => $this->_listViewId,
-                'itemsCssClass' => $this->_listViewId,
-                'registerLinkTags' => true,
-
-                'pluginOptions' => [
-                    'contentSelector' => '#'.$this->_listViewId,
-                    'loading' => [
-                        'msgText' => "<em>Loading next set of items...</em>",
-                        'finishedMsg' => "<em>No more items to load</em>",
-                    ],
-                    'behavior' => InfiniteScrollPager::BEHAVIOR_LOCAL,
-                    'animate'=>true
-                ],
+                'class' => \diazoxide\infinitescroll\InfiniteScrollPager::className(),
             ];
         }
 
