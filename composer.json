@@ -21,11 +21,13 @@
       "email": "diazoxide@gmail.com"
     }
   ],
-
   "require": {
     "yiisoft/yii2": "*",
     "diazoxide/yii2-revslider": "*",
     "yiidoc/yii2-redactor": "*",
+    "bower-asset/font-awesome": "^5.7",
+    "bower-asset/sticky-sidebar": "*",
+    "diazoxide/yii2-infinite-scroll": "dev-master",
     "yii-dream-team/yii2-upload-behavior": "dev-master",
     "voskobovich/yii2-many-many-behavior": "^3.0",
     "kartik-v/yii2-widget-select2": "@dev",
@@ -34,15 +36,12 @@
     "yiisoft/yii2-imagine": "*",
     "nirvana-msu/yii2-infinite-scroll": "1.0.*@dev",
     "kop/yii2-scroll-pager": "dev-master",
-    "bower-asset/font-awesome": "^5.7",
-    "bower-asset/sticky-sidebar": "*",
-    "bower-asset/infinite-scroll": "*",
     "yiidoc/yii2-redactor": "*",
     "yii-dream-team/yii2-upload-behavior": "*",
     "lesha724/yii2-math-captcha": "*",
     "kartik-v/yii2-social": "@dev",
     "chriskonnertz/bbcode": "dev-master",
-    "paulzi/yii2-json-behavior" : "~1.0.0"
+    "paulzi/yii2-json-behavior": "~1.0.0"
   },
   "repositories": [
     {
