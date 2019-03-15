@@ -36,6 +36,7 @@
     "kop/yii2-scroll-pager": "dev-master",
     "bower-asset/font-awesome": "^5.7",
     "bower-asset/sticky-sidebar": "*",
+    "bower-asset/infinite-scroll": "*",
     "yiidoc/yii2-redactor": "*",
     "yii-dream-team/yii2-upload-behavior": "*",
     "lesha724/yii2-math-captcha": "*",
