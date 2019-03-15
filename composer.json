@@ -32,7 +32,7 @@
     "dektrium/yii2-user": "^0.9.14",
     "dektrium/yii2-rbac": "^1.0",
     "yiisoft/yii2-imagine": "*",
-    "nirvana-msu/yii2-infinite-scroll": "1.0.*@dev",
+    "nirvana-msu/yii2-infinite-scroll": "dev-master",
     "kop/yii2-scroll-pager": "dev-master",
     "bower-asset/font-awesome": "^5.7",
     "bower-asset/sticky-sidebar": "*",

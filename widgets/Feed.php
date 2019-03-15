@@ -8,6 +8,7 @@ use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use diazoxide\blog\traits\FeedTrait;
 use kop\y2sp\ScrollPager;
+use nirvana\infinitescroll\InfiniteScrollPager;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
 use yii\helpers\Html;
@@ -114,16 +115,24 @@ class Feed extends \yii\bootstrap\Widget
         if ($this->infinite_scroll || $this->load_more_button) {
             $this->show_pager = true;
             $this->_pager = [
-                'class' => ScrollPager::class,
-                'container' => "#{$this->_listViewId}",
-                'triggerText' => Module::t('Load more...')
+                'class' => InfiniteScrollPager::className(),
+                'widgetId' => $this->_listViewId,
+                'itemsCssClass' => $this->item_options['class'],
+                'pluginOptions' => [
+                    'loading' => [
+                        'msgText' => "<em>Loading next set of items...</em>",
+                        'finishedMsg' => "<em>No more items to load</em>",
+                    ],
+                    'behavior' => InfiniteScrollPager::BEHAVIOR_TWITTER,
+                ],
             ];
         }
 
-        if ($this->infinite_scroll) {
-            $this->_pager['enabledExtensions'] = [ScrollPager::EXTENSION_SPINNER, ScrollPager::EXTENSION_NONE_LEFT, ScrollPager::EXTENSION_PAGING];
-            $this->_pager['overflowContainer'] = "#{$this->_listViewId}";
-        }
+//        if ($this->infinite_scroll) {
+//
+//            $this->_pager['enabledExtensions'] = [ScrollPager::EXTENSION_SPINNER, ScrollPager::EXTENSION_NONE_LEFT, ScrollPager::EXTENSION_PAGING];
+//            $this->_pager['overflowContainer'] = "#{$this->_listViewId}";
+//        }
 
         $this->list_options['id'] = $this->_listViewId;
 
