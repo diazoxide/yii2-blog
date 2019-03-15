@@ -28,6 +28,7 @@
     "bower-asset/font-awesome": "^5.7",
     "bower-asset/sticky-sidebar": "*",
     "diazoxide/yii2-infinite-scroll": "dev-master",
+
     "yii-dream-team/yii2-upload-behavior": "dev-master",
     "voskobovich/yii2-many-many-behavior": "^3.0",
     "kartik-v/yii2-widget-select2": "@dev",
