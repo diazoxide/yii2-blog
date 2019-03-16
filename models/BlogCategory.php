@@ -473,7 +473,7 @@ class BlogCategory extends \yii\db\ActiveRecord
         $config = (array) $this->widgetType->config;
         $config = reset($config);
         $config['category_id'] = $this->id;
-
+        $config['id']=$this->formName().'_'.$this->id;
 
         return Feed::widget($config);
     }

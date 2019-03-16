@@ -86,8 +86,7 @@ class Feed extends \yii\bootstrap\Widget
 
         echo Html::beginTag('div', $this->options);
 
-        $this->_listViewId = "Feed-widget-" . $this->id;
-
+        $this->_listViewId = $this->id . "_list_view";
 
 
         if ($this->_category) {
@@ -107,32 +106,34 @@ class Feed extends \yii\bootstrap\Widget
         if ($this->show_title) {
             echo Html::tag(
                 isset($this->title_options['tag']) && !empty($this->title_options['tag']) ? $this->title_options['tag'] : 'div',
-                $this->title." ".$this->_listViewId,
+                $this->title,
                 $this->title_options
             );
 
         }
+        Html::addCssClass($this->list_options, $this->_listViewId);
+        Html::addCssClass($this->item_options, $this->_listViewId . '_item');
+
         if ($this->infinite_scroll || $this->load_more_button) {
             $this->show_pager = true;
             $this->_pager = [
                 'class' => \diazoxide\infinitescroll\InfiniteScrollPager::className(),
+                'contentSelector' => '#' . $this->_listViewId,
+                'pluginOptions' => [
+                    'append' => '#' . $this->_listViewId . ' .' . $this->_listViewId . '_item',
+                    'elementScroll' => true,
+                    'status' => "#{$this->id} .page-load-status"
+                ]
             ];
+
         }
 
-//        if ($this->infinite_scroll) {
-//
-//            $this->_pager['enabledExtensions'] = [ScrollPager::EXTENSION_SPINNER, ScrollPager::EXTENSION_NONE_LEFT, ScrollPager::EXTENSION_PAGING];
-//            $this->_pager['overflowContainer'] = "#{$this->_listViewId}";
-//        }
-
-        //$this->list_options['id'] = $this->_listViewId;
-        $this->list_options['class'] .= ' '.$this->_listViewId;
 
         echo ListView::widget([
-            'id'=>$this->_listViewId,
+            'id' => $this->_listViewId,
             'dataProvider' => $this->getDataProvider(),
-            'options' => $this->list_options,
-            'itemOptions' => $this->item_options,
+            'options' => array_filter($this->list_options),
+            'itemOptions' => array_filter($this->item_options),
             'layout' => "{items}" . ($this->show_pager ? "{pager}" : ""),
             'itemView' => '@vendor/diazoxide/yii2-blog/widgets/views/_feed_item',
             'viewParams' => [
@@ -161,6 +162,31 @@ class Feed extends \yii\bootstrap\Widget
 
             'pager' => $this->_pager
         ]);
+
+        echo <<<HTML
+<div class="page-load-status">
+  <div class="infinite-scroll-request">
+    <span>Loading...</span>
+  </div>
+  <p class="infinite-scroll-last">End of content</p>
+  <p class="infinite-scroll-error">No more pages to load</p>
+</div>
+HTML;
+
+        $css = <<<CSS
+.page-load-status {
+    display: none;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    border-top: 1px solid #DDD;
+    text-align: center;
+    color: #fff;
+    background: #444;
+}
+CSS;
+
+        $this->view->registerCss($css);
 
         echo Html::endTag('div');
 

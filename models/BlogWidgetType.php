@@ -61,12 +61,11 @@ class BlogWidgetType extends \yii\db\ActiveRecord
     {
         return [
             [['title'], 'required'],
-            [['title'],'string','max'=>255],
+            [['title'], 'string', 'max' => 255],
             [['config'], JsonValidator::className()],
             [['config_data'], 'safe'],
         ];
     }
-
 
 
     /**
@@ -81,10 +80,11 @@ class BlogWidgetType extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getWidget(){
-        $config = (array) $this->config;
+    public function getWidget()
+    {
+        $config = (array)$this->config;
         $config = reset($config);
-        //$config['category_id'] = $this->id;
+        //$config['id'] = $this->id;
         return Feed::widget($config);
     }
 
