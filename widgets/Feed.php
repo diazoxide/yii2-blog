@@ -11,6 +11,7 @@ use kop\y2sp\ScrollPager;
 use nirvana\infinitescroll\InfiniteScrollPager;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ListView;
 
@@ -74,6 +75,8 @@ class Feed extends \yii\bootstrap\Widget
     protected $_pager = null;
     protected $_category = null;
 
+    protected $_infiniteScrollPagerStatusOptions = ['tag' => 'div', 'class' => 'diazoxide_infinite_scroll_pager_status'];
+
     /**
      * @throws \Exception
      */
@@ -122,7 +125,7 @@ class Feed extends \yii\bootstrap\Widget
                 'pluginOptions' => [
                     'append' => '#' . $this->_listViewId . ' .' . $this->_listViewId . '_item',
                     'elementScroll' => true,
-                    'status' => "#{$this->id} .page-load-status"
+                    'status' => "#{$this->id} .{$this->_infiniteScrollPagerStatusOptions['class']}"
                 ]
             ];
 
@@ -163,30 +166,8 @@ class Feed extends \yii\bootstrap\Widget
             'pager' => $this->_pager
         ]);
 
-        echo <<<HTML
-<div class="page-load-status">
-  <div class="infinite-scroll-request">
-    <span>Loading...</span>
-  </div>
-  <p class="infinite-scroll-last">End of content</p>
-  <p class="infinite-scroll-error">No more pages to load</p>
-</div>
-HTML;
+        $this->renderInfinityScrollStatusHtml();
 
-        $css = <<<CSS
-.page-load-status {
-    display: none;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    border-top: 1px solid #DDD;
-    text-align: center;
-    color: #fff;
-    background: #444;
-}
-CSS;
-
-        $this->view->registerCss($css);
 
         echo Html::endTag('div');
 
@@ -252,5 +233,17 @@ CSS;
     public function getCategory()
     {
         return BlogCategory::findOne($this->category_id);
+    }
+
+    public function renderInfinityScrollStatusHtml()
+    {
+        $options = $this->_infiniteScrollPagerStatusOptions;
+        $tag = ArrayHelper::remove($options, 'tag', 'div');
+
+        echo Html::beginTag($tag, $options);
+        echo Html::tag('div', Module::t('Loading...'), ['class' => 'infinite-scroll-request']);
+        echo Html::tag('div', Module::t('End of content.'), ['class' => 'infinite-scroll-last']);
+        echo Html::tag('div', Module::t('No more posts to load.'), ['class' => 'infinite-scroll-error']);
+        echo Html::endTag($tag);
     }
 }

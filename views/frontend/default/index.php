@@ -10,40 +10,11 @@ $this->title = $title;
     <div id="blog-container">
         <div class="top-buffer-20-sm">
 
-            <div class="col-md-4 nospaces-xs">
-
-                <div class="home-feed nopadding-xs" id="home-feed-container">
-                    <div id="home_feed" class="top-buffer-20-xs top-buffer-0-md">
-                        <div class="widget_title"><i
-                                    class="fa fa-newspaper-o"></i> <?= \diazoxide\blog\Module::t('News Feed') ?>
-                        </div>
-                        <?= Feed::widget([
-                            'items_count' => 15,
-                            'show_item_brief' => false,
-                            'item_brief_length' => 50,
-                            'infinite_scroll' => true,
-                            'id' => 'home_feed_widget',
-                            'item_image_type' => 'xsthumb',
-                            'item_title_length' => 50,
-                            'item_title_options' => ['class' => 'top-buffer-10-xs'],
-                            'item_info_container_options' => ['class' => 'text-right text-warning'],
-                            'item_image_container_options' => ['class' => 'col-xs-2 left-padding-0-xs right-padding-10-xs'],
-                            'item_content_container_options' => ['class' => 'col-xs-10 nospaces-xs'],
-                            'item_options' => ['tag' => 'article', 'class' => 'item col-xs-12 top-buffer-10-xs left-padding-0-xs right-padding-10-xs'],
-                        ]);
-                        ?>
-                    </div>
-                </div>
-
-            </div>
-
             <div class="col-md-8 home-slider-container">
 
                 <div class="row">
                     <div class="nopadding-xs">
-                        <div class="widget_title hidden-xs">
-                            <i class="fa fa-star"></i> <?= \diazoxide\blog\Module::t('General') ?>
-                        </div>
+
                         <?= \diazoxide\blog\widgets\Slider::widget(
                             ['itemsCount' => 5]
                         ) ?>
@@ -51,7 +22,7 @@ $this->title = $title;
                 </div>
 
                 <!--Popular posts-->
-                <div class="top-buffer-20-xs home-white-content row">
+                <div class="home-white-content top-buffer-20-xs row">
                     <div class="col-xs-12">
                         <?= \diazoxide\blog\models\BlogWidgetType::findOne(3)->widget ?>
                     </div>
@@ -90,6 +61,34 @@ $this->title = $title;
                 </div>
 
             </div>
+
+            <div class="col-md-4 nospaces-xs">
+
+                <div class="home-feed nopadding-xs" id="home-feed-container">
+                    <div id="home_feed" class="top-buffer-20-xs top-buffer-0-md">
+                        <?= Feed::widget([
+                            'title' => '<i class="fa fa-newspaper-o"></i> ' . \diazoxide\blog\Module::t('Feed'),
+                            'items_count' => 15,
+                            'show_item_brief' => false,
+                            'show_title' => true,
+                            'item_brief_length' => 50,
+                            'infinite_scroll' => true,
+                            'id' => 'home_feed_widget',
+                            'item_image_type' => 'xsthumb',
+                            'item_title_length' => 70,
+                            'title_options'=>['class'=>'widget_title'],
+                            'item_title_options' => ['class' => 'top-buffer-10-xs'],
+                            'item_info_container_options' => ['class' => 'text-right text-warning small'],
+                            'item_image_container_options' => ['class' => 'col-xs-2 left-padding-0-xs right-padding-10-xs'],
+                            'item_content_container_options' => ['class' => 'col-xs-10 nospaces-xs'],
+                            'item_options' => ['tag' => 'article', 'class' => 'item col-xs-12 top-buffer-10-xs left-padding-0-xs right-padding-10-xs'],
+                        ]);
+                        ?>
+                    </div>
+                </div>
+
+            </div>
+
 
         </div>
     </div>
