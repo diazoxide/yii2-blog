@@ -87,10 +87,7 @@ class Feed extends \yii\bootstrap\Widget
         /* Init. category model */
         $this->_category = $this->getCategory();
 
-        echo Html::beginTag('div', $this->options);
-
         $this->_listViewId = $this->id . "_list_view";
-
 
         if ($this->_category) {
             if ($this->show_category_title) {
@@ -106,6 +103,7 @@ class Feed extends \yii\bootstrap\Widget
             }
         }
 
+
         if ($this->show_title) {
             echo Html::tag(
                 isset($this->title_options['tag']) && !empty($this->title_options['tag']) ? $this->title_options['tag'] : 'div',
@@ -114,8 +112,6 @@ class Feed extends \yii\bootstrap\Widget
             );
 
         }
-        Html::addCssClass($this->list_options, $this->_listViewId);
-        Html::addCssClass($this->item_options, $this->_listViewId . '_item');
 
         if ($this->infinite_scroll || $this->load_more_button) {
             $this->show_pager = true;
@@ -128,9 +124,24 @@ class Feed extends \yii\bootstrap\Widget
                     'status' => "#{$this->id} .{$this->_infiniteScrollPagerStatusOptions['class']}"
                 ]
             ];
-
+            $this->options['style']='position:relative;';
         }
 
+
+
+        Html::addCssClass($this->list_options, $this->_listViewId);
+        Html::addCssClass($this->item_options, $this->_listViewId . '_item');
+
+
+
+
+
+        $this->getView()->registerJs($this->custom_js);
+        $this->getView()->registerCss($this->custom_css);
+    }
+
+    public function run(){
+        echo Html::beginTag('div', $this->options);
 
         echo ListView::widget([
             'id' => $this->_listViewId,
@@ -170,11 +181,7 @@ class Feed extends \yii\bootstrap\Widget
 
 
         echo Html::endTag('div');
-
-        $this->getView()->registerJs($this->custom_js);
-        $this->getView()->registerCss($this->custom_css);
     }
-
     /**
      * Building Data provider
      * @return ActiveDataProvider

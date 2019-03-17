@@ -297,14 +297,3 @@
     text-align: center;
     margin-bottom: 0;
 }
-
-.diazoxide_infinite_scroll_pager_status {
-    display: none;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    border-top: 1px solid #DDD;
-    text-align: center;
-    color: #fff;
-    background: #444;
-}
