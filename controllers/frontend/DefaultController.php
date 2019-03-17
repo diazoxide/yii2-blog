@@ -61,7 +61,6 @@ class DefaultController extends Controller
         if (Yii::$app->request->getQueryParam('slug')) {
             $category = BlogCategory::findOne(['slug' => Yii::$app->request->getQueryParam('slug')]);
             $searchModel->category_id = $category->id;
-
         }
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

@@ -103,16 +103,6 @@ class Feed extends \yii\bootstrap\Widget
             }
         }
 
-
-        if ($this->show_title) {
-            echo Html::tag(
-                isset($this->title_options['tag']) && !empty($this->title_options['tag']) ? $this->title_options['tag'] : 'div',
-                $this->title,
-                $this->title_options
-            );
-
-        }
-
         if ($this->infinite_scroll || $this->load_more_button) {
             $this->show_pager = true;
             $this->_pager = [
@@ -143,6 +133,14 @@ class Feed extends \yii\bootstrap\Widget
     public function run(){
         echo Html::beginTag('div', $this->options);
 
+        if ($this->show_title) {
+            echo Html::tag(
+                isset($this->title_options['tag']) && !empty($this->title_options['tag']) ? $this->title_options['tag'] : 'div',
+                $this->title,
+                $this->title_options
+            );
+
+        }
         echo ListView::widget([
             'id' => $this->_listViewId,
             'dataProvider' => $this->getDataProvider(),

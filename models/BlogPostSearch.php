@@ -64,7 +64,8 @@ class BlogPostSearch extends BlogPost
         $query->orderBy(['created_at' => SORT_DESC]);
 
         if ($this->scenario == self::SCENARIO_USER) {
-            $query->andWhere([BlogCategory::tableName() . '.status' => IActiveStatus::STATUS_ACTIVE])->innerJoinWith('category')
+            $query->andWhere([BlogPost::tableName() . '.status' => IActiveStatus::STATUS_ACTIVE])
+                ->innerJoinWith('category')
                 ->andWhere([BlogCategory::tableName() . '.status' => IActiveStatus::STATUS_ACTIVE]);
         }
 
@@ -86,9 +87,7 @@ class BlogPostSearch extends BlogPost
 
         }
 
-        if ($this->category_id) {
-            $query->andFilterWhere([$this::tableName() . '.category_id' => $this->category_id]);
-        }
+
 
         if ($this->scenario == self::SCENARIO_ADMIN) {
 
@@ -108,6 +107,8 @@ class BlogPostSearch extends BlogPost
                 ->andFilterWhere(['like', $this::tableName() . '.content', $this->content])
                 ->andFilterWhere(['like', $this::tableName() . '.slug', $this->slug]);
         }
+
+        $query->innerJoinWith('category')->andFilterWhere([BlogCategory::tableName() . '.id' => $this->category_id]);
 
         return $dataProvider;
     }

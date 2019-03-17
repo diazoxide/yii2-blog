@@ -16,6 +16,7 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yiidreamteam\upload\ImageUploadBehavior;
 
+
 /**
  * This is the model class for table "blog_category".
  *
