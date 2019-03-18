@@ -41,7 +41,6 @@
     "kartik-v/yii2-social": "@dev",
     "chriskonnertz/bbcode": "dev-master",
     "paulzi/yii2-json-behavior": "~1.0.0",
-    "kartik-v/yii2-tree-manager": "@dev"
   },
   "repositories": [
     {
