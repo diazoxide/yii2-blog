@@ -7,10 +7,6 @@
 
 namespace diazoxide\blog\models;
 
-use diazoxide\blog\Module;
-use diazoxide\blog\traits\IActiveStatus;
-use diazoxide\blog\traits\ModuleTrait;
-use diazoxide\blog\traits\StatusTrait;
 use Yii;
 use yii\behaviors\AttributeBehavior;
 use yii\behaviors\SluggableBehavior;
@@ -20,6 +16,11 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yiidreamteam\upload\ImageUploadBehavior;
 
+use diazoxide\blog\Module;
+use diazoxide\blog\traits\IActiveStatus;
+use diazoxide\blog\traits\ModuleTrait;
+use diazoxide\blog\traits\StatusTrait;
+use voskobovich\behaviors\ManyToManyBehavior;
 
 /**
  * This is the model class for table "blog_post".
@@ -87,7 +88,7 @@ class BlogPost extends \yii\db\ActiveRecord
                 },
             ],
             [
-                'class' => \voskobovich\behaviors\ManyToManyBehavior::className(),
+                'class' => ManyToManyBehavior::className(),
                 'relations' => [
                     'category_ids' => 'categories',
                 ],
@@ -121,7 +122,7 @@ class BlogPost extends \yii\db\ActiveRecord
             [['category_ids'], 'each', 'rule' => ['integer']],
 
             [['category_id', 'title', 'content'], 'required'],
-            [['category_id', 'click', 'user_id', 'status'], 'integer'],
+            [['category_id', 'click', 'user_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['brief', 'content'], 'string'],
             [['is_slide', 'show_comments'], 'boolean'],
             [['show_comments'], 'default', 'value' => true],
@@ -175,6 +176,9 @@ class BlogPost extends \yii\db\ActiveRecord
         return $this->hasMany(BlogPostBook::className(), ['post_id' => 'id']);
     }
 
+    /**
+     * @return int|string
+     */
     public function getCommentsCount()
     {
         return $this->hasMany(BlogComment::className(), ['post_id' => 'id'])->count('post_id');
@@ -211,6 +215,9 @@ class BlogPost extends \yii\db\ActiveRecord
         return null;
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getComments()
     {
         return $this->hasMany(BlogComment::className(), ['post_id' => 'id']);

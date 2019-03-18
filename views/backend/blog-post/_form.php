@@ -8,6 +8,7 @@
 use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\Module;
 //use kartik\markdown\MarkdownEditor;
+use \kartik\datetime\DateTimePicker;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -90,7 +91,24 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'click')->textInput() ?>
 
-            <?= $form->field($model, 'created_at')->textInput() ?>
+            <?=
+            $form->field($model, 'created_at')->widget(DateTimePicker::className(), [
+                'name' => 'created_at',
+                'type' => DateTimePicker::TYPE_BUTTON,
+                'options' => [
+                    'placeholder' => Module::t('Select Publish Datetime'),
+                    'value' => Yii::$app->formatter->asDatetime($model->created_at)
+                ],
+//                'convertFormat' => true,
+                'pluginOptions' => [
+                    'format' => Yii::$app->formatter->datetimeFormat,
+                    'autoclose' => true,
+                    'weekStart' => 1, //неделя начинается с понедельника
+                    'startDate' => '01.05.2015 00:00', //самая ранняя возможная дата
+                    'todayBtn' => true, //снизу кнопка "сегодня"
+                ]
+            ]); ?>
+
             <?= $form->field($model, 'updated_at')->textInput() ?>
 
             <?= $form->field($model, 'status')->dropDownList(\diazoxide\blog\models\BlogPost::getStatusList()) ?>
