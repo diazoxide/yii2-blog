@@ -97,7 +97,7 @@ class Module extends \yii\base\Module
 
                 return $this->frontendViewsMap[$route];
 
-            } elseif(isset($this->_frontendViewsMap[$route] )) {
+            } elseif (isset($this->_frontendViewsMap[$route])) {
 
                 return $this->_frontendViewsMap[$route];
 
@@ -198,7 +198,7 @@ class Module extends \yii\base\Module
     {
         return [
             ['label' => 'Posts', 'url' => ['/blog/blog-post'], 'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS")],
-            ['label' => 'Categories', 'url' => ['/blog/blog-category', 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")]],
+            ['label' => 'Categories', 'url' => ['/blog/blog-category'], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
             ['label' => 'Comments', 'url' => ['/blog/blog-comment'], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
             ['label' => 'Tags', 'url' => ['/blog/blog-tag'], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
             ['label' => 'Widget Types', 'url' => ['/blog/widget-type/index'], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],

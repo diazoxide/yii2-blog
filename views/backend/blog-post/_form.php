@@ -109,6 +109,8 @@ use yii\widgets\ActiveForm;
                 ]
             ]); ?>
 
+
+
             <?= $form->field($model, 'updated_at')->textInput() ?>
 
             <?= $form->field($model, 'status')->dropDownList(\diazoxide\blog\models\BlogPost::getStatusList()) ?>
