@@ -10,7 +10,10 @@ namespace diazoxide\blog\controllers\backend;
 use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogCategorySearch;
 use diazoxide\blog\traits\IActiveStatus;
+use paulzi\adjacencyList\AdjacencyListQueryTrait;
 use Yii;
+use yii\data\ActiveDataProvider;
+use yii\db\ActiveRecord;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -21,6 +24,8 @@ use yii\web\NotFoundHttpException;
  */
 class BlogCategoryController extends Controller
 {
+    use AdjacencyListQueryTrait;
+
     public function behaviors()
     {
         return [
@@ -63,17 +68,25 @@ class BlogCategoryController extends Controller
             ],
         ];
     }
+
     /**
      * Lists all BlogCategory models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new BlogCategorySearch();
-        $dataProvider = BlogCategory::get(0, BlogCategory::find()->all());
+//        $searchModel = new BlogCategorySearch();
+//        $dataProvider = BlogCategory::get(0, BlogCategory::find()->all());
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => BlogCategory::findOne(1)->getChildren(),
+            'pagination' => [
+                'pageSize' => 100,
+            ]
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+//            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

@@ -19,11 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="blog-category-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
+
     <p>
         <?= Html::a(Module::t('Create ') . Module::t('Blog Category'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    
+    <?php /*
     <table class="table table-striped table-bordered">
         <thead>
         <tr>
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($dataProvider as $item) { ?>
+        <?php foreach ($dataProvider->asArray()->all() as $item) { ?>
             <tr data-key="1">
                 <td><?= $item['id']; ?></td>
                 <td><?= Html::img($item['banner'], ['class' => 'img-responsive', 'width' => 100]); ?></td>
@@ -62,5 +62,24 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php } ?>
         </tbody>
     </table>
+ */ ?>
 
+    <?= \yii\grid\GridView::widget([
+        'dataProvider' => $dataProvider,
+        //'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\CheckboxColumn'],
+            'id',
+            [
+                'attribute' => 'title',
+                'value' => function ($model) {
+                    return \yii\helpers\StringHelper::truncate(Html::encode($model->title), 50, "...");
+                }
+            ],
+            'sort_order',
+            'created_at:date',
+            'updated_at:date',
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 </div>

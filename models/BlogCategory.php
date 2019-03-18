@@ -11,6 +11,7 @@ use diazoxide\blog\Module;
 use diazoxide\blog\traits\ModuleTrait;
 use diazoxide\blog\traits\StatusTrait;
 use diazoxide\blog\widgets\Feed;
+use paulzi\adjacencyList\AdjacencyListBehavior;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -45,6 +46,8 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @property string url
  * @property BlogCategory childs
  * @property BlogWidgetType widgetType
+ * @method \yii\db\ActiveQuery getChildren()
+ * @property \yii\db\ActiveQuery children
  */
 class BlogCategory extends \yii\db\ActiveRecord
 {
@@ -62,6 +65,7 @@ class BlogCategory extends \yii\db\ActiveRecord
 
     private $_isNavLabel;
     private $_status;
+
 
     /**
      * @inheritdoc
@@ -107,97 +111,7 @@ class BlogCategory extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * Это досталось от китайского модуля, еще не рефакторил
-     *
-     * @param int $parentId parent category id
-     * @param array $array category array list
-     * @param int $level category level, will affect $repeat
-     * @param int $add times of $repeat
-     * @param string $repeat symbols or spaces to be added for sub category
-     * @return array  category collections
-     */
 
-    static public function get($parentId = 0, $array = array(), $level = 0, $add = 2, $repeat = '　')
-    {
-        $strRepeat = '';
-        // add some spaces or symbols for non top level categories
-        if ($level > 1) {
-            for ($j = 0; $j < $level; $j++) {
-                $strRepeat .= $repeat;
-            }
-        }
-
-        // i feel this is useless
-        if ($level > 0) {
-            $strRepeat .= '';
-        }
-
-        $newArray = array();
-        $tempArray = array();
-
-        //performance is not very good here
-        foreach (( array )$array as $v) {
-            if ($v['parent_id'] == $parentId) {
-                $newArray [] = array(
-                    'id' => $v['id'],
-                    'title' => $v['title'],
-                    'parent_id' => $v['parent_id'],
-                    'sort_order' => $v['sort_order'],
-                    'banner' => $v->getThumbFileUrl('banner', 'thumb'), //'postsCount'=>$v['postsCount'],
-                    'icon_class' => $v['icon_class'],
-                    'is_nav' => $v['is_nav'],
-                    'is_featured' => $v['is_featured'],
-                    'template' => $v['template'],
-                    'status' => $v->getStatus(),
-                    'created_at' => $v['created_at'],
-                    'updated_at' => $v['updated_at'],
-                    'redirect_url' => $v['redirect_url'],
-                    'str_repeat' => $strRepeat,
-                    'str_label' => $strRepeat . $v['title'],
-                );
-
-                $tempArray = self::get($v['id'], $array, ($level + $add), $add, $repeat);
-                if ($tempArray) {
-                    $newArray = array_merge($newArray, $tempArray);
-                }
-            }
-        }
-        return $newArray;
-    }
-
-    /**
-     * Это досталось от китайского модуля, еще не рефакторил
-     * капец тут страшно всё непонятно
-     *
-     * return all sub categorys of a parent category
-     * @param int $parentId
-     * @param array $array
-     * @return array
-     */
-
-    static public function getCategory($parentId = 0, $array = array())
-    {
-        $newArray = array();
-        foreach ((array)$array as $v) {
-            if ($v['parent_id'] == $parentId) {
-                $newArray[$v['id']] = array(
-                    'text' => $v['title'] . ' 导航[' . ($v['is_nav'] ? Module::t('CONSTANT_YES') : Module::t('CONSTANT_NO')) . '] 排序[' . $v['sort_order'] .
-                        '] 类型[' . ($v['page_type'] == 'list' ? Module::t('PAGE_TYPE_LIST') : Module::t('PAGE_TYPE_PAGE')) . '] 状态[' .
-                        F::getStatus2($v['status']) . '] [<a href="' . Yii::app()->createUrl('/category/update', array('id' => $v['id'])) . '">修改</a>][<a href="'
-                        . Yii::app()->createUrl('/category/create', array('id' => $v['id'])) . '">增加子菜单</a>]&nbsp;&nbsp[<a href="' .
-                        Yii::app()->createUrl('/category/delete', array('id' => $v['id'])) . '">删除</a>]',
-                    //'children'=>array(),
-                );
-
-                $tempArray = self::getCategory($v['id'], $array);
-                if ($tempArray) {
-                    $newArray[$v['id']]['children'] = $tempArray;
-                }
-            }
-        }
-        return $newArray;
-    }
 
     /**
      * @param int $parentId
@@ -317,6 +231,9 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
+            [
+                'class' => AdjacencyListBehavior::className(),
+            ],
             TimestampBehavior::class,
             [
                 'class' => SluggableBehavior::class,
@@ -343,7 +260,7 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'is_nav', 'is_featured', 'sort_order', 'widget_type_id', 'page_size', 'status'], 'integer'],
+            [['parent_id', 'is_nav', 'is_featured', 'sort_order', 'widget_type_id', 'page_size', 'status','sort'], 'integer'],
             [['title'], 'required'],
             [['sort_order', 'page_size'], 'default', 'value' => 0],
             [['icon_class', 'read_icon_class', 'read_more_text'], 'string', 'max' => 60],
@@ -369,6 +286,7 @@ class BlogCategory extends \yii\db\ActiveRecord
             'is_nav' => Module::t('Is Nav'),
             'is_featured' => Module::t('Is Featured'),
             'sort_order' => Module::t('Sort Order'),
+            'sort' => Module::t('Sort'),
             'page_size' => Module::t('Page Size'),
             'template' => Module::t('Template'),
             'redirect_url' => Module::t('Redirect Url'),
@@ -405,7 +323,7 @@ class BlogCategory extends \yii\db\ActiveRecord
     public static function getAllMenuItems($subCats = false)
     {
         $items = [];
-        $model = self::find()->andWhere(['parent_id' => 0])->orderBy(['sort_order' => SORT_DESC])->andWhere(['is_nav' => true])->all();
+        $model = self::find()->andWhere(['parent_id' => 1])->orderBy(['sort_order' => SORT_DESC])->andWhere(['is_nav' => true])->all();
         /** @var BlogCategory $item */
         foreach ($model as $item) {
 

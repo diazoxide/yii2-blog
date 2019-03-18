@@ -196,7 +196,10 @@ class Feed extends \yii\bootstrap\Widget
         }
 
         if ($this->_category) {
-            $query->andWhere(['category_id' => $this->category_id]);
+            $catIds = ArrayHelper::map(BlogCategory::findOne($this->category_id)->getChildren()->all(), 'id','id');
+            $catIds[] = $this->category_id;
+            $query->andFilterWhere(['in', '.category_id', $catIds]);
+
         }
 
         if (!$this->show_pager) {

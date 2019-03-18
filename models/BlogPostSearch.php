@@ -5,6 +5,7 @@ namespace diazoxide\blog\models;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 
 /**
  * @property Module module
@@ -107,8 +108,12 @@ class BlogPostSearch extends BlogPost
                 ->andFilterWhere(['like', $this::tableName() . '.content', $this->content])
                 ->andFilterWhere(['like', $this::tableName() . '.slug', $this->slug]);
         }
+        if($this->category_id) {
+            $catIds = ArrayHelper::map(BlogCategory::findOne($this->category_id)->getChildren()->all(), 'id','id');
+            $catIds[] = $this->category_id;
+            $query->andFilterWhere(['in', $this::tableName().'.category_id', $catIds]);
 
-        $query->innerJoinWith('category')->andFilterWhere([BlogCategory::tableName() . '.id' => $this->category_id]);
+        }
 
         return $dataProvider;
     }
