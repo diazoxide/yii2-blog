@@ -44,6 +44,7 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @property BlogComment[] $blogComments
  * @property BlogCategory $category
  * @property BlogPostBook $books
+ * @property Module module
  */
 class BlogPost extends \yii\db\ActiveRecord
 {
@@ -64,6 +65,7 @@ class BlogPost extends \yii\db\ActiveRecord
     /**
      * created_at, updated_at to now()
      * crate_user_id, update_user_id to current login user id
+     * @throws \yii\base\InvalidConfigException
      */
     public function behaviors()
     {
