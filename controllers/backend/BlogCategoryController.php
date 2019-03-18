@@ -78,12 +78,7 @@ class BlogCategoryController extends Controller
 //        $searchModel = new BlogCategorySearch();
 //        $dataProvider = BlogCategory::get(0, BlogCategory::find()->all());
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => BlogCategory::findOne(1)->getChildren(),
-            'pagination' => [
-                'pageSize' => 100,
-            ]
-        ]);
+        $dataProvider = BlogCategory::findOne(1)->children;
 
         return $this->render('index', [
 //            'searchModel' => $searchModel,

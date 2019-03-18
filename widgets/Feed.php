@@ -117,14 +117,8 @@ class Feed extends \yii\bootstrap\Widget
             $this->options['style']='position:relative;';
         }
 
-
-
         Html::addCssClass($this->list_options, $this->_listViewId);
         Html::addCssClass($this->item_options, $this->_listViewId . '_item');
-
-
-
-
 
         $this->getView()->registerJs($this->custom_js);
         $this->getView()->registerCss($this->custom_css);
@@ -196,9 +190,9 @@ class Feed extends \yii\bootstrap\Widget
         }
 
         if ($this->_category) {
-            $catIds = ArrayHelper::map(BlogCategory::findOne($this->category_id)->getChildren()->all(), 'id','id');
+            $catIds = ArrayHelper::map(BlogCategory::findOne($this->category_id)->getDescendants()->all(), 'id','id');
             $catIds[] = $this->category_id;
-            $query->andFilterWhere(['in', '.category_id', $catIds]);
+            $query->andFilterWhere(['in', 'category_id', $catIds]);
 
         }
 

@@ -261,8 +261,9 @@ class BlogPost extends \yii\db\ActiveRecord
         $this->tags = BlogTag::array2string(array_unique(array_map('trim', BlogTag::string2array($this->tags))));
     }
 
+
     /**
-     *
+     * @return string
      */
     public function getUrl()
     {
@@ -275,6 +276,9 @@ class BlogPost extends \yii\db\ActiveRecord
         return Yii::$app->getUrlManager()->createUrl(['blog/default/view', 'year' => $year, 'month' => $month, 'day' => $day, 'slug' => $this->slug]);
     }
 
+    /**
+     * @return string
+     */
     public function getAbsoluteUrl()
     {
         if ($this->getModule()->getIsBackend()) {
@@ -286,8 +290,9 @@ class BlogPost extends \yii\db\ActiveRecord
         return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default/view', 'year' => $year, 'month' => $month, 'day' => $day, 'slug' => $this->slug]);
     }
 
+
     /**
-     *
+     * @return array
      */
     public function getTagLinks()
     {
@@ -302,7 +307,7 @@ class BlogPost extends \yii\db\ActiveRecord
     /**
      * comment need approval
      * @param BlogComment $comment
-     * @return
+     * @return bool
      */
     public function addComment($comment)
     {
@@ -311,16 +316,25 @@ class BlogPost extends \yii\db\ActiveRecord
         return $comment->save();
     }
 
+    /**
+     * @return string
+     */
     public function getCreatedRelativeTime()
     {
         return Yii::$app->formatter->format($this->created_at, 'relativeTime');
     }
 
+    /**
+     * @return string
+     */
     public function getUpdatedRelativeTime()
     {
         return Yii::$app->formatter->format($this->updated_at, 'relativeTime');
     }
 
+    /**
+     * @return array|mixed
+     */
     public function getBreadcrumbs()
     {
         $result = $this->category->breadcrumbs;
@@ -328,8 +342,4 @@ class BlogPost extends \yii\db\ActiveRecord
         return $result;
     }
 
-    public function getSluga()
-    {
-        return 1;
-    }
 }

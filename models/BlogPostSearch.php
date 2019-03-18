@@ -93,7 +93,6 @@ class BlogPostSearch extends BlogPost
         if ($this->scenario == self::SCENARIO_ADMIN) {
 
             $query->andFilterWhere([
-                $this::tableName() . '.category_id' => $this->category_id,
                 $this::tableName() . '.id' => $this->id,
                 $this::tableName() . '.status' => $this->status,
                 $this::tableName() . '.click' => $this->click,
@@ -109,10 +108,9 @@ class BlogPostSearch extends BlogPost
                 ->andFilterWhere(['like', $this::tableName() . '.slug', $this->slug]);
         }
         if($this->category_id) {
-            $catIds = ArrayHelper::map(BlogCategory::findOne($this->category_id)->getChildren()->all(), 'id','id');
+            $catIds = ArrayHelper::map(BlogCategory::findOne($this->category_id)->getDescendants()->all(), 'id','id');
             $catIds[] = $this->category_id;
             $query->andFilterWhere(['in', $this::tableName().'.category_id', $catIds]);
-
         }
 
         return $dataProvider;
