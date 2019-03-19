@@ -185,6 +185,9 @@ class Feed extends \yii\bootstrap\Widget
         $query->where(['status' => IActiveStatus::STATUS_ACTIVE])
             ->orderBy($this->getOrderFromType());
 
+        $query->andWhere('FROM_UNIXTIME(created_at) <= NOW()');
+
+
         if ($this->days_interval) {
             $query->andWhere('FROM_UNIXTIME(created_at) > NOW() - INTERVAL ' . $this->days_interval . ' DAY');
         }

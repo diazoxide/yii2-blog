@@ -73,7 +73,7 @@ use yii\widgets\ActiveForm;
                 'data' => ArrayHelper::map(BlogCategory::find()->all(), 'id', 'title'),
                 //'language' => 'de',
                 'options' => [
-                    'placeholder' => Module::t('Select Categories'),
+                    'placeholder' => Module::t('Select Main Category'),
                 ],
                 'pluginOptions' => [
                     'allowClear' => true
@@ -92,14 +92,14 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'click')->textInput() ?>
 
             <?=
-            $form->field($model, 'created_at')->widget(DateTimePicker::className(), [
-                'name' => 'created_at',
-                'type' => DateTimePicker::TYPE_BUTTON,
+            $form->field($model, 'created')->widget(DateTimePicker::className(), [
+                'name' => 'created',
+                'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
                 'options' => [
                     'placeholder' => Module::t('Select Publish Datetime'),
-                    'value' => Yii::$app->formatter->asDatetime($model->created_at)
+                    'value' => !$model->isNewRecord ? Yii::$app->formatter->asDatetime($model->created_at) : ""
                 ],
-//                'convertFormat' => true,
+                'convertFormat' => true,
                 'pluginOptions' => [
                     'format' => Yii::$app->formatter->datetimeFormat,
                     'autoclose' => true,
@@ -108,10 +108,6 @@ use yii\widgets\ActiveForm;
                     'todayBtn' => true, //снизу кнопка "сегодня"
                 ]
             ]); ?>
-
-
-
-            <?= $form->field($model, 'updated_at')->textInput() ?>
 
             <?= $form->field($model, 'status')->dropDownList(\diazoxide\blog\models\BlogPost::getStatusList()) ?>
 

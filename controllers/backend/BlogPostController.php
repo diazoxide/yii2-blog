@@ -11,6 +11,7 @@ use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\models\BlogPostBook;
 use diazoxide\blog\models\BlogPostBookChapter;
 use diazoxide\blog\models\BlogPostSearch;
+use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -23,6 +24,7 @@ use yii\web\NotFoundHttpException;
  */
 class BlogPostController extends BaseAdminController
 {
+
     public function behaviors()
     {
         return [
@@ -225,11 +227,11 @@ class BlogPostController extends BaseAdminController
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         $bookDataProvider = new ActiveDataProvider([
             'query' => $model->getBooks(),
             'pagination' => [
@@ -242,8 +244,11 @@ class BlogPostController extends BaseAdminController
             ]
         ]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['update', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->created_at = Yii::$app->formatter->asTimestamp($model->created);
+            if ($model->save()) {
+                return $this->redirect(['update', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [

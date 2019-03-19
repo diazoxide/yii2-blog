@@ -55,6 +55,10 @@ class BlogPost extends \yii\db\ActiveRecord
 
     private $_status;
 
+    public $created;
+
+    public $updated;
+
     /**
      * @inheritdoc
      */
@@ -123,7 +127,7 @@ class BlogPost extends \yii\db\ActiveRecord
 
             [['category_id', 'title', 'content'], 'required'],
             [['category_id', 'click', 'user_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['brief', 'content'], 'string'],
+            [['brief', 'content','created','updated'], 'string'],
             [['is_slide', 'show_comments'], 'boolean'],
             [['show_comments'], 'default', 'value' => true],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
@@ -157,6 +161,7 @@ class BlogPost extends \yii\db\ActiveRecord
             'updated_at' => Module::t('Updated At'),
             'is_slide' => Module::t('Show In Slider'),
             'commentsCount' => Module::t('Comments Count'),
+            'created' => Module::t('Created'),
         ];
     }
 
@@ -349,6 +354,15 @@ class BlogPost extends \yii\db\ActiveRecord
         $result = $this->category->breadcrumbs;
         $result[] = ['label' => $this->category->title, 'url' => $this->category->url];
         return $result;
+    }
+
+
+    /**
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getCreated(){
+        return Module::convertTime($this->created_at,'datetime');
     }
 
 }

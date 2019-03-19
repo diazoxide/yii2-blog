@@ -244,4 +244,25 @@ class Module extends \yii\base\Module
         return $result;
     }
 
+
+    /**
+     * @param $dateStr
+     * @param string $type
+     * @param null $format
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     */
+    public static function convertTime($dateStr, $type='date', $format = null) {
+        if ($type === 'datetime') {
+            $fmt = ($format == null) ? Yii::$app->formatter->datetimeFormat: $format;
+        }
+        elseif ($type === 'time') {
+            $fmt = ($format == null) ? Yii::$app->formatter->timeFormat : $format;
+        }
+        else {
+            $fmt = ($format == null) ? Yii::$app->formatter->dateFormat : $format;
+        }
+        return \Yii::$app->formatter->asDate($dateStr, $fmt);
+    }
+
 }

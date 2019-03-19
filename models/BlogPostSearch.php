@@ -4,6 +4,7 @@ namespace diazoxide\blog\models;
 
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 
@@ -65,9 +66,12 @@ class BlogPostSearch extends BlogPost
         $query->orderBy(['created_at' => SORT_DESC]);
 
         if ($this->scenario == self::SCENARIO_USER) {
+
             $query->andWhere([BlogPost::tableName() . '.status' => IActiveStatus::STATUS_ACTIVE])
                 ->innerJoinWith('category')
                 ->andWhere([BlogCategory::tableName() . '.status' => IActiveStatus::STATUS_ACTIVE]);
+
+            $query->andWhere('FROM_UNIXTIME(created_at) <= NOW()');
         }
 
         $dataProvider = new ActiveDataProvider([
@@ -80,14 +84,12 @@ class BlogPostSearch extends BlogPost
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-        print_r($this->slug);
+
         if ($this->scenario == self::SCENARIO_USER) {
             $query
                 ->andFilterWhere(['like', $this::tableName() . '.title', $this->q])
                 ->orFilterWhere(['like', $this::tableName() . '.content', $this->q]);
-
         }
-
 
 
         if ($this->scenario == self::SCENARIO_ADMIN) {
@@ -107,10 +109,10 @@ class BlogPostSearch extends BlogPost
                 ->andFilterWhere(['like', $this::tableName() . '.content', $this->content])
                 ->andFilterWhere(['like', $this::tableName() . '.slug', $this->slug]);
         }
-        if($this->category_id) {
-            $catIds = ArrayHelper::map(BlogCategory::findOne($this->category_id)->getDescendants()->all(), 'id','id');
+        if ($this->category_id) {
+            $catIds = ArrayHelper::map(BlogCategory::findOne($this->category_id)->getDescendants()->all(), 'id', 'id');
             $catIds[] = $this->category_id;
-            $query->andFilterWhere(['in', $this::tableName().'.category_id', $catIds]);
+            $query->andFilterWhere(['in', $this::tableName() . '.category_id', $catIds]);
         }
 
         return $dataProvider;
