@@ -50,6 +50,34 @@ use yii\widgets\ActiveForm;
                     'plugins' => ['clips', 'fontcolor', 'imagemanager']
                 ]
             ]); ?>
+            <?=
+            $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::class, [
+                'kcfinder' => true,
+                'kcfOptions' => [
+                    'uploadURL' => '@web/upload',
+                    'uploadDir' => '@webroot/upload',
+                    'access' => [  // @link http://kcfinder.sunhater.com/install#_access
+                        'files' => [
+                            'upload' => true,
+                            'delete' => true,
+                            'copy' => true,
+                            'move' => true,
+                            'rename' => true,
+                        ],
+                        'dirs' => [
+                            'create' => true,
+                            'delete' => true,
+                            'rename' => true,
+                        ],
+                    ],
+                    'types' => [  // @link http://kcfinder.sunhater.com/install#_types
+                        'files' => [
+                            'type' => '',
+                        ],
+                    ],
+                ],
+            ]);
+            ?>
         </div>
 
         <div class="col-md-4">
