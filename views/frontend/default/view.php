@@ -42,13 +42,24 @@ $username_attribute = Module::getInstance()->userName;
                 : <?= Html::a($post->category->title, $post->category->url); ?>
             </p>
             <p class="blog-post__info">
-                <time title="<?= Module::t('Create Time'); ?>" itemprop="datePublished"
-                      datetime="<?= date_format(date_timestamp_set(new DateTime(), $post->created_at), 'c') ?>">
-                    <i class="fa fa-calendar-alt"></i> <?= Yii::$app->formatter->asDateTime($post->created_at); ?>
-                </time>
-                <span title="<?= Module::t('Click'); ?>">
-                    <i class="fa fa-eye"></i> <?= $post->click; ?>
-                </span>
+
+                <?php /** @var boolean $showDate */
+                if ($showDate): ?>
+                    <time title="<?= Module::t('Create Time'); ?>" itemprop="datePublished"
+                          datetime="<?= date_format(date_timestamp_set(new DateTime(), $post->created_at), 'c') ?>">
+                        <i class="fa fa-calendar-alt"></i>
+                        <?= /** @var String $dateType */
+                        Yii::$app->formatter->format($post->created_at, $dateType); ?>
+                    </time>
+                <?php endif; ?>
+
+                <?php /** @var boolean $showClicks */
+                if ($showClicks): ?>
+                    <span title="<?= Module::t('Click'); ?>">
+                      <i class="fa fa-eye"></i> <?= $post->click; ?>
+                    </span>
+                <?php endif; ?>
+
                 <?php if ($post->tagLinks): ?>
                     <span title="<?= Module::t('blog', 'Tags'); ?>">
                         <i class="fa fa-tag"></i> <?= implode(' ', $post->tagLinks); ?>
@@ -72,9 +83,10 @@ $username_attribute = Module::getInstance()->userName;
         </h1>
 
         <div class="blog-post__content" itemprop="articleBody">
+
             <?= $post->content ?>
 
-            <?= $this->render('_books',['books'=>$post->getBooks()]) ?>
+            <?= $this->render('_books', ['books' => $post->getBooks()]) ?>
 
         </div>
         <?php if (isset($post->module->schemaOrg) && isset($post->module->schemaOrg['publisher'])) : ?>
@@ -112,8 +124,8 @@ $username_attribute = Module::getInstance()->userName;
 
 <section id="blog-post__bottom_ad">
     <?php
-    $banner = isset($banners['in_post']) ?  $banners['in_post'] : '';
-    if(is_array($banner)) {
+    $banner = isset($banners['in_post']) ? $banners['in_post'] : '';
+    if (is_array($banner)) {
         echo Html::a(Html::img($banner['src'], ['class' => 'img-responsive', 'style' => 'width:100%']), $banner['href']);
     } else {
         echo $banner;

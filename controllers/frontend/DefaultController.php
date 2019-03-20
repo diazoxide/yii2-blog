@@ -23,6 +23,9 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
+/**
+ * @property Module module
+ */
 class DefaultController extends Controller
 {
     use ModuleTrait;
@@ -77,15 +80,39 @@ class DefaultController extends Controller
         echo Yii::$app->controller->route;
     }
 
+
+    /**
+     * @param $action
+     * @return bool
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function beforeAction($action)
+    {
+
+        if (isset($this->module->frontendLayoutMap[$this->route])) {
+            $this->layout = $this->module->frontendLayoutMap[$this->route];
+        }
+
+        return parent::beforeAction($action);
+    }
+
+
     /**
      * @param $slug
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionView($slug)
+    public function actionView()
     {
-        $this->layout = Yii::$app->controller->module->blogViewLayout;
-        $post = BlogPost::find()->where(['status' => IActiveStatus::STATUS_ACTIVE, 'slug' => $slug])->one();
+        $id = Yii::$app->request->get('id');
+        $slug = Yii::$app->request->get('slug');
+
+        $post = BlogPost::find();
+        if ($slug) {
+            $post = $post->where(['status' => IActiveStatus::STATUS_ACTIVE, 'slug' => $slug])->one();
+        } elseif ($id) {
+            $post = $post->where(['status' => IActiveStatus::STATUS_ACTIVE, 'id' => $id])->one();
+        }
 
         if ($post === null) {
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
@@ -128,12 +155,14 @@ class DefaultController extends Controller
             'dataProvider' => $dataProvider,
             'comment' => $comment,
             'banners' => $this->getModule()->banners,
-
+            'showClicks' => $this->getModule()->showClicksInPost,
+            'showDate' => $this->getModule()->showDateInPost,
+            'dateType' => $this->getModule()->dateTypeInPost,
         ]);
     }
 
     /**
-     * @param $id
+     * @param $slug
      * @return string
      * @throws NotFoundHttpException
      */

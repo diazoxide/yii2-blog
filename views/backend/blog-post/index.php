@@ -6,7 +6,6 @@
  */
 
 use diazoxide\blog\models\BlogPost;
-use diazoxide\blog\models\Status;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use yii\grid\GridView;
@@ -17,6 +16,8 @@ use yii\helpers\Html;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Module::t('Blog Posts');
+/** @var array $breadcrumbs */
+$this->params['breadcrumbs'] = $breadcrumbs;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-post-index">

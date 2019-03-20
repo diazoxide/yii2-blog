@@ -140,6 +140,7 @@ class BlogPostController extends BaseAdminController
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'arrayCategory' => $arrayCategory,
+            'breadcrumbs'=>$this->module->breadcrumbs
         ]);
     }
 
@@ -227,7 +228,6 @@ class BlogPostController extends BaseAdminController
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException
-     * @throws \yii\base\InvalidConfigException
      */
     public function actionUpdate($id)
     {
@@ -253,7 +253,7 @@ class BlogPostController extends BaseAdminController
 
         return $this->render('update', [
             'model' => $model,
-            'bookDataProvider' => $bookDataProvider
+            'bookDataProvider' => $bookDataProvider,
         ]);
     }
 

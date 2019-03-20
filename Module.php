@@ -25,6 +25,10 @@ class Module extends \yii\base\Module
 
     public $frontendViewsMap = [];
 
+    public $frontendLayoutMap = [];
+
+    public $frontendTitleMap = [];
+
     protected $_frontendViewsMap = [
         'blog/default/index' => 'index',
         'blog/default/view' => 'view',
@@ -48,11 +52,19 @@ class Module extends \yii\base\Module
 
     public $enableComments = false;
 
+    public $enableBooks = true;
+
     public $enableLocalComments = false;
 
     public $enableFacebookComments = true;
 
     public $showBannerInPost = false;
+
+    public $showClicksInPost = true;
+
+    public $showDateInPost = true;
+
+    public $dateTypeInPost = 'dateTime';
 
     public $blogViewLayout = null;
 
@@ -212,18 +224,12 @@ class Module extends \yii\base\Module
         return $opengraph;
     }
 
-    public function getModuleId()
-    {
-        return Yii::$app->controller->module->id;
-    }
-
     public function getCategoriesUrl()
     {
-
         if ($this->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createUrl([$this->moduleId . '/blog-category']);
+            return Yii::$app->getUrlManager()->createUrl([$this->id . '/blog-category/index']);
         }
-        return Yii::$app->getUrlManager()->createUrl([$this->moduleId . '/default']);
+        return Yii::$app->getUrlManager()->createUrl([$this->id . '/default']);
 
     }
 
@@ -231,9 +237,19 @@ class Module extends \yii\base\Module
     {
 
         if ($this->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createUrl([$this->moduleId . '/default/index']);
+            return Yii::$app->getUrlManager()->createUrl([$this->id . '/default/index']);
         }
-        return Yii::$app->getUrlManager()->createUrl([$this->moduleId . '/default/index']);
+        return Yii::$app->getUrlManager()->createUrl([$this->id . '/default/index']);
+
+    }
+
+    public function getArchiveUrl()
+    {
+
+        if ($this->getIsBackend()) {
+            return Yii::$app->getUrlManager()->createUrl([$this->id . '/default/index']);
+        }
+        return Yii::$app->getUrlManager()->createUrl([$this->id . '/default/archive']);
 
     }
 
@@ -241,6 +257,13 @@ class Module extends \yii\base\Module
     {
         $result = [];
         $result[] = ['label' => Module::t('Blog'), 'url' => $this->homeUrl];
+        return $result;
+    }
+
+    public function getCategoryBreadcrumbs()
+    {
+        $result = $this->breadcrumbs;
+        $result[] = ['label' => Module::t('Categories'), 'url' => $this->categoriesUrl];
         return $result;
     }
 
@@ -252,14 +275,13 @@ class Module extends \yii\base\Module
      * @return string
      * @throws \yii\base\InvalidConfigException
      */
-    public static function convertTime($dateStr, $type='date', $format = null) {
+    public static function convertTime($dateStr, $type = 'date', $format = null)
+    {
         if ($type === 'datetime') {
-            $fmt = ($format == null) ? Yii::$app->formatter->datetimeFormat: $format;
-        }
-        elseif ($type === 'time') {
+            $fmt = ($format == null) ? Yii::$app->formatter->datetimeFormat : $format;
+        } elseif ($type === 'time') {
             $fmt = ($format == null) ? Yii::$app->formatter->timeFormat : $format;
-        }
-        else {
+        } else {
             $fmt = ($format == null) ? Yii::$app->formatter->dateFormat : $format;
         }
         return \Yii::$app->formatter->asDate($dateStr, $fmt);

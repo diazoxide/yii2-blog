@@ -18,7 +18,10 @@ $dataProvider = new ActiveDataProvider([
         'pageSize' => 20,
     ],
 ]);
+
 echo ListView::widget([
     'dataProvider' => $dataProvider,
     'itemView' => '_book',
+    'emptyText' => '',
+
 ]);

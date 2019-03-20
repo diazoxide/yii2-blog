@@ -62,26 +62,28 @@ echo Html::beginTag(
     'div',
     $infoContainerOptions);
 ?>
-    <?php /** @var boolean $showCategory */
-    if ($showCategory): ?>
-        <span class="label label-warning"><?= $model->category->title; ?></span>
-    <?php /** @var boolean $showCategoryWithIcon */
-    elseif ($showCategoryWithIcon): ?>
-        <span class="label label-warning"><?= $model->category->titleWithIcon; ?></span>
-    <?php /** @var boolean $showCategoryIcon */
-    elseif ($showCategoryIcon): ?>
-        <span class="label label-warning"><?= $model->category->icon; ?></span>
-    <?php endif; ?>
-    <?php /** @var boolean $showDate */
-    if ($showDate): ?>
-        <span class="blog_datetime"><i
-                    class="fa fa-calendar"></i> <?=
-            Yii::$app->formatter->format($model->created_at, 'relativeTime') ?></span>
-    <?php endif; ?>
-    <?php /** @var boolean $showViews */
-    if ($showViews): ?>
-        <span><i class="fa fa-eye"></i> <?= $model->click; ?></span>
-    <?php endif; ?>
+<?php /** @var boolean $showCategory */
+if ($showCategory): ?>
+    <span class="label label-warning"><?= $model->category->title; ?></span>
+<?php /** @var boolean $showCategoryWithIcon */
+elseif ($showCategoryWithIcon): ?>
+    <span class="label label-warning"><?= $model->category->titleWithIcon; ?></span>
+<?php /** @var boolean $showCategoryIcon */
+elseif ($showCategoryIcon): ?>
+    <span class="label label-warning"><?= $model->category->icon; ?></span>
+<?php endif; ?>
+<?php /** @var boolean $showDate */
+if ($showDate): ?>
+    <span class="blog_datetime">
+        <i class="fa fa-calendar"></i>
+        <?= /** @var string $dateType */
+        Yii::$app->formatter->format($model->created_at, $dateType) ?>
+    </span>
+<?php endif; ?>
+<?php /** @var boolean $showViews */
+if ($showViews): ?>
+    <span><i class="fa fa-eye"></i> <?= $model->click; ?></span>
+<?php endif; ?>
 
 <?php
 echo Html::endTag('div');

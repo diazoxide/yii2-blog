@@ -49,8 +49,11 @@ use diazoxide\blog\widgets\Feed;
                             Feed::TYPE_RECENT => Module::t('Recent'),
                         ])->label(Module::t('Type')) .
                         $form->field($model, 'config[show_title]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Title')) .
+                        $form->field($model, 'config[active_title]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Active Title')) .
+                        $form->field($model, 'config[active_title_url]')->textInput(['maxlength' => 255])->label(Module::t('Active Title Url')) .
                         $form->field($model, 'config[title]')->textInput(['maxlength' => 255])->label(Module::t('Widget Title')) .
                         $form->field($model, 'config[show_category_title]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Category Title')) .
+                        $form->field($model, 'config[show_category_filter]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Category Filter')) .
                         $form->field($model, 'config[infinite_scroll]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Infinite Scroll')) .
                         $form->field($model, 'config[show_pager]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Pager')) .
                         $form->field($model, 'config[load_more_button]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Load More Button')),
@@ -75,7 +78,15 @@ use diazoxide\blog\widgets\Feed;
                                 $form->field($model, 'config[show_item_category_icon]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Item Category Icon')) .
                                 $form->field($model, 'config[show_item_category_with_icon]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Item Category With Icon')) .
                                 $form->field($model, 'config[show_item_views]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Item Views')) .
-                                $form->field($model, 'config[show_item_date]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Item Date')),
+                                $form->field($model, 'config[show_item_date]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Show Item Date')) .
+                                $form->field($model, 'config[item_date_type]')->dropDownList(
+                                    [
+                                        'relativeTime' => Module::t('Relative time'),
+                                        'time' => Module::t('Time'),
+                                        'date' => Module::t('Date'),
+                                        'dateTime' => Module::t('Date and time')
+                                    ]
+                                )->label(Module::t('Item Date Format')),
                         ],
                         [
                             'label' => 'Title',
@@ -105,11 +116,24 @@ use diazoxide\blog\widgets\Feed;
                                 $form->field($model, 'config[options][style]')->textInput(['maxlength' => 255])->label(Module::t('HTML Style')),
                         ],
                         [
-                            'label' => 'Category Title',
+                            'label' => 'Header',
+                            'content' => $form->field($model, 'config[header_options][tag]')->textInput(['maxlength' => 255])->label(Module::t('HTML Tag')) .
+                                $form->field($model, 'config[header_options][id]')->textInput(['maxlength' => 255])->label(Module::t('HTML ID')) .
+                                $form->field($model, 'config[header_options][class]')->textInput(['maxlength' => 255])->label(Module::t('HTML Class')) .
+                                $form->field($model, 'config[header_options][style]')->textInput(['maxlength' => 255])->label(Module::t('HTML Style'))
+                        ],
+                        [
+                            'label' => 'Title',
                             'content' => $form->field($model, 'config[title_options][tag]')->textInput(['maxlength' => 255])->label(Module::t('HTML Tag')) .
                                 $form->field($model, 'config[title_options][id]')->textInput(['maxlength' => 255])->label(Module::t('HTML ID')) .
                                 $form->field($model, 'config[title_options][class]')->textInput(['maxlength' => 255])->label(Module::t('HTML Class')) .
                                 $form->field($model, 'config[title_options][style]')->textInput(['maxlength' => 255])->label(Module::t('HTML Style'))
+                        ],
+                        [
+                            'label' => 'Active Title',
+                            'content' => $form->field($model, 'config[active_title_options][id]')->textInput(['maxlength' => 255])->label(Module::t('HTML ID')) .
+                                $form->field($model, 'config[active_title_options][class]')->textInput(['maxlength' => 255])->label(Module::t('HTML Class')) .
+                                $form->field($model, 'config[active_title_options][style]')->textInput(['maxlength' => 255])->label(Module::t('HTML Style'))
                         ],
                         [
                             'label' => 'List',

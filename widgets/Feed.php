@@ -7,8 +7,10 @@ use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use diazoxide\blog\traits\FeedTrait;
+use kartik\select2\Select2;
 use kop\y2sp\ScrollPager;
 use nirvana\infinitescroll\InfiniteScrollPager;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
@@ -22,6 +24,7 @@ class Feed extends \yii\bootstrap\Widget
     const TYPE_RECENT = 3;
 
     public $category_id;
+    public $show_category_filter = false;
 
     public $custom_css;
     public $custom_js;
@@ -30,16 +33,25 @@ class Feed extends \yii\bootstrap\Widget
 
     public $type = Feed::TYPE_RECENT;
 
-
+    /*
+     * Counts and offsets
+     * This parameters works only
+     * when pager parameter is false
+     * */
     public $items_count = 10;
     public $offset = 0;
+
     public $item_image_type = 'mthumb';
     public $item_read_more_button_text = 'Read more...';
     public $item_read_more_button_icon_class = 'fa fa-eye';
+    public $item_date_type = 'relativeTime';
+    public $item_brief_length = 100;
+    public $item_brief_suffix = '...';
+    public $item_title_length = 100;
+    public $item_title_suffix = '...';
 
     public $item_image_container_options = ['class' => 'col-xs-3'];
     public $item_content_container_options = ['class' => 'col-xs-9'];
-
     public $item_info_container_options = [];
     public $item_options = ['tag' => 'article', 'class' => 'item row top-buffer-20-xs'];
     public $item_title_options = ['tag' => 'h5', 'class' => 'nospaces-xs'];
@@ -47,14 +59,14 @@ class Feed extends \yii\bootstrap\Widget
     public $item_read_more_button_options = ['class' => 'btn btn-warning'];
     public $list_options = ['tag' => 'div', 'class' => 'feed-widget-listview'];
     public $title_options = ['tag' => 'div', 'class' => 'row'];
+    public $header_options = ['tag' => 'div', 'class' => 'header'];
+    public $active_title_options = ['class' => 'text-warning'];
 
-    public $item_brief_length = 100;
-    public $item_brief_suffix = '...';
-    public $item_title_length = 100;
-    public $item_title_suffix = '...';
 
     public $infinite_scroll = false;
     public $load_more_button = false;
+    public $active_title = false;
+    public $active_title_url = null;
 
     public $show_title = false;
     public $show_category_title = false;
@@ -74,6 +86,7 @@ class Feed extends \yii\bootstrap\Widget
     protected $_listViewId;
     protected $_pager = null;
     protected $_category = null;
+    protected $_category_filter_parameter;
 
     protected $_infiniteScrollPagerStatusOptions = ['tag' => 'div', 'class' => 'diazoxide_infinite_scroll_pager_status'];
 
@@ -85,9 +98,24 @@ class Feed extends \yii\bootstrap\Widget
         parent::init();
 
         /* Init. category model */
-        $this->_category = $this->getCategory();
 
         $this->_listViewId = $this->id . "_list_view";
+
+        /*
+         * Show Category Filter in widget
+         * User can instantly change category from widget
+         * */
+        if ($this->show_category_filter) {
+            $this->_category_filter_parameter = $this->id . '_category';
+
+            $categoryId = Yii::$app->request->get($this->_category_filter_parameter);
+            if ($categoryId) {
+                $this->category_id = $categoryId;
+            }
+        }
+
+        $this->_category = $this->getCategory();
+
 
         if ($this->_category) {
             if ($this->show_category_title) {
@@ -114,7 +142,7 @@ class Feed extends \yii\bootstrap\Widget
                     'status' => "#{$this->id} .{$this->_infiniteScrollPagerStatusOptions['class']}"
                 ]
             ];
-            $this->options['style']='position:relative;';
+            $this->options['style'] = 'position:relative;';
         }
 
         Html::addCssClass($this->list_options, $this->_listViewId);
@@ -124,17 +152,16 @@ class Feed extends \yii\bootstrap\Widget
         $this->getView()->registerCss($this->custom_css);
     }
 
-    public function run(){
+    /**
+     * @return string|void
+     * @throws \Exception
+     */
+    public function run()
+    {
         echo Html::beginTag('div', $this->options);
 
-        if ($this->show_title) {
-            echo Html::tag(
-                isset($this->title_options['tag']) && !empty($this->title_options['tag']) ? $this->title_options['tag'] : 'div',
-                $this->title,
-                $this->title_options
-            );
+        $this->renderHeader();
 
-        }
         echo ListView::widget([
             'id' => $this->_listViewId,
             'dataProvider' => $this->getDataProvider(),
@@ -148,6 +175,7 @@ class Feed extends \yii\bootstrap\Widget
                 'briefSuffix' => $this->item_brief_suffix,
                 'titleLength' => $this->item_title_length,
                 'titleSuffix' => $this->item_title_suffix,
+                'dateType' => $this->item_date_type,
                 'imageType' => $this->item_image_type,
                 'showCategory' => $this->show_item_category,
                 'showCategoryIcon' => $this->show_item_category_icon,
@@ -171,9 +199,9 @@ class Feed extends \yii\bootstrap\Widget
 
         $this->renderInfinityScrollStatusHtml();
 
-
         echo Html::endTag('div');
     }
+
     /**
      * Building Data provider
      * @return ActiveDataProvider
@@ -193,10 +221,9 @@ class Feed extends \yii\bootstrap\Widget
         }
 
         if ($this->_category) {
-            $catIds = ArrayHelper::map(BlogCategory::findOne($this->category_id)->getDescendants()->all(), 'id','id');
+            $catIds = ArrayHelper::map(BlogCategory::findOne($this->category_id)->getDescendants()->all(), 'id', 'id');
             $catIds[] = $this->category_id;
             $query->andFilterWhere(['in', 'category_id', $catIds]);
-
         }
 
         if (!$this->show_pager) {
@@ -250,5 +277,77 @@ class Feed extends \yii\bootstrap\Widget
         echo Html::tag('div', Module::t('End of content.'), ['class' => 'infinite-scroll-last']);
         echo Html::tag('div', Module::t('No more posts to load.'), ['class' => 'infinite-scroll-error']);
         echo Html::endTag($tag);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function renderCategoryFilter()
+    {
+        echo Html::beginForm('', 'get', ['class' => 'form']);
+        echo Select2::widget([
+            'data' => ArrayHelper::map(BlogCategory::find()->all(), 'id', 'title'),
+            'name' => $this->_category_filter_parameter,
+            'size' => Select2::SIZE_MEDIUM,
+            'value' => $this->category_id,
+            'options' => [
+                'placeholder' => Module::t('Select Category'),
+                'multiple' => false,
+                'onchange' => 'this.form.submit()'
+            ],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+            'addon' => ['prepend' => [
+                'content' => '<i class="fa fa-list"></i>'
+            ]],
+        ]);
+        echo Html::endForm();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function renderHeader()
+    {
+        $options = $this->header_options;
+        $tag = ArrayHelper::remove($options, 'tag', 'div');
+
+        echo Html::beginTag($tag, $options);
+
+        $this->renderTitle();
+
+        if ($this->show_category_filter) {
+            $this->renderCategoryFilter();
+        }
+
+        echo Html::endTag($tag);
+    }
+
+    /**
+     * Rendering title
+     * if show_title parameter is true printing title
+     * and if active_title is true, showing title as link
+     */
+    public function renderTitle()
+    {
+        if ($this->show_title) {
+
+            $title = $this->title;
+            if ($this->active_title) {
+                $url = $this->active_title_url;
+                if (!$url && $this->_category) {
+                    $url = $this->_category->url;
+                }
+                $title = Html::a($title, $url, $this->active_title_options);
+            }
+
+            echo Html::tag(
+                isset($this->title_options['tag']) && !empty($this->title_options['tag']) ? $this->title_options['tag'] : 'div',
+                $title,
+                $this->title_options
+            );
+        }
+
     }
 }

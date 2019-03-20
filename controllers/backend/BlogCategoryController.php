@@ -10,6 +10,7 @@ namespace diazoxide\blog\controllers\backend;
 use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogCategorySearch;
 use diazoxide\blog\traits\IActiveStatus;
+use paulzi\adjacencyList\AdjacencyListBehavior;
 use paulzi\adjacencyList\AdjacencyListQueryTrait;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -72,16 +73,13 @@ class BlogCategoryController extends Controller
     /**
      * Lists all BlogCategory models.
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionIndex()
     {
-//        $searchModel = new BlogCategorySearch();
-//        $dataProvider = BlogCategory::get(0, BlogCategory::find()->all());
-
-        $dataProvider = BlogCategory::findOne(1)->children;
-
+        $dataProvider = $this->findModel(1)->children;
         return $this->render('index', [
-//            'searchModel' => $searchModel,
+            'breadcrumbs'=>$this->module->breadcrumbs,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -119,16 +117,24 @@ class BlogCategoryController extends Controller
      * Creates a new BlogCategory model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionCreate()
     {
+        $parent_id = Yii::$app->request->get('parent_id');
+
+        $parent_id = $parent_id ? $parent_id : 1;
+
         $model = new BlogCategory();
 
-        if (Yii::$app->request->get('parent_id') > 0) {
-            $model->parent_id = Yii::$app->request->get('parent_id');
-        }
+        $parent = $this->findModel($parent_id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $model->parent_id = $parent_id;
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->prependTo($parent)->save();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

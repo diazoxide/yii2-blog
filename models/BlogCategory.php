@@ -112,7 +112,6 @@ class BlogCategory extends \yii\db\ActiveRecord
     }
 
 
-
     /**
      * @param int $parentId
      * @param array $array
@@ -133,96 +132,12 @@ class BlogCategory extends \yii\db\ActiveRecord
         return $str;
     }
 
-    /**
-     * @param int $id
-     * @param array $array
-     * @return array|int
-     */
-    static public function getCategorySub2($id = 0, $array = array())
-    {
-        if (0 == $id) {
-            return 0;
-        }
-
-        $arrayResult = array();
-        $rootId = self::getRootCategoryId($id, $array);
-        foreach ((array)$array as $v) {
-            if ($v['parent_id'] == $rootId) {
-                array_push($arrayResult, $v);
-            }
-        }
-
-        return $arrayResult;
-    }
-
-    /**
-     * @param int $id
-     * @param array $array
-     * @return int
-     */
-    static public function getRootCategoryId($id = 0, $array = [])
-    {
-        if (0 == $id) {
-            return 0;
-        }
-
-        foreach ((array)$array as $v) {
-            if ($v['id'] == $id) {
-                $parentId = $v['parent_id'];
-                if (0 == $parentId) {
-                    return $id;
-                } else {
-                    return self::getRootCategoryId($parentId, $array);
-                }
-            }
-        }
-    }
-
     public function getBreadcrumbs()
     {
-        $result = $this->getModule()->breadcrumbs;
-        $result[] = ['label' => Module::t('Blog Categories'), 'url' => [$this->getModule()->categoriesUrl]];
+        $result = $this->getModule()->categoryBreadcrumbs;
         return $result;
     }
 
-    /**
-     * @param int $id
-     * @param array $array
-     * @return array|void
-     */
-    static public function getPathToRoot($id = 0, $array = array())
-    {
-        if (0 == $id) {
-            return [];
-        }
-
-        $arrayResult = array();
-        $parent_id = 0;
-        foreach ((array)$array as $v) {
-            if ($v['id'] == $id) {
-                $parent_id = $v['parent_id'];
-                if (self::PAGE_TYPE_LIST == $v['page_type']) {
-                    $arrayResult = array($v['title'] => array('list', id => $v['id']));
-                } elseif (self::PAGE_TYPE_PAGE == $v['page_type']) {
-                    $arrayResult = array($v['title'] => array('page', id => $v['id']));
-                }
-            }
-        }
-
-        if (0 < $parent_id) {
-            $arrayTemp = self::getPathToRoot($parent_id, $array);
-
-            if (!empty($arrayTemp)) {
-                $arrayResult += $arrayTemp;
-            }
-        }
-
-        if (!empty($arrayResult)) {
-            return $arrayResult;
-        } else {
-            return;
-        }
-    }
 
     /**
      * created_at, updated_at to now()
@@ -260,13 +175,26 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'is_nav', 'is_featured', 'sort_order', 'widget_type_id', 'page_size', 'status','sort'], 'integer'],
+            [['parent_id', 'is_nav', 'is_featured', 'sort_order', 'widget_type_id', 'page_size', 'status', 'sort'], 'integer'],
             [['title'], 'required'],
+            [['parent_id'], 'parentValidation'],
             [['sort_order', 'page_size'], 'default', 'value' => 0],
             [['icon_class', 'read_icon_class', 'read_more_text'], 'string', 'max' => 60],
             [['title', 'template', 'redirect_url', 'slug'], 'string', 'max' => 255],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
         ];
+    }
+
+    public function parentValidation($attribute, $params)
+    {
+        if ($this->id == $this->parent_id) {
+            // no real check at the moment to be sure that the error is triggered
+            $this->addError($attribute, Module::t('The element cannot use itself as a parent.'));
+        }
+        if ($this->id != 1 && $this->parent_id == null) {
+            $this->addError($attribute, Module::t('You can not create root element.'));
+
+        }
     }
 
     /**
@@ -276,7 +204,7 @@ class BlogCategory extends \yii\db\ActiveRecord
     {
         return [
             'id' => Module::t('ID'),
-            'parent_id' => Module::t('Parent ID'),
+            'parent_id' => Module::t('Parent'),
             'title' => Module::t('Title'),
             'slug' => Module::t('Slug'),
             'banner' => Module::t('Banner'),
@@ -320,6 +248,10 @@ class BlogCategory extends \yii\db\ActiveRecord
         return $this->count(BlogPost::class, ['category_id' => 'id']);
     }
 
+    /**
+     * @param bool $subCats
+     * @return array
+     */
     public static function getAllMenuItems($subCats = false)
     {
         $items = [];
@@ -333,6 +265,10 @@ class BlogCategory extends \yii\db\ActiveRecord
         return $items;
     }
 
+    /**
+     * @param bool $subCats
+     * @return array
+     */
     public function getMenuItem($subCats = false)
     {
         $item = [
@@ -364,9 +300,9 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function getUrl()
     {
         if ($this->getModule()->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createUrl(['blog/blog-category/update', 'id' => $this->id]);
+            return Yii::$app->getUrlManager()->createUrl([$this->getModule()->id . '/blog-category/update', 'id' => $this->id]);
         }
-        return Yii::$app->getUrlManager()->createUrl(['blog/default/archive', 'slug' => $this->slug]);
+        return Yii::$app->getUrlManager()->createUrl([$this->getModule()->id . '/default/archive', 'slug' => $this->slug]);
 
     }
 
@@ -389,10 +325,10 @@ class BlogCategory extends \yii\db\ActiveRecord
 
     public function getWidget()
     {
-        $config = (array) $this->widgetType->config;
+        $config = (array)$this->widgetType->config;
         $config = reset($config);
         $config['category_id'] = $this->id;
-        $config['id']=$this->formName().'_'.$this->id;
+        $config['id'] = $this->formName() . '_' . $this->id;
 
         return Feed::widget($config);
     }

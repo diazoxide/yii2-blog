@@ -71,7 +71,7 @@ class BlogPostSearch extends BlogPost
                 ->innerJoinWith('category')
                 ->andWhere([BlogCategory::tableName() . '.status' => IActiveStatus::STATUS_ACTIVE]);
 
-            $query->andWhere('FROM_UNIXTIME(created_at) <= NOW()');
+            $query->andWhere('FROM_UNIXTIME('.BlogCategory::tableName().'.created_at) <= NOW()');
         }
 
         $dataProvider = new ActiveDataProvider([
