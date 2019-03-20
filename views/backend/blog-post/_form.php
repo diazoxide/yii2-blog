@@ -52,8 +52,31 @@ use yii\widgets\ActiveForm;
             ]); */?>
             <?= $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [
                 'options' => ['rows' => 6],
-                'preset' => 'basic',
+                'preset' => 'advanced',
                 'kcfinder' => true,
+                'kcfOptions' => [
+                    'uploadURL' => $model->module->imgFileUrl,
+                    'uploadDir' => $model->module->imgFilePath,
+                    'access' => [  // @link http://kcfinder.sunhater.com/install#_access
+                        'files' => [
+                            'upload' => true,
+                            'delete' => true,
+                            'copy' => true,
+                            'move' => true,
+                            'rename' => true,
+                        ],
+                        'dirs' => [
+                            'create' => true,
+                            'delete' => true,
+                            'rename' => true,
+                        ],
+                    ],
+                    'types' => [  // @link http://kcfinder.sunhater.com/install#_types
+                        'files' => [
+                            'type' => '',
+                        ],
+                    ],
+                ],
             ]) ?>
         </div>
 
