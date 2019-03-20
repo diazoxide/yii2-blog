@@ -11,6 +11,7 @@ use diazoxide\blog\Module;
 use \kartik\datetime\DateTimePicker;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -44,10 +45,26 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'brief')->textarea(['rows' => 4]) ?>
 
-            <?php  $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
+
+            <?php echo $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
                 'moduleId' => $model->module->redactorModule,
                 'clientOptions' => [
-                    'plugins' => ['clips', 'fontcolor', 'imagemanager']
+                    'plugins' => ['clips',
+                        'advanced',
+                        'fullscreen',
+                        'counter',
+                        'fontcolor',
+                        'fontfamily',
+                        'fontsize',
+                        'handle',
+                        'inlinestyle',
+                        'properties',
+                        'specialchars',
+                        'table',
+                        'textdirection',
+                        'textexpander',
+                        'variable',
+                        'video', 'imagemanager']
                 ]
             ]); ?>
             <?php /*echo $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [
