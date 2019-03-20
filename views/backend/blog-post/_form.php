@@ -44,13 +44,13 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'brief')->textarea(['rows' => 4]) ?>
 
-            <?php /* $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
+            <?php  $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
                 'moduleId' => $model->module->redactorModule,
                 'clientOptions' => [
                     'plugins' => ['clips', 'fontcolor', 'imagemanager']
                 ]
-            ]); */?>
-            <?= $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [
+            ]); ?>
+            <?php /*echo $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [
                 'options' => ['rows' => 6],
                 'preset' => 'advanced',
                 'kcfinder' => true,
@@ -77,7 +77,7 @@ use yii\widgets\ActiveForm;
                         ],
                     ],
                 ],
-            ]) ?>
+            ])*/ ?>
         </div>
 
         <div class="col-md-4">
