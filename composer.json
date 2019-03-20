@@ -24,7 +24,7 @@
   "require": {
     "yiisoft/yii2": "*",
     "diazoxide/yii2-revslider": "*",
-    "2amigos/yii2-ckeditor-widget" : "~2.1",
+    "2amigos/yii2-ckeditor-widget" : "dev-master",
     "iutbay/yii2-kcfinder" : "*",
     "yiidoc/yii2-redactor": "*",
     "bower-asset/font-awesome": "^5.7",

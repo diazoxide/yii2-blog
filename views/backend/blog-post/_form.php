@@ -44,40 +44,17 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'brief')->textarea(['rows' => 4]) ?>
 
-            <?= $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
+            <?php /* $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
                 'moduleId' => $model->module->redactorModule,
                 'clientOptions' => [
                     'plugins' => ['clips', 'fontcolor', 'imagemanager']
                 ]
-            ]); ?>
-            <?=
-            $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::class, [
+            ]); */?>
+            <?= $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [
+                'options' => ['rows' => 6],
+                'preset' => 'basic',
                 'kcfinder' => true,
-                'kcfOptions' => [
-                    'uploadURL' => '@web/upload',
-                    'uploadDir' => '@webroot/upload',
-                    'access' => [  // @link http://kcfinder.sunhater.com/install#_access
-                        'files' => [
-                            'upload' => true,
-                            'delete' => true,
-                            'copy' => true,
-                            'move' => true,
-                            'rename' => true,
-                        ],
-                        'dirs' => [
-                            'create' => true,
-                            'delete' => true,
-                            'rename' => true,
-                        ],
-                    ],
-                    'types' => [  // @link http://kcfinder.sunhater.com/install#_types
-                        'files' => [
-                            'type' => '',
-                        ],
-                    ],
-                ],
-            ]);
-            ?>
+            ]) ?>
         </div>
 
         <div class="col-md-4">
