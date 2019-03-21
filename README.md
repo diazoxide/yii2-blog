@@ -54,12 +54,6 @@
 }
 ```
 
-> after install run migration command
-
-```bash
-php yii migrate --migrationPath=@vendor/diazoxide/yii2-blog/migrations
-```
-
 > common configuration
 
 ```php
@@ -104,6 +98,15 @@ php yii migrate --migrationPath=@vendor/diazoxide/yii2-blog/migrations
 ```php
 $config['modules']['blog']['controllerNamespace'] = 'diazoxide\blog\controllers\backend';
 ```
+
+# Migration
+
+> after install run migration command
+
+```bash
+php yii migrate --migrationPath=@vendor/diazoxide/yii2-blog/migrations
+```
+
 
 # Custom urlManager rules for beautiful links
 
