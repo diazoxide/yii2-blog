@@ -53,6 +53,13 @@
     }
 }
 ```
+
+> after install run migration command
+
+```bash
+php yii migrate --migrationPath=@vendor/diazoxide/yii2-blog/migrations
+```
+
 > common configuration
 
 ```php
