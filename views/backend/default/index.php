@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id' => 'home_feed_widget',
             'item_image_type' => 'xsthumb',
             'item_title_length' => 70,
-            'list_options' => ['style' => 'height:80vh; overflow:auto;'],
+            'list_options' => ['style' => 'height:50vh; overflow:auto;'],
             'title_options' => ['class' => 'widget_title'],
             'show_item_category'=>true,
             'item_title_options' => ['class' => 'top-buffer-10-xs'],
