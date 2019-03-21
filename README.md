@@ -42,11 +42,11 @@
 </ul>
 
 # installation
->add to composer.json
+> add to composer.json
 ```
 "diazoxide/yii2-blog": "dev-master"
 ```
->common configuration
+> common configuration
 ```php
  'modules'=>[
      'blog' => [
@@ -84,7 +84,7 @@
  ]
 ```
 
->backend configuration
+> backend configuration
 
 just add this line in your backend configuration file
 ```
@@ -93,15 +93,15 @@ $config['modules']['blog']['controllerNamespace'] = 'diazoxide\blog\controllers\
 ```
 
 # Custom urlManager rules for beautiful links
->archive url in frontend
+> archive url in frontend
 
 https://blog.com/archive
 
->category url in frontend
+> category url in frontend
 
 https://blog.com/category/politics
 
->post url in frontend like a wordpress and seo friendly
+> post url in frontend like a wordpress and seo friendly
 
 https://blog.com/2019/11/21/your-post-slug
 
