@@ -47,7 +47,7 @@
 "diazoxide/yii2-blog": "dev-master"
 ```
 >common configuration
-```
+```php
  'modules'=>[
      'blog' => [
          'class' => "diazoxide\blog\Module",
@@ -105,7 +105,7 @@ https://blog.com/category/politics
 
 https://blog.com/2019/11/21/your-post-slug
 
-```
+```php
  'urlManager' => [
     'enablePrettyUrl' => true,
     'showScriptName' => false,
