@@ -7,14 +7,19 @@
 
 namespace diazoxide\blog\controllers\backend;
 
+use diazoxide\blog\Module;
 use Yii;
 
+/**
+ * @property Module module
+ */
 class DefaultController extends BaseAdminController
 {
+    /**
+     * @return string
+     */
     public function actionIndex()
     {
-        //if(!Yii::$app->user->can('readPost')) throw new HttpException(403, 'No Auth');
-
         if (Yii::$app->user->isGuest) {
             $this->redirect("user/login");
         }

@@ -2,7 +2,8 @@
 
 use diazoxide\blog\Module;
 use yii\helpers\Html;
-$this->title = Module::t("Blog Administrator panel");
+$this->title = Module::t("Blog");
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="col-md-3">
     <?php
