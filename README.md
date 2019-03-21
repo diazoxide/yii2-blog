@@ -1,4 +1,5 @@
 # diazoxide/yii2-blog
+
 <h4>Advanced Yii2 Blog module. Posts, Categories, Comments, Tags, With Slider Revolution, SEO tags, Social Tags</h4>
 
 <h5>Features</h5>
@@ -42,6 +43,7 @@
 </ul>
 
 # installation
+
 > add to composer.json
 
 ```
@@ -94,6 +96,7 @@ $config['modules']['blog']['controllerNamespace'] = 'diazoxide\blog\controllers\
 ```
 
 # Custom urlManager rules for beautiful links
+
 > archive url in frontend
 
 https://blog.com/archive
