@@ -41,7 +41,7 @@
   <li>Slider Revolution</li>
 </ul>
 
-#installation
+# installation
 >add to composer.json
 ```
 "diazoxide/yii2-blog": "dev-master"
@@ -92,7 +92,7 @@ $config['modules']['blog']['controllerNamespace'] = 'diazoxide\blog\controllers\
 
 ```
 
-#Custom urlManager rules for beautiful links
+# Custom urlManager rules for beautiful links
 >archive url in frontend
 
 https://blog.com/archive
