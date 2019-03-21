@@ -46,8 +46,12 @@
 
 > add to composer.json
 
-```
-"diazoxide/yii2-blog": "dev-master"
+```json
+{
+    "require": {
+      "diazoxide/yii2-blog": "dev-master"
+    }
+}
 ```
 > common configuration
 
@@ -90,9 +94,8 @@
 
 > backend configuration
 
-```
+```php
 $config['modules']['blog']['controllerNamespace'] = 'diazoxide\blog\controllers\backend';
-
 ```
 
 # Custom urlManager rules for beautiful links
