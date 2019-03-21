@@ -24,12 +24,12 @@
   "require": {
     "yiisoft/yii2": "*",
     "diazoxide/yii2-revslider": "*",
+    "diazoxide/yii2-infinite-scroll": "dev-master",
     "2amigos/yii2-ckeditor-widget" : "dev-master",
     "yiidoc/yii2-redactor": "dev-master",
     "bower-asset/modmore-redactor-plugins": "*",
     "bower-asset/font-awesome": "^5.7",
     "bower-asset/sticky-sidebar": "*",
-    "diazoxide/yii2-infinite-scroll": "dev-master",
     "paulzi/yii2-adjacency-list": "^2.2",
     "yii-dream-team/yii2-upload-behavior": "dev-master",
     "voskobovich/yii2-many-many-behavior": "^3.0",
