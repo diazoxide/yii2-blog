@@ -43,10 +43,12 @@
 
 # installation
 > add to composer.json
+
 ```
 "diazoxide/yii2-blog": "dev-master"
 ```
 > common configuration
+
 ```php
  'modules'=>[
      'blog' => [
@@ -86,7 +88,6 @@
 
 > backend configuration
 
-just add this line in your backend configuration file
 ```
 $config['modules']['blog']['controllerNamespace'] = 'diazoxide\blog\controllers\backend';
 
