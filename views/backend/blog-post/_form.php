@@ -64,7 +64,19 @@ use yii\widgets\ActiveForm;
                         'textdirection',
                         'textexpander',
                         'variable',
-                        'video', 'imagemanager']
+                        'video',
+                        'imagemanager',
+                        'breadcrumb',
+                        'contrast',
+                        'imagepx',
+                        'imageurl',
+//                        'norphan',
+                        'replacer',
+                        'speek',
+//                        'syntax',
+                        'wym',
+                        'zoom'
+                        ]
                 ]
             ]); ?>
             <?php /*echo $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [

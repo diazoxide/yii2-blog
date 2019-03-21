@@ -12,7 +12,6 @@ class StickySidebarAsset extends AssetBundle
         [
             'sticky-sidebar.js',
             'type' => 'module'
-
         ],
     ];
 }

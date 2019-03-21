@@ -23,7 +23,8 @@ class AdminAsset extends AssetBundle
     public $js = [
     ];
     public $depends = [
-        'yii\bootstrap\BootstrapAsset',
-        'diazoxide\blog\assets\FontAwesomeAsset',
+        \yii\bootstrap\BootstrapAsset::class,
+        FontAwesomeAsset::class,
+        ModmoreRedactorPluginsAsset::class
     ];
 }
