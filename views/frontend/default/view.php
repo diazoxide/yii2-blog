@@ -176,3 +176,24 @@ $username_attribute = Module::getInstance()->userName;
     </section>
 <?php endif; ?>
 
+<section>
+    <?= \diazoxide\blog\widgets\Feed::widget([
+        'items_count' => 3,
+        'category_id'=>$post->category_id,
+        'show_title'=>true,
+        'title_options'=>['class'=>'widget_title'],
+        'title'=>Module::t('Related Posts'),
+        'show_item_brief' => false,
+        'show_item_category_icon'=>false,
+        'item_brief_length' => 50,
+        'item_options'=>['class'=>'col-md-4'],
+        'item_image_container_options'=>['class'=>'col-xs-12 top-buffer-20-xs'],
+        'item_content_container_options'=>['class'=>'col-xs-12'],
+        'item_date_type'=>'dateTime',
+        'item_info_container_options'=>['class'=>'text-warning text-right small'],
+//            'item_date_options'=>['class'=>'text-right text-warning'],
+        'id' => 'post_feed_widget'
+    ]);
+    ?>
+</section>
+

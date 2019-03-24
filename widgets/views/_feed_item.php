@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 /** @var array $imageContainerOptions */
@@ -22,6 +23,10 @@ use yii\helpers\Html;
 ?>
 
 <?php
+
+$bodyTag = ArrayHelper::remove($bodyOptions, 'tag', 'div');
+echo Html::beginTag($bodyTag, $bodyOptions);
+
 /**
  * Building image container Html
  */
@@ -113,5 +118,7 @@ if ($showReadMoreButton) {
     );
 }
 echo Html::endTag('div');
+
+echo Html::endTag($bodyTag);
 ?>
 

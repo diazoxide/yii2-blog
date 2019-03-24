@@ -28,12 +28,13 @@ use yii\helpers\Html;
         </div>
 
         <div>
-        <span>
-            <i class="fa fa-calendar"></i> <?= Yii::$app->formatter->asDate($model->created_at); ?>
-        </span>
-            <span>
-            <i class="fa fa-eye"></i> <?= $model->click; ?>
-        </span>
+
+            <span><i class="fa fa-calendar"></i> <?= Yii::$app->formatter->asDatetime($model->created_at); ?></span>
+
+            <?php if ($model->module->showClicksInArchive): ?>
+                <span><i class="fa fa-eye"></i> <?= $model->click; ?></span>
+            <?php endif; ?>
+
         </div>
     </div>
 </div>

@@ -63,15 +63,18 @@ class BlogPostSearch extends BlogPost
     {
         $query = BlogPost::find();
 
-        $query->orderBy(['created_at' => SORT_DESC]);
+        if ($this->scenario == self::SCENARIO_ADMIN) {
+            $query->orderBy(['id' => SORT_DESC]);
 
+        }
         if ($this->scenario == self::SCENARIO_USER) {
+            $query->orderBy(['published_at' => SORT_DESC]);
 
             $query->andWhere([BlogPost::tableName() . '.status' => IActiveStatus::STATUS_ACTIVE])
                 ->innerJoinWith('category')
                 ->andWhere([BlogCategory::tableName() . '.status' => IActiveStatus::STATUS_ACTIVE]);
 
-            $query->andWhere('FROM_UNIXTIME('.BlogCategory::tableName().'.created_at) <= NOW()');
+            $query->andWhere('FROM_UNIXTIME(' . BlogPost::tableName() . '.published_at) <= NOW()');
         }
 
         $dataProvider = new ActiveDataProvider([
@@ -101,6 +104,7 @@ class BlogPostSearch extends BlogPost
                 $this::tableName() . '.user_id' => $this->user_id,
                 $this::tableName() . '.created_at' => $this->created_at,
                 $this::tableName() . '.updated_at' => $this->updated_at,
+                $this::tableName() . '.published_at' => $this->published_at,
             ]);
 
             $query

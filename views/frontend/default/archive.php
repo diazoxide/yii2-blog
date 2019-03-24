@@ -7,6 +7,7 @@
 
 use diazoxide\blog\Module;
 use yii\widgets\ListView;
+use \yii\widgets\Pjax;
 
 \diazoxide\blog\assets\AppAsset::register($this);
 
@@ -41,6 +42,7 @@ if (Yii::$app->get('opengraph', false)) {
     </div>
 
     <?php
+    Pjax::begin();
     echo ListView::widget([
         'dataProvider' => $dataProvider,
         'itemView' => '_post',
@@ -49,6 +51,7 @@ if (Yii::$app->get('opengraph', false)) {
         ],
         'layout' => '{items}{pager}{summary}'
     ]);
+    Pjax::end();
     ?>
 </div>
 

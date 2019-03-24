@@ -15,6 +15,7 @@ use paulzi\adjacencyList\AdjacencyListBehavior;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\widgets\Breadcrumbs;
 use yiidreamteam\upload\ImageUploadBehavior;
 
 
@@ -48,6 +49,7 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @property BlogWidgetType widgetType
  * @method \yii\db\ActiveQuery getChildren()
  * @property \yii\db\ActiveQuery children
+ * @property Breadcrumbs breadcrumbs
  */
 class BlogCategory extends \yii\db\ActiveRecord
 {
@@ -148,6 +150,9 @@ class BlogCategory extends \yii\db\ActiveRecord
         return [
             [
                 'class' => AdjacencyListBehavior::className(),
+                'sortable'=>[
+                    'sortAttribute'=>'sort_order'
+                ]
             ],
             TimestampBehavior::class,
             [
@@ -323,13 +328,17 @@ class BlogCategory extends \yii\db\ActiveRecord
         return $this->hasOne(BlogWidgetType::class, ['id' => 'widget_type_id']);
     }
 
+    /**
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     * @throws \Exception
+     */
     public function getWidget()
     {
         $config = (array)$this->widgetType->config;
         $config = reset($config);
         $config['category_id'] = $this->id;
         $config['id'] = $this->formName() . '_' . $this->id;
-
         return Feed::widget($config);
     }
 

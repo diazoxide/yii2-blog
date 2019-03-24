@@ -212,8 +212,13 @@ class BlogPostController extends BaseAdminController
     {
         $model = new BlogPost();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['update', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->published_at = Yii::$app->formatter->asTimestamp($model->published);
+
+            if ($model->save()) {
+                return $this->redirect(['update', 'id' => $model->id]);
+            }
         }
 
         return $this->render('create', [
@@ -245,7 +250,7 @@ class BlogPostController extends BaseAdminController
         ]);
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->created_at = Yii::$app->formatter->asTimestamp($model->created);
+            $model->published_at = Yii::$app->formatter->asTimestamp($model->published);
             if ($model->save()) {
                 return $this->redirect(['update', 'id' => $model->id]);
             }

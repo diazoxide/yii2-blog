@@ -59,7 +59,10 @@ use diazoxide\blog\widgets\Feed;
                         $form->field($model, 'config[load_more_button]')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')])->label(Module::t('Load More Button')),
                     'active' => true,
                     'headerOptions' => [
-                        'id' => 'main'
+                        'id' => 'main',
+                    ],
+                    'options' => [
+                        'href' => '#main'
                     ]
                 ],
                 [
@@ -123,6 +126,13 @@ use diazoxide\blog\widgets\Feed;
                                 $form->field($model, 'config[header_options][style]')->textInput(['maxlength' => 255])->label(Module::t('HTML Style'))
                         ],
                         [
+                            'label' => 'Body',
+                            'content' => $form->field($model, 'config[body_options][tag]')->textInput(['maxlength' => 255])->label(Module::t('HTML Tag')) .
+                                $form->field($model, 'config[body_options][id]')->textInput(['maxlength' => 255])->label(Module::t('HTML ID')) .
+                                $form->field($model, 'config[body_options][class]')->textInput(['maxlength' => 255])->label(Module::t('HTML Class')) .
+                                $form->field($model, 'config[body_options][style]')->textInput(['maxlength' => 255])->label(Module::t('HTML Style'))
+                        ],
+                        [
                             'label' => 'Title',
                             'content' => $form->field($model, 'config[title_options][tag]')->textInput(['maxlength' => 255])->label(Module::t('HTML Tag')) .
                                 $form->field($model, 'config[title_options][id]')->textInput(['maxlength' => 255])->label(Module::t('HTML ID')) .
@@ -148,6 +158,13 @@ use diazoxide\blog\widgets\Feed;
                                 $form->field($model, 'config[item_options][id]')->textInput(['maxlength' => 255])->label(Module::t('HTML ID')) .
                                 $form->field($model, 'config[item_options][class]')->textInput(['maxlength' => 255])->label(Module::t('HTML Class')) .
                                 $form->field($model, 'config[item_options][Style]')->textInput(['maxlength' => 255])->label(Module::t('HTML Style')),
+                        ],
+                        [
+                            'label' => 'Item Body',
+                            'content' => $form->field($model, 'config[item_body_options][tag]')->textInput(['maxlength' => 255])->label(Module::t('HTML Tag')) .
+                                $form->field($model, 'config[item_body_options][id]')->textInput(['maxlength' => 255])->label(Module::t('HTML ID')) .
+                                $form->field($model, 'config[item_body_options][class]')->textInput(['maxlength' => 255])->label(Module::t('HTML Class')) .
+                                $form->field($model, 'config[item_body_options][Style]')->textInput(['maxlength' => 255])->label(Module::t('HTML Style')),
                         ],
                         [
                             'label' => 'Item Image',
@@ -213,5 +230,22 @@ use diazoxide\blog\widgets\Feed;
     <?php
     ActiveForm::end();
     ?>
-
 </div>
+
+<?php
+$js = <<<js
+$(function(){
+  var url = document.location.toString();
+if (url.match('#')) {
+    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+} 
+
+// Change hash for page-reload
+$('.nav-tabs a').on('shown.bs.tab', function (e) {
+    window.location.hash = e.target.hash;
+})
+
+});
+js;
+
+$this->registerJs($js); ?>

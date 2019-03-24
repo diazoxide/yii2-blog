@@ -49,34 +49,34 @@ use yii\widgets\ActiveForm;
             <?php echo $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
                 'moduleId' => $model->module->redactorModule,
                 'clientOptions' => [
-                    'plugins' => ['clips',
-                        'advanced',
-                        'fullscreen',
-                        'counter',
-                        'fontcolor',
-                        'fontfamily',
-                        'fontsize',
-                        'handle',
-                        'inlinestyle',
-                        'properties',
-                        'specialchars',
-                        'table',
-                        'textdirection',
-                        'textexpander',
-                        'variable',
+                    'plugins' => [
+//                        'inlinestyle',
+                        //'fontsize',
+                        //'fontcolor',
+                        //'fontfamily',
+//                        'textdirection',
+//                        'textexpander',
+//                        'clips',
+//                        'counter',
+//                        'handle',
+//                        'properties',
+//                        'specialchars',
+//                        'table',
+//                        'variable',
                         'video',
                         'imagemanager',
-                        'breadcrumb',
-                        'contrast',
-                        'imagepx',
-                        'imageurl',
+//                        'breadcrumb',
+//                        'contrast',
+//                        'imagepx',
+//                        'imageurl',
 //                        'norphan',
-                        'replacer',
-                        'speek',
+//                        'replacer',
+//                        'speek',
 //                        'syntax',
-                        'wym',
-                        'zoom'
-                        ]
+//                        'wym',
+//                        'zoom',
+//                        'fullscreen',
+                    ]
                 ]
             ]); ?>
             <?php /*echo $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [
@@ -149,12 +149,12 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'click')->textInput() ?>
 
             <?=
-            $form->field($model, 'created')->widget(DateTimePicker::className(), [
-                'name' => 'created',
+            $form->field($model, 'published')->widget(DateTimePicker::className(), [
+                'name' => 'published',
                 'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
                 'options' => [
                     'placeholder' => Module::t('Select Publish Datetime'),
-                    'value' => !$model->isNewRecord ? Yii::$app->formatter->asDatetime($model->created_at) : ""
+                    'value' => $model->getPublished()
                 ],
                 'convertFormat' => true,
                 'pluginOptions' => [

@@ -62,6 +62,8 @@ class Module extends \yii\base\Module
 
     public $showClicksInPost = true;
 
+    public $showClicksInArchive = false;
+
     public $showDateInPost = true;
 
     public $dateTypeInPost = 'dateTime';

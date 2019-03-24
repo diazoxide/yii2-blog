@@ -93,8 +93,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'form-control', 'prompt' => Module::t('Author')]
                 )
             ],
-            'created_at:date',
-            'updated_at:date',
+            'published_at:relativeTime',
+            'created_at:dateTime',
+            'updated_at:dateTime',
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

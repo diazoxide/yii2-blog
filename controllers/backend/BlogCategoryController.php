@@ -77,7 +77,8 @@ class BlogCategoryController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = $this->findModel(1)->children;
+        $model = $this->findModel(1);
+        $dataProvider = $model->children;
         return $this->render('index', [
             'breadcrumbs'=>$this->module->breadcrumbs,
             'dataProvider' => $dataProvider,

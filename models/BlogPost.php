@@ -41,6 +41,7 @@ use voskobovich\behaviors\ManyToManyBehavior;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $published_at
  *
  * @property BlogComment[] $blogComments
  * @property BlogCategory $category
@@ -58,6 +59,8 @@ class BlogPost extends \yii\db\ActiveRecord
     public $created;
 
     public $updated;
+
+    public $published;
 
     /**
      * @inheritdoc
@@ -126,8 +129,12 @@ class BlogPost extends \yii\db\ActiveRecord
             [['category_ids'], 'each', 'rule' => ['integer']],
 
             [['category_id', 'title', 'content'], 'required'],
-            [['category_id', 'click', 'user_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['brief', 'content','created','updated'], 'string'],
+            [['category_id', 'click', 'user_id', 'status', 'created_at', 'updated_at', 'published_at'], 'integer'],
+
+            [['brief', 'content'], 'string'],
+
+            [['created', 'updated', 'published'], 'date', 'format' => Yii::$app->formatter->datetimeFormat],
+
             [['is_slide', 'show_comments'], 'boolean'],
             [['show_comments'], 'default', 'value' => true],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
@@ -159,6 +166,7 @@ class BlogPost extends \yii\db\ActiveRecord
             'status' => Module::t('Status'),
             'created_at' => Module::t('Created At'),
             'updated_at' => Module::t('Updated At'),
+            'published_at' => Module::t('Published At'),
             'is_slide' => Module::t('Show In Slider'),
             'commentsCount' => Module::t('Comments Count'),
             'created' => Module::t('Created'),
@@ -361,8 +369,36 @@ class BlogPost extends \yii\db\ActiveRecord
      * @return string
      * @throws \yii\base\InvalidConfigException
      */
-    public function getCreated(){
-        return Module::convertTime($this->created_at,'datetime');
+    public function getCreated()
+    {
+        if ($this->isNewRecord) {
+            return Module::convertTime(time(), 'datetime');
+        }
+        return Module::convertTime($this->created_at, 'datetime');
+    }
+
+    /**
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getUpdated()
+    {
+        if ($this->isNewRecord) {
+            return Module::convertTime(time(), 'datetime');
+        }
+        return Module::convertTime($this->updated_at, 'datetime');
+    }
+
+    /**
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getPublished()
+    {
+        if ($this->isNewRecord) {
+            return Module::convertTime(time(), 'datetime');
+        }
+        return Module::convertTime($this->published_at, 'datetime');
     }
 
 }

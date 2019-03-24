@@ -54,12 +54,14 @@ class Feed extends \yii\bootstrap\Widget
     public $item_content_container_options = ['class' => 'col-xs-9'];
     public $item_info_container_options = [];
     public $item_options = ['tag' => 'article', 'class' => 'item row top-buffer-20-xs'];
+    public $item_body_options = ['tag' => 'div', 'class' => 'body'];
     public $item_title_options = ['tag' => 'h5', 'class' => 'nospaces-xs'];
     public $item_brief_options = ['tag' => 'p', 'class' => 'nospaces-xs'];
     public $item_read_more_button_options = ['class' => 'btn btn-warning'];
     public $list_options = ['tag' => 'div', 'class' => 'feed-widget-listview'];
     public $title_options = ['tag' => 'div', 'class' => 'row'];
     public $header_options = ['tag' => 'div', 'class' => 'header'];
+    public $body_options = ['tag' => 'div', 'class' => 'body'];
     public $active_title_options = ['class' => 'text-warning'];
 
 
@@ -162,6 +164,22 @@ class Feed extends \yii\bootstrap\Widget
 
         $this->renderHeader();
 
+        $this->renderBody();
+
+        echo Html::endTag('div');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function renderBody(){
+
+        $options = $this->body_options;
+
+        $tag = ArrayHelper::remove($options, 'tag', 'div');
+
+        echo Html::beginTag($tag, $options);
+
         echo ListView::widget([
             'id' => $this->_listViewId,
             'dataProvider' => $this->getDataProvider(),
@@ -170,6 +188,7 @@ class Feed extends \yii\bootstrap\Widget
             'layout' => "{items}" . ($this->show_pager ? "{pager}" : ""),
             'itemView' => '@vendor/diazoxide/yii2-blog/widgets/views/_feed_item',
             'viewParams' => [
+                'bodyOptions' => $this->item_body_options,
                 'showBrief' => $this->show_item_brief,
                 'briefLength' => $this->item_brief_length,
                 'briefSuffix' => $this->item_brief_suffix,
@@ -198,8 +217,8 @@ class Feed extends \yii\bootstrap\Widget
         ]);
 
         $this->renderInfinityScrollStatusHtml();
+        echo Html::endTag($tag);
 
-        echo Html::endTag('div');
     }
 
     /**
@@ -213,11 +232,11 @@ class Feed extends \yii\bootstrap\Widget
         $query->where(['status' => IActiveStatus::STATUS_ACTIVE])
             ->orderBy($this->getOrderFromType());
 
-        $query->andWhere('FROM_UNIXTIME(created_at) <= NOW()');
+        $query->andWhere('FROM_UNIXTIME(published_at) <= NOW()');
 
 
         if ($this->days_interval) {
-            $query->andWhere('FROM_UNIXTIME(created_at) > NOW() - INTERVAL ' . $this->days_interval . ' DAY');
+            $query->andWhere('FROM_UNIXTIME(published_at) > NOW() - INTERVAL ' . $this->days_interval . ' DAY');
         }
 
         if ($this->_category) {
@@ -250,7 +269,7 @@ class Feed extends \yii\bootstrap\Widget
             case self::TYPE_RANDOM:
                 return new Expression('rand()');
             case self::TYPE_RECENT:
-                return ['created_at' => SORT_DESC];
+                return ['published_at' => SORT_DESC];
             case self::TYPE_POPULAR:
                 return ['click' => SORT_DESC];
             default:
