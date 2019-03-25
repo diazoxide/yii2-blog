@@ -208,6 +208,9 @@ class Module extends \yii\base\Module
         return \Yii::$app->get($this->urlManager)->getHostInfo() . $this->imgFileUrl;
     }
 
+    /**
+     * @return array
+     */
     public static function getBlogNavigation()
     {
         return [
@@ -219,6 +222,9 @@ class Module extends \yii\base\Module
         ];
     }
 
+    /**
+     * @return OpenGraph
+     */
     public function getOpenGraph()
     {
         $opengraph = new OpenGraph();
@@ -226,6 +232,9 @@ class Module extends \yii\base\Module
         return $opengraph;
     }
 
+    /**
+     * @return string
+     */
     public function getCategoriesUrl()
     {
         if ($this->getIsBackend()) {
@@ -235,6 +244,9 @@ class Module extends \yii\base\Module
 
     }
 
+    /**
+     * @return string
+     */
     public function getHomeUrl()
     {
 
@@ -245,6 +257,9 @@ class Module extends \yii\base\Module
 
     }
 
+    /**
+     * @return string
+     */
     public function getArchiveUrl()
     {
 
@@ -255,6 +270,9 @@ class Module extends \yii\base\Module
 
     }
 
+    /**
+     * @return array
+     */
     public function getBreadcrumbs()
     {
         $result = [];
@@ -262,6 +280,9 @@ class Module extends \yii\base\Module
         return $result;
     }
 
+    /**
+     * @return array|mixed
+     */
     public function getCategoryBreadcrumbs()
     {
         $result = $this->breadcrumbs;
