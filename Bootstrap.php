@@ -6,7 +6,7 @@ use yii\base\BootstrapInterface;
 use yii\i18n\PhpMessageSource;
 
 /**
- * Blogs module bootstrap class.
+ * Yii2Config module bootstrap class.
  */
 class Bootstrap implements BootstrapInterface
 {
@@ -30,7 +30,7 @@ class Bootstrap implements BootstrapInterface
             ]
         );
         // Add module I18N category.
-        if (!isset($app->i18n->translations['akiraz2/blog'])) {
+        if (!isset($app->i18n->translations['diazoxide/blog'])) {
             $app->i18n->translations['diazoxide/blog'] = [
                 'class' => PhpMessageSource::class,
                 'basePath' => __DIR__ . '/messages',
