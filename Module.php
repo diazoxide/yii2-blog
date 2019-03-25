@@ -160,14 +160,14 @@ class Module extends \yii\base\Module
      */
     protected function registerTranslations()
     {
-        Yii::$app->i18n->translations['diazoxide/blog'] = [
-            'class' => PhpMessageSource::class,
-            'basePath' => '@vendor/diazoxide/yii2-blog/messages',
-            'forceTranslation' => true,
-            'fileMap' => [
-                'diazoxide/blog' => 'blog.php',
-            ]
-        ];
+//        Yii::$app->i18n->translations['diazoxide/blog'] = [
+//            'class' => PhpMessageSource::class,
+//            'basePath' => '@vendor/diazoxide/yii2-blog/messages',
+//            'forceTranslation' => true,
+//            'fileMap' => [
+//                'diazoxide/blog' => 'blog.php',
+//            ]
+//        ];
 
     }
 
@@ -214,11 +214,11 @@ class Module extends \yii\base\Module
     public static function getBlogNavigation()
     {
         return [
-            ['label' => 'Posts', 'url' => ['/blog/blog-post'], 'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS")],
-            ['label' => 'Categories', 'url' => ['/blog/blog-category'], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
-            ['label' => 'Comments', 'url' => ['/blog/blog-comment'], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
-            ['label' => 'Tags', 'url' => ['/blog/blog-tag'], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
-            ['label' => 'Widget Types', 'url' => ['/blog/widget-type/index'], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
+            ['label' => Module::t('Posts'), 'url' => ['/blog/blog-post'], 'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS")],
+            ['label' => Module::t('Categories'), 'url' => ['/blog/blog-category'], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
+            ['label' => Module::t('Comments'), 'url' => ['/blog/blog-comment'], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
+            ['label' => Module::t('Tags'), 'url' => ['/blog/blog-tag'], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
+            ['label' => Module::t('Widget Types'), 'url' => ['/blog/widget-type/index'], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
         ];
     }
 

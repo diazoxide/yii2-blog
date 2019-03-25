@@ -1,8 +1,10 @@
 <?php
 
 namespace diazoxide\blog;
+
 use yii\base\BootstrapInterface;
 use yii\i18n\PhpMessageSource;
+
 /**
  * Blogs module bootstrap class.
  */
@@ -16,10 +18,6 @@ class Bootstrap implements BootstrapInterface
         // Add module URL rules.
         $app->getUrlManager()->addRules(
             [
-//                '<_m:blog>/cat/<category_id:\d+>-<slug:[a-zA-Z0-9_-]{1,100}+>' => '<_m>/default/index',
-//                '<_m:blog>/<id:\d+>-<slug:[a-zA-Z0-9_-]{1,100}+>' => '<_m>/default/view',
-//                '<_m:blog>' => '<_m>/default/index',
-
                 '/category/<slug>' => '/blog/default/archive',
                 '/archive' => '/blog/default/archive',
                 [
@@ -53,6 +51,6 @@ class Bootstrap implements BootstrapInterface
 //                'imageAllowExtensions' => ['jpg', 'png', 'gif', 'svg']
 //            ]);
 //        }
-        \Yii::setAlias('@diazoxide', \Yii::getAlias('@vendor') . '/akiraz2');
+        \Yii::setAlias('@diazoxide', \Yii::getAlias('@vendor') . '/diazoxide');
     }
 }
