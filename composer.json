@@ -100,5 +100,8 @@
     "psr-4": {
       "diazoxide\\blog\\": ""
     }
+  },
+  "extra": {
+    "bootstrap": "diazoxide\\blog\\Bootstrap"
   }
 }
