@@ -27,7 +27,7 @@
     "diazoxide/yii2-revslider": "*",
     "diazoxide/yii2-infinite-scroll": "dev-master",
     "2amigos/yii2-ckeditor-widget" : "dev-master",
-    "yiidoc/yii2-redactor": "dev-master",
+    "yiidoc/yii2-redactor": "*",
     "bower-asset/modmore-redactor-plugins": "v1.1.3",
     "bower-asset/font-awesome": "^5.7",
     "bower-asset/sticky-sidebar": "*",
