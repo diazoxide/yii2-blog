@@ -22,6 +22,7 @@
     }
   ],
   "require": {
+    "ext-json":"*",
     "yiisoft/yii2": "*",
     "diazoxide/yii2-revslider": "*",
     "diazoxide/yii2-infinite-scroll": "dev-master",
@@ -39,7 +40,6 @@
     "dektrium/yii2-user": "^0.9.14",
     "dektrium/yii2-rbac": "^1.0",
     "yiisoft/yii2-imagine": "*",
-    "yiidoc/yii2-redactor": "*",
     "yii-dream-team/yii2-upload-behavior": "*",
     "lesha724/yii2-math-captcha": "*",
     "chriskonnertz/bbcode": "dev-master",

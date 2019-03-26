@@ -10,6 +10,7 @@ namespace diazoxide\blog;
 use diazoxide\blog\assets\AdminAsset;
 use diazoxide\blog\assets\AppAsset;
 use diazoxide\blog\components\OpenGraph;
+use diazoxide\blog\traits\ConfigTrait;
 use Yii;
 use yii\base\ViewNotFoundException;
 use yii\db\ActiveRecord;
@@ -17,6 +18,8 @@ use yii\i18n\PhpMessageSource;
 
 class Module extends \yii\base\Module
 {
+    use ConfigTrait;
+
     public $controllerNamespace = 'diazoxide\blog\controllers\frontend';
 
     public $backendViewPath = '@vendor/diazoxide/yii2-blog/views/backend';
