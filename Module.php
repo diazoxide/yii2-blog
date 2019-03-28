@@ -16,9 +16,11 @@ use yii\base\ViewNotFoundException;
 use yii\db\ActiveRecord;
 use yii\i18n\PhpMessageSource;
 
+/**
+ * @property array breadcrumbs
+ */
 class Module extends \yii\base\Module
 {
-    use ConfigTrait;
 
     public $controllerNamespace = 'diazoxide\blog\controllers\frontend';
 
@@ -32,14 +34,17 @@ class Module extends \yii\base\Module
 
     public $frontendTitleMap = [];
 
-    protected $_frontendViewsMap = [
-        'blog/default/index' => 'index',
-        'blog/default/view' => 'view',
-        'blog/default/archive' => 'archive',
-        'blog/default/book' => 'viewBook',
-        'blog/default/chapter' => 'viewChapter',
-        'blog/default/chapter-search' => 'searchBookChapter',
-    ];
+    protected function _frontendViewsMap()
+    {
+        return [
+            $this->id . '/default/index' => 'index',
+            $this->id . '/default/view' => 'view',
+            $this->id . '/default/archive' => 'archive',
+            $this->id . '/default/book' => 'viewBook',
+            $this->id . '/default/chapter' => 'viewChapter',
+            $this->id . '/default/chapter-search' => 'searchBookChapter',
+        ];
+    }
 
     public $urlManager = 'urlManager';
 
@@ -70,8 +75,6 @@ class Module extends \yii\base\Module
     public $showDateInPost = true;
 
     public $dateTypeInPost = 'dateTime';
-
-    public $blogViewLayout = null;
 
     public $schemaOrg = [];
 
@@ -114,9 +117,9 @@ class Module extends \yii\base\Module
 
                 return $this->frontendViewsMap[$route];
 
-            } elseif (isset($this->_frontendViewsMap[$route])) {
+            } elseif (isset($this->_frontendViewsMap()[$route])) {
 
-                return $this->_frontendViewsMap[$route];
+                return $this->_frontendViewsMap()[$route];
 
             }
         }
@@ -214,14 +217,14 @@ class Module extends \yii\base\Module
     /**
      * @return array
      */
-    public static function getBlogNavigation()
+    public function getNavigation()
     {
         return [
-            ['label' => Module::t('Posts'), 'url' => ['/blog/blog-post'], 'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS")],
-            ['label' => Module::t('Categories'), 'url' => ['/blog/blog-category'], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
-            ['label' => Module::t('Comments'), 'url' => ['/blog/blog-comment'], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
-            ['label' => Module::t('Tags'), 'url' => ['/blog/blog-tag'], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
-            ['label' => Module::t('Widget Types'), 'url' => ['/blog/widget-type/index'], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
+            ['label' => Module::t('Posts'), 'url' => ["/{$this->id}/blog-post"], 'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS")],
+            ['label' => Module::t('Categories'), 'url' => ["/{$this->id}/blog-category"], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
+            ['label' => Module::t('Comments'), 'url' => ["/{$this->id}/blog-comment"], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
+            ['label' => Module::t('Tags'), 'url' => ["/{$this->id}/blog-tag"], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
+            ['label' => Module::t('Widget Types'), 'url' => ["/{$this->id}/widget-type/index"], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
         ];
     }
 
@@ -311,6 +314,37 @@ class Module extends \yii\base\Module
             $fmt = ($format == null) ? Yii::$app->formatter->dateFormat : $format;
         }
         return \Yii::$app->formatter->asDate($dateStr, $fmt);
+    }
+
+
+    public function bootstrap($app)
+    {
+        // Add module URL rules.
+        $app->getUrlManager()->addRules(
+            [
+                '/category/<slug>' => '/blog/default/archive',
+                '/archive' => '/blog/default/archive',
+                [
+                    'pattern' => '<year:\d{4}>/<month:\d{2}>/<day:\d{2}>/<slug>',
+                    'route' => '/blog/default/view',
+                    'suffix' => '/'
+                ],
+                //Fixing old posts issue
+                '/archives/<id:\d+>' => '/site/old-post',
+            ]
+        );
+        // Add module I18N category.
+        if (!isset($app->i18n->translations['diazoxide/blog'])) {
+            $app->i18n->translations['diazoxide/blog'] = [
+                'class' => PhpMessageSource::class,
+                'basePath' => __DIR__ . '/messages',
+                'forceTranslation' => true,
+                'fileMap' => [
+                    'diazoxide/blog' => 'blog.php',
+                ]
+            ];
+        }
+        \Yii::setAlias('@diazoxide', \Yii::getAlias('@vendor') . '/diazoxide');
     }
 
 }

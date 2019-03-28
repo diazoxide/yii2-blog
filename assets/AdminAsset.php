@@ -21,6 +21,7 @@ class AdminAsset extends AssetBundle
     ];
 
     public $js = [
+        'js/fixRedactor.js'
     ];
     public $depends = [
         \yii\bootstrap\BootstrapAsset::class,

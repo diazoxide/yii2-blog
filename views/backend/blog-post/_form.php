@@ -46,46 +46,16 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'brief')->textarea(['rows' => 4]) ?>
 
 
-            <?php echo $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
-                'moduleId' => $model->module->redactorModule,
-                'clientOptions' => [
-                    'plugins' => [
-//                        'inlinestyle',
-                        //'fontsize',
-                        //'fontcolor',
-                        //'fontfamily',
-//                        'textdirection',
-//                        'textexpander',
-//                        'clips',
-//                        'counter',
-//                        'handle',
-//                        'properties',
-//                        'specialchars',
-//                        'table',
-//                        'variable',
-                        'video',
-                        'imagemanager',
-//                        'breadcrumb',
-//                        'contrast',
-//                        'imagepx',
-//                        'imageurl',
-//                        'norphan',
-//                        'replacer',
-//                        'speek',
-//                        'syntax',
-//                        'wym',
-//                        'zoom',
-//                        'fullscreen',
-                    ]
-                ]
-            ]); ?>
-            <?php /*echo $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [
+
+            <?php
+echo $this->context->module->imgFilePath.'/upload';
+            echo $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [
                 'options' => ['rows' => 6],
                 'preset' => 'advanced',
                 'kcfinder' => true,
                 'kcfOptions' => [
-                    'uploadURL' => $model->module->imgFileUrl,
-                    'uploadDir' => $model->module->imgFilePath,
+                    'uploadURL' =>  $this->context->module->imgFileUrl.'/upload/3',
+                    'uploadDir' => $this->context->module->imgFilePath.'/upload/3',
                     'access' => [  // @link http://kcfinder.sunhater.com/install#_access
                         'files' => [
                             'upload' => true,
@@ -106,7 +76,7 @@ use yii\widgets\ActiveForm;
                         ],
                     ],
                 ],
-            ])*/ ?>
+            ]) ?>
         </div>
 
         <div class="col-md-4">

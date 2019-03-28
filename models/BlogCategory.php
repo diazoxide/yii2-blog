@@ -77,19 +77,6 @@ class BlogCategory extends \yii\db\ActiveRecord
         return '{{%blog_category}}';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public static function getOneIsNavLabel($isNav = null)
-    {
-        if ($isNav) {
-            $arrayIsNav = self::getArrayIsNav();
-            return $arrayIsNav[$isNav];
-        }
-
-        return;
-    }
-
 
     /**
      * @return array

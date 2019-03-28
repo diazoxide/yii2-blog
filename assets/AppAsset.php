@@ -7,6 +7,7 @@
 
 namespace diazoxide\blog\assets;
 
+use yii\bootstrap\BootstrapAsset;
 use yii\web\AssetBundle;
 
 class AppAsset extends AssetBundle
@@ -25,7 +26,7 @@ class AppAsset extends AssetBundle
     ];
 
     public $depends = [
-        'yii\bootstrap\BootstrapAsset',
+        BootstrapAsset::class,
         'diazoxide\blog\assets\StickySidebarAsset',
         'diazoxide\blog\assets\FontAwesomeAsset',
     ];

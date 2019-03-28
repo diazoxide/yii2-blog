@@ -26,7 +26,7 @@
     "yiisoft/yii2": "*",
     "diazoxide/yii2-revslider": "*",
     "diazoxide/yii2-infinite-scroll": "dev-master",
-    "2amigos/yii2-ckeditor-widget" : "dev-master",
+    "2amigos/yii2-ckeditor-widget" : "~2.1",
     "yiidoc/yii2-redactor": "*",
     "bower-asset/modmore-redactor-plugins": "v1.1.3",
     "bower-asset/font-awesome": "^5.7",
@@ -100,8 +100,5 @@
     "psr-4": {
       "diazoxide\\blog\\": ""
     }
-  },
-  "extra": {
-    "bootstrap": "diazoxide\\blog\\Bootstrap"
   }
 }
