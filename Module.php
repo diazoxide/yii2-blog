@@ -34,23 +34,19 @@ class Module extends \yii\base\Module
 
     public $frontendTitleMap = [];
 
-    protected function _frontendViewsMap()
-    {
-        return [
-            $this->id . '/default/index' => 'index',
-            $this->id . '/default/view' => 'view',
-            $this->id . '/default/archive' => 'archive',
-            $this->id . '/default/book' => 'viewBook',
-            $this->id . '/default/chapter' => 'viewChapter',
-            $this->id . '/default/chapter-search' => 'searchBookChapter',
-        ];
-    }
-
     public $urlManager = 'urlManager';
 
     public $imgFilePath = '@frontend/web/img/blog';
 
     public $imgFileUrl = '/img/blog';
+
+    /* @var string
+     * Final directory for post content uploads
+     * When you use text redactor all uploaded images saving in
+     * Directory: $imgFilePath/$_postContentImagesDirectory
+     * */
+    public $postContentImagesDirectory = "upload/post-content";
+
 
     public $adminAccessControl = null;
 
@@ -96,13 +92,26 @@ class Module extends \yii\base\Module
 
     public $blogTheme;
 
-    protected $_isBackend;
-
     public $homeTitle = 'Blog';
 
     public $banners = [];
 
     public $htmlClass = "diazoxide_blog";
+
+
+    protected $_isBackend;
+
+    protected function _frontendViewsMap()
+    {
+        return [
+            $this->id . '/default/index' => 'index',
+            $this->id . '/default/view' => 'view',
+            $this->id . '/default/archive' => 'archive',
+            $this->id . '/default/book' => 'viewBook',
+            $this->id . '/default/chapter' => 'viewChapter',
+            $this->id . '/default/chapter-search' => 'searchBookChapter',
+        ];
+    }
 
     /**
      * @return mixed|string

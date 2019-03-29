@@ -45,76 +45,70 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'brief')->textarea(['rows' => 4]) ?>
 
-            <?php /*echo $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
-                'moduleId' => $model->module->redactorModule,
-                'clientOptions' => [
-                    'plugins' => [
-//                        'inlinestyle',
-                        //'fontsize',
-                        //'fontcolor',
-                        //'fontfamily',
-//                        'textdirection',
-//                        'textexpander',
-//                        'clips',
-//                        'counter',
-//                        'handle',
-//                        'properties',
-//                        'specialchars',
-//                        'table',
-//                        'variable',
-                        'video',
-                        'imagemanager',
-//                        'breadcrumb',
-//                        'contrast',
-//                        'imagepx',
-//                        'imageurl',
-//                        'norphan',
-//                        'replacer',
-//                        'speek',
-//                        'syntax',
-//                        'wym',
-//                        'zoom',
-//                        'fullscreen',
+            <?php
+            if (false) {
+                echo $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
+                    'moduleId' => $model->module->redactorModule,
+                    'clientOptions' => [
+                        'plugins' => [
+                            'video',
+                            'imagemanager',
+                        ]
                     ]
-                ]
-            ]);*/ ?>
+                ]);
+            } else {
+                echo $form->field($model, 'content')->widget(\dosamigos\tinymce\TinyMce::className(), [
+                    'options' => ['rows' => 6],
+                    'language' => 'en',
+                    'clientOptions' => [
+                        'plugins' => [
+                            "advlist autolink lists emoticons link charmap print preview anchor autoresize",
+                            "bbcode insertdatetime searchreplace visualblocks code fullscreen ",
+                            "insertdatetime media table contextmenu paste image imagetools fullpage searchreplace autolink directionality",
+                            "autosave wordcount textcolor charmap visualchars codesample charmap pagebreak nonbreaking anchor toc insertdatetime advlist",
+                        ],
+                        'toolbar' => "restoredraft | undo redo | styleselect forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | charmap emoticons insertdatetime | ltr rtl",
+                        'automatic_uploads' => true,
+                        'images_upload_url' => Url::to(['tinymce/upload']),
+                        'file_picker_types' => 'image',
+                        'media_live_embeds' => 'true',
+                        'image_advtab' => true,
+                    ]
+                ]);
+            }
+
+            ?>
 
             <?php
-
-            echo $this->context->module->imgFilePath.'/upload';
-            echo $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [
-                'options' => ['rows' => 6],
-                'preset' => 'advanced',
-                'kcfinder' => true,
-                'kcfOptions' => [
-                    'uploadURL' =>  $this->context->module->imgFileUrl.'/upload/3',
-                    'uploadDir' => $this->context->module->imgFilePath.'/upload/3',
-                    'access' => [  // @link http://kcfinder.sunhater.com/install#_access
-                        'files' => [
-                            'upload' => true,
-                            'delete' => true,
-                            'copy' => true,
-                            'move' => true,
-                            'rename' => true,
-                        ],
-                        'dirs' => [
-                            'create' => true,
-                            'delete' => true,
-                            'rename' => true,
-                        ],
-                    ],
-                    'types' => [  // @link http://kcfinder.sunhater.com/install#_types
-//                        'files' => [
-//                            'type' => '',
-//                        ],
-                        'images' => array(
-                            'type' => "*img",
-                            'thumbWidth' => 150,
-                            'thumbHeight' => 150
-                        )
-                    ],
-                ],
-            ]) ?>
+            /* */
+            /* echo $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [
+                  'options' => ['rows' => 6],
+                  'preset' => 'advanced',
+                  'kcfinder' => true,
+                  'kcfOptions' => [
+                      'uploadURL' =>  $this->context->module->imgFileUrl.'/upload/3',
+                      'uploadDir' => $this->context->module->imgFilePath.'/upload/3',
+                      'access' => [  // @link http://kcfinder.sunhater.com/install#_access
+                          'files' => [
+                              'upload' => true,
+                              'delete' => true,
+                              'copy' => true,
+                              'move' => true,
+                              'rename' => true,
+                          ],
+                          'dirs' => [
+                              'create' => true,
+                              'delete' => true,
+                              'rename' => true,
+                          ],
+                      ],
+                      'types' => [  // @link http://kcfinder.sunhater.com/install#_types
+                          'files' => [
+                              'type' => '',
+                          ]
+                      ],
+                  ],
+              ])*/ ?>
         </div>
 
         <div class="col-md-4">

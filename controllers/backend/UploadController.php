@@ -2,6 +2,7 @@
 
 namespace diazoxide\blog\controllers\backend;
 
+use Yii;
 use yii\web\Response;
 
 class UploadController extends BaseAdminController
