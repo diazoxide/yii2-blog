@@ -7,6 +7,7 @@
 
 namespace diazoxide\blog\assets;
 
+use yii\bootstrap\BootstrapAsset;
 use yii\web\AssetBundle;
 
 class AdminAsset extends AssetBundle
@@ -21,11 +22,9 @@ class AdminAsset extends AssetBundle
     ];
 
     public $js = [
-        'js/fixRedactor.js'
     ];
     public $depends = [
-        \yii\bootstrap\BootstrapAsset::class,
+        BootstrapAsset::class,
         FontAwesomeAsset::class,
-        ModmoreRedactorPluginsAsset::class
     ];
 }

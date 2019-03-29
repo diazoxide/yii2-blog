@@ -37,14 +37,10 @@ class TinymceController extends Controller
      */
     public function actionUpload()
     {
-
         Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
-
         $imageFolder = Yii::getAlias($this->module->imgFilePath . '/' . $this->module->postContentImagesDirectory);
         $imageUrl = Yii::getAlias($this->module->imgFileUrl . '/' . $this->module->postContentImagesDirectory);
-
         $temp = UploadedFile::getInstanceByName('file');
-
 
         if ($temp) {
 
@@ -56,7 +52,6 @@ class TinymceController extends Controller
 
             return ['location' => $fileurl];
         } else {
-            // Notify editor that the upload failed
             throw new BadRequestHttpException("Invalid upload.");
         }
     }
