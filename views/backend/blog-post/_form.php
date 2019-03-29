@@ -45,10 +45,43 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'brief')->textarea(['rows' => 4]) ?>
 
-
+            <?php /*echo $form->field($model, 'content')->widget(\yii\redactor\widgets\Redactor::class, [
+                'moduleId' => $model->module->redactorModule,
+                'clientOptions' => [
+                    'plugins' => [
+//                        'inlinestyle',
+                        //'fontsize',
+                        //'fontcolor',
+                        //'fontfamily',
+//                        'textdirection',
+//                        'textexpander',
+//                        'clips',
+//                        'counter',
+//                        'handle',
+//                        'properties',
+//                        'specialchars',
+//                        'table',
+//                        'variable',
+                        'video',
+                        'imagemanager',
+//                        'breadcrumb',
+//                        'contrast',
+//                        'imagepx',
+//                        'imageurl',
+//                        'norphan',
+//                        'replacer',
+//                        'speek',
+//                        'syntax',
+//                        'wym',
+//                        'zoom',
+//                        'fullscreen',
+                    ]
+                ]
+            ]);*/ ?>
 
             <?php
-echo $this->context->module->imgFilePath.'/upload';
+
+            echo $this->context->module->imgFilePath.'/upload';
             echo $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::className(), [
                 'options' => ['rows' => 6],
                 'preset' => 'advanced',
@@ -71,9 +104,14 @@ echo $this->context->module->imgFilePath.'/upload';
                         ],
                     ],
                     'types' => [  // @link http://kcfinder.sunhater.com/install#_types
-                        'files' => [
-                            'type' => '',
-                        ],
+//                        'files' => [
+//                            'type' => '',
+//                        ],
+                        'images' => array(
+                            'type' => "*img",
+                            'thumbWidth' => 150,
+                            'thumbHeight' => 150
+                        )
                     ],
                 ],
             ]) ?>
