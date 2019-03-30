@@ -192,7 +192,7 @@
 .blog-post__content img:first-child {
     float: left;
     height: auto !important;
-    width: 100%;
+    width: 100% !important;
 }
 
 /*New*/
@@ -272,7 +272,8 @@
 }
 
 #home_feed .feed-widget-listview {
-    overflow-y: auto;
+    overflow-y: scroll;
+    max-height: 100vh;
 }
 
 .home_posts_widget .post_widget .item {

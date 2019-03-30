@@ -268,13 +268,19 @@ class BlogPostController extends BaseAdminController
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->status = IActiveStatus::STATUS_ARCHIVE;
-        $model->save();
-        return $this->redirect(['index']);
+        if($model->status == IActiveStatus::STATUS_ARCHIVE){
+            $model->delete();
+        } else {
+            $model->status = IActiveStatus::STATUS_ARCHIVE;
+            $model->save();
+        }
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
 
@@ -317,12 +323,18 @@ class BlogPostController extends BaseAdminController
      * @param $id
      * @return \yii\web\Response
      * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDeleteBook($id)
     {
         $model = $this->findBookModel($id);
-        $model->status = IActiveStatus::STATUS_ARCHIVE;
-        $model->save();
+        if($model->status == IActiveStatus::STATUS_ARCHIVE){
+            $model->delete();
+        } else {
+            $model->status = IActiveStatus::STATUS_ARCHIVE;
+            $model->save();
+        }
         return $this->redirect(Yii::$app->request->referrer);
     }
 

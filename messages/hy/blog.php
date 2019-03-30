@@ -111,7 +111,7 @@ return [
     'Yes' => 'Այո',
     'STATUS_INACTIVE'=>'Ապաակտիվացված',
     'STATUS_ACTIVE'=>'Ակտիվ',
-    'STATUS_DELETED'=>'Ջնջված',
+    'STATUS_ARCHIVE'=>'Արխիվ',
     'Show In Slider'=>'Ցուցադրել սլայդերում',
     'General'=>'Գլխավոր',
     'Feed'=>'Լրահոս',

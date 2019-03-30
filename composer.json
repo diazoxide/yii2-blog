@@ -1,6 +1,6 @@
 {
   "name": "diazoxide/yii2-blog",
-  "description": "Advanced Yii2 blog module, posts, categories, tags, comments, SEO, social plugins, Slider Revolution e.t.c.",
+  "description": "Advanced Yii2 blog module, posts, categories, tags, comments, books, SEO, social plugins, Slider Revolution e.t.c.",
   "type": "yii2-extension",
   "keywords": [
     "yii2",
@@ -101,8 +101,8 @@
     "psr-4": {
       "diazoxide\\blog\\": ""
     }
-  },
+  }/*,
   "extra": {
     "bootstrap": "diazoxide\\blog\\Bootstrap"
-  }
+  }*/
 }
