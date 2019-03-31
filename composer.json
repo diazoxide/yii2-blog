@@ -22,12 +22,12 @@
     }
   ],
   "require": {
-    "ext-json":"*",
+    "ext-json": "*",
     "yiisoft/yii2": "*",
     "diazoxide/yii2-revslider": "*",
     "diazoxide/yii2-infinite-scroll": "dev-master",
-    "2amigos/yii2-ckeditor-widget" : "dev-master",
-    "2amigos/yii2-tinymce-widget" : "~1.1",
+    "2amigos/yii2-ckeditor-widget": "dev-master",
+    "2amigos/yii2-tinymce-widget": "~1.1",
     "yiidoc/yii2-redactor": "*",
     "bower-asset/modmore-redactor-plugins": "v1.1.3",
     "bower-asset/font-awesome": "^5.7",
@@ -44,7 +44,8 @@
     "yii-dream-team/yii2-upload-behavior": "*",
     "lesha724/yii2-math-captcha": "*",
     "chriskonnertz/bbcode": "dev-master",
-    "paulzi/yii2-json-behavior": "~1.0.0"
+    "paulzi/yii2-json-behavior": "~1.0.0",
+    "himiklab/yii2-sitemap-module" : "*"
   },
   "repositories": [
     {

@@ -66,6 +66,7 @@ class Feed extends \yii\bootstrap\Widget
 
 
     public $infinite_scroll = false;
+    public $infinite_scroll_element_scroll = true;
     public $load_more_button = false;
     public $active_title = false;
     public $active_title_url = null;
@@ -136,11 +137,11 @@ class Feed extends \yii\bootstrap\Widget
         if ($this->infinite_scroll || $this->load_more_button) {
             $this->show_pager = true;
             $this->_pager = [
-                'class' => \diazoxide\infinitescroll\InfiniteScrollPager::className(),
+                'class' => \diazoxide\infinitescroll\InfiniteScrollPager::class,
                 'contentSelector' => '#' . $this->_listViewId,
                 'pluginOptions' => [
                     'append' => '#' . $this->_listViewId . ' .' . $this->_listViewId . '_item',
-                    'elementScroll' => true,
+                    'elementScroll' => $this->infinite_scroll_element_scroll,
                     'status' => "#{$this->id} .{$this->_infiniteScrollPagerStatusOptions['class']}"
                 ]
             ];
@@ -172,7 +173,8 @@ class Feed extends \yii\bootstrap\Widget
     /**
      * @throws \Exception
      */
-    public function renderBody(){
+    public function renderBody()
+    {
 
         $options = $this->body_options;
 
@@ -253,7 +255,7 @@ class Feed extends \yii\bootstrap\Widget
         return new ActiveDataProvider([
             'query' => $query,
             'pagination' => $this->show_pager ? [
-                'pageSize' => $this->items_count,
+//                'pageSize' => $this->items_count,
                 'pageParam' => $this->id . '_page',
                 'pageSizeParam' => $this->id . '_page_size',
             ] : false
@@ -334,7 +336,9 @@ class Feed extends \yii\bootstrap\Widget
 
         echo Html::beginTag($tag, $options);
 
-        $this->renderTitle();
+        if ($this->show_title) {
+            $this->renderTitle();
+        }
 
         if ($this->show_category_filter) {
             $this->renderCategoryFilter();
@@ -350,23 +354,21 @@ class Feed extends \yii\bootstrap\Widget
      */
     public function renderTitle()
     {
-        if ($this->show_title) {
 
-            $title = $this->title;
-            if ($this->active_title) {
-                $url = $this->active_title_url;
-                if (!$url && $this->_category) {
-                    $url = $this->_category->url;
-                }
-                $title = Html::a($title, $url, $this->active_title_options);
+        $title = $this->title;
+        if ($this->active_title) {
+            $url = $this->active_title_url;
+            if (!$url && $this->_category) {
+                $url = $this->_category->url;
             }
-
-            echo Html::tag(
-                isset($this->title_options['tag']) && !empty($this->title_options['tag']) ? $this->title_options['tag'] : 'div',
-                $title,
-                $this->title_options
-            );
+            $title = Html::a($title, $url, $this->active_title_options);
         }
 
+        echo Html::tag(
+            isset($this->title_options['tag']) && !empty($this->title_options['tag']) ? $this->title_options['tag'] : 'div',
+            $title,
+            $this->title_options
+        );
     }
+
 }
