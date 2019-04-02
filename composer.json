@@ -31,6 +31,7 @@
     "yiidoc/yii2-redactor": "*",
     "bower-asset/modmore-redactor-plugins": "v1.1.3",
     "bower-asset/font-awesome": "^5.7",
+    "bower-asset/featherlight": "^1.7.6",
     "bower-asset/sticky-sidebar": "*",
     "paulzi/yii2-adjacency-list": "^2.2",
     "yii-dream-team/yii2-upload-behavior": "dev-master",

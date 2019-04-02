@@ -23,6 +23,7 @@ class Bootstrap implements BootstrapInterface
                 ],
                 //Fixing old posts issue
                 '/archives/<id:\d+>' => '/site/old-post',
+                '/sitemap'=>'blog/sitemap'
             ]
         );
         // Add module I18N category.
@@ -36,6 +37,8 @@ class Bootstrap implements BootstrapInterface
                 ]
             ];
         }
+
+        if(!$app->hasModule(''))
 
         \Yii::setAlias('@diazoxide', \Yii::getAlias('@vendor') . '/diazoxide');
     }

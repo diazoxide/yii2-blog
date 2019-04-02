@@ -10,10 +10,15 @@ namespace diazoxide\blog;
 use diazoxide\blog\assets\AdminAsset;
 use diazoxide\blog\assets\AppAsset;
 use diazoxide\blog\components\OpenGraph;
+use diazoxide\blog\models\BlogCategory;
+use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\traits\ConfigTrait;
+use diazoxide\blog\traits\IActiveStatus;
+use himiklab\sitemap\behaviors\SitemapBehavior;
 use Yii;
 use yii\base\ViewNotFoundException;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 use yii\i18n\PhpMessageSource;
 
 /**
@@ -141,6 +146,68 @@ class Module extends \yii\base\Module
     public function init()
     {
         parent::init();
+
+        $this->modules = [
+            'sitemap' => [
+                'class' => \himiklab\sitemap\Sitemap::class,
+                'models' => [
+                    [
+                        'class' => BlogPost::class,
+                        'behaviors' => [
+                            'sitemap' => [
+                                'class' => SitemapBehavior::class,
+                                'scope' => function ($model) {
+                                    /** @var \yii\db\ActiveQuery $model */
+                                    $model->select(['published_at', 'slug']);
+                                    $model->andWhere(['status' => IActiveStatus::STATUS_ACTIVE]);
+                                },
+                                'dataClosure' => /**
+                                 * @param BlogPost $model
+                                 * @return array
+                                 */
+                                    function ($model) {
+                                        return [
+                                            'loc' => $model->url,
+                                            'lastmod' => $model->published_at,
+                                            'changefreq' => SitemapBehavior::CHANGEFREQ_DAILY,
+                                            'priority' => 0.8,
+                                        ];
+                                    }
+                            ],
+                        ],
+                    ],
+                    [
+                        'class' => BlogCategory::class,
+                        'behaviors' => [
+                            'sitemap' => [
+                                'class' => SitemapBehavior::class,
+                                'scope' => function ($model) {
+                                    /** @var \yii\db\ActiveQuery $model */
+                                    $model->select(['created_at', 'slug']);
+                                    $model->andWhere(['status' => IActiveStatus::STATUS_ACTIVE]);
+                                },
+                                'dataClosure' => /**
+                                 * @param BlogPost $model
+                                 * @return array
+                                 */
+                                    function ($model) {
+                                        return [
+                                            'loc' => $model->url,
+                                            'lastmod' => $model->created_at,
+                                            'changefreq' => SitemapBehavior::CHANGEFREQ_DAILY,
+                                            'priority' => 1,
+                                        ];
+                                    }
+                            ],
+                        ],
+                    ],
+                ],
+                'enableGzip' => true,
+                'cacheExpire' => 1,
+            ],
+        ];
+
+
         if ($this->getIsBackend() === true) {
             $this->setViewPath($this->backendViewPath);
             AdminAsset::register(Yii::$app->view);

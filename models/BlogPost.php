@@ -292,9 +292,9 @@ class BlogPost extends \yii\db\ActiveRecord
         if ($this->getModule()->getIsBackend()) {
             return Yii::$app->getUrlManager()->createUrl(['blog/blog-post/update', 'id' => $this->id]);
         }
-        $year = date('Y', $this->created_at);
-        $month = date('m', $this->created_at);
-        $day = date('d', $this->created_at);
+        $year = date('Y', $this->published_at);
+        $month = date('m', $this->published_at);
+        $day = date('d', $this->published_at);
         return Yii::$app->getUrlManager()->createUrl(['blog/default/view', 'year' => $year, 'month' => $month, 'day' => $day, 'slug' => $this->slug]);
     }
 
@@ -306,9 +306,9 @@ class BlogPost extends \yii\db\ActiveRecord
         if ($this->getModule()->getIsBackend()) {
             return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/blog-post/update', 'id' => $this->id]);
         }
-        $year = date('Y', $this->created_at);
-        $month = date('m', $this->created_at);
-        $day = date('d', $this->created_at);
+        $year = date('Y', $this->published_at);
+        $month = date('m', $this->published_at);
+        $day = date('d', $this->published_at);
         return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default/view', 'year' => $year, 'month' => $month, 'day' => $day, 'slug' => $this->slug]);
     }
 
