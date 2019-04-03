@@ -43,10 +43,24 @@ class DefaultController extends Controller
     }
 
 
-
     public function actionIndex()
     {
         $featuredCategories = BlogCategory::find()->where(['is_featured' => true, 'status' => IActiveStatus::STATUS_ACTIVE])->orderBy(['sort_order' => SORT_DESC]);
+
+        $this->module->openGraph->set([
+            'title' => $this->module->homeTitle,
+            'description' => $this->module->homeDescription,
+        ]);
+
+        Yii::$app->view->registerMetaTag([
+            'name' => 'description',
+            'content' => $this->module->homeDescription
+        ]);
+
+        Yii::$app->view->registerMetaTag([
+            'name' => 'keywords',
+            'content' => $this->module->homeKeywords
+        ]);
 
         return $this->render($this->module->getView(), [
             'title' => $this->getModule()->homeTitle,
@@ -119,7 +133,7 @@ class DefaultController extends Controller
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
 
-        $this->getModule()->openGraph->set([
+        $this->module->openGraph->set([
             'title' => $post->title,
             'description' => $post->brief,
             'image' => $post->getThumbFileUrl('banner', 'facebook'),

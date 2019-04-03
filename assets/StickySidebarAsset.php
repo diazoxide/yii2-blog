@@ -11,7 +11,8 @@ class StickySidebarAsset extends AssetBundle
     public $js = [
         [
             'sticky-sidebar.js',
-            'type' => 'module'
+            'type' => 'module',
+            'crossorigin'=>"anonymous"
         ],
     ];
 }

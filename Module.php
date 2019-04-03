@@ -98,6 +98,8 @@ class Module extends \yii\base\Module
     public $blogTheme;
 
     public $homeTitle = 'Blog';
+    public $homeDescription = 'My New Blog';
+    public $homeKeywords = 'Blog keywords';
 
     public $banners = [];
 

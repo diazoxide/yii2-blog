@@ -230,8 +230,8 @@
 }
 
 .fb-comments.fb_iframe_widget,
-.fb_iframe_widget span,
-.fb_iframe_widget span iframe {
+.fb-comments.fb_iframe_widget span,
+.fb-comments.fb_iframe_widget span iframe {
     width: 100% !important;
 }
 

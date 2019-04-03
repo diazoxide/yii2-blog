@@ -27,7 +27,8 @@ class AppAsset extends AssetBundle
 
     public $depends = [
         BootstrapAsset::class,
-        'diazoxide\blog\assets\StickySidebarAsset',
-        'diazoxide\blog\assets\FontAwesomeAsset',
+        StickySidebarAsset::class,
+        FontAwesomeAsset::class,
+        FeatherlightAsset::class
     ];
 }
