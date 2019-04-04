@@ -7,6 +7,11 @@
 
 namespace diazoxide\blog\models;
 
+use diazoxide\blog\Module;
+use diazoxide\blog\traits\IActiveStatus;
+use diazoxide\blog\traits\ModuleTrait;
+use diazoxide\blog\traits\StatusTrait;
+use voskobovich\behaviors\ManyToManyBehavior;
 use Yii;
 use yii\behaviors\AttributeBehavior;
 use yii\behaviors\SluggableBehavior;
@@ -15,12 +20,6 @@ use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yiidreamteam\upload\ImageUploadBehavior;
-
-use diazoxide\blog\Module;
-use diazoxide\blog\traits\IActiveStatus;
-use diazoxide\blog\traits\ModuleTrait;
-use diazoxide\blog\traits\StatusTrait;
-use voskobovich\behaviors\ManyToManyBehavior;
 
 /**
  * This is the model class for table "blog_post".
@@ -83,7 +82,9 @@ class BlogPost extends \yii\db\ActiveRecord
                 'class' => SluggableBehavior::class,
                 'attribute' => 'title',
                 'slugAttribute' => 'slug',
-                'immutable' => true
+                'immutable' => true,
+                'ensureUnique'=>true,
+
             ],
             [
                 'class' => AttributeBehavior::class,
