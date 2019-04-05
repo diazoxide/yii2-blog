@@ -46,7 +46,8 @@
     "lesha724/yii2-math-captcha": "*",
     "chriskonnertz/bbcode": "dev-master",
     "paulzi/yii2-json-behavior": "~1.0.0",
-    "himiklab/yii2-sitemap-module" : "*"
+    "himiklab/yii2-sitemap-module" : "*",
+    "ml/json-ld": "1.*"
   },
   "repositories": [
     {

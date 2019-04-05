@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use \diazoxide\blog\widgets\Feed;
 
 /** @var String $title */
-/** @var array $banners */
 $this->title = $title;
 ?>
     <div id="blog-container">

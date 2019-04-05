@@ -64,7 +64,6 @@ class DefaultController extends Controller
 
         return $this->render($this->module->getView(), [
             'title' => $this->getModule()->homeTitle,
-            'banners' => $this->getModule()->banners,
             'featuredCategories' => $featuredCategories,
         ]);
 
@@ -169,7 +168,6 @@ class DefaultController extends Controller
             'post' => $post,
             'dataProvider' => $dataProvider,
             'comment' => $comment,
-            'banners' => $this->getModule()->banners,
             'showClicks' => $this->getModule()->showClicksInPost,
             'showDate' => $this->getModule()->showDateInPost,
             'dateType' => $this->getModule()->dateTypeInPost,

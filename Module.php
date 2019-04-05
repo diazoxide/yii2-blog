@@ -27,6 +27,11 @@ use yii\i18n\PhpMessageSource;
 class Module extends \yii\base\Module
 {
 
+    const EVENT_BEFORE_POST_CONTENT_VIEW = 1;
+    const EVENT_AFTER_POST_CONTENT_VIEW = 2;
+    const EVENT_BEFORE_POST_BOOK_VIEW = 3;
+    const EVENT_AFTER_POST_BOOK_VIEW = 4;
+
     public $controllerNamespace = 'diazoxide\blog\controllers\frontend';
 
     public $backendViewPath = '@vendor/diazoxide/yii2-blog/views/backend';
@@ -38,7 +43,7 @@ class Module extends \yii\base\Module
     public $frontendLayoutMap = [];
 
     public $frontendTitleMap = [];
-
+    
     public $urlManager = 'urlManager';
 
     public $imgFilePath = '@frontend/web/img/blog';
@@ -101,8 +106,6 @@ class Module extends \yii\base\Module
     public $homeDescription = 'My New Blog';
     public $homeKeywords = 'Blog keywords';
 
-    public $banners = [];
-
     public $htmlClass = "diazoxide_blog";
 
 
@@ -141,6 +144,7 @@ class Module extends \yii\base\Module
         }
         throw new ViewNotFoundException('The view file does not exist.');
     }
+
 
     /**
      * @throws \yii\base\InvalidConfigException
