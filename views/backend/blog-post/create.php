@@ -11,8 +11,8 @@ use diazoxide\blog\Module;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\blog\models\BlogPost */
 
-$this->title = Module::t('Create ') . Module::t('Blog Post');
-$this->params['breadcrumbs'][] = ['label' => Module::t('Blog Posts'), 'url' => ['index']];
+$this->title = Module::t('', 'Create ') . Module::t('', 'Blog Post');
+$this->params['breadcrumbs'][] = ['label' => Module::t('', 'Blog Posts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-post-create">

@@ -30,7 +30,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-12 text-right">
-            <?= Html::submitButton($model->isNewRecord ? Module::t('Create') : Module::t('Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-warning']) ?>
+            <?= Html::submitButton($model->isNewRecord ? Module::t('', 'Create') : Module::t('', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-warning']) ?>
         </div>
     </div>
 
@@ -75,7 +75,7 @@ use yii\widgets\ActiveForm;
                 'data' => ArrayHelper::map(BlogCategory::find()->all(), 'id', 'title'),
                 //'language' => 'de',
                 'options' => [
-                    'placeholder' => Module::t('Select Categories'),
+                    'placeholder' => Module::t('', 'Select Categories'),
                     'multiple' => true
                 ],
                 'pluginOptions' => [
@@ -90,7 +90,7 @@ use yii\widgets\ActiveForm;
                 'data' => ArrayHelper::map(BlogCategory::find()->all(), 'id', 'title'),
                 //'language' => 'de',
                 'options' => [
-                    'placeholder' => Module::t('Select Main Category'),
+                    'placeholder' => Module::t('', 'Select Main Category'),
                 ],
                 'pluginOptions' => [
                     'allowClear' => true
@@ -98,9 +98,9 @@ use yii\widgets\ActiveForm;
             ]);
             ?>
 
-            <?= $form->field($model, 'is_slide')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')], ['prompt' => Module::t('Select value')]) ?>
+            <?= $form->field($model, 'is_slide')->dropDownList([0 => Module::t('', 'No'), 1 => Module::t('', 'Yes')], ['prompt' => Module::t('', 'Select value')]) ?>
 
-            <?= $form->field($model, 'show_comments')->dropDownList([0 => Module::t('No'), 1 => Module::t('Yes')], ['prompt' => Module::t('Select value')]) ?>
+            <?= $form->field($model, 'show_comments')->dropDownList([0 => Module::t('', 'No'), 1 => Module::t('', 'Yes')], ['prompt' => Module::t('', 'Select value')]) ?>
 
             <?= $form->field($model, 'tags')->textInput(['maxlength' => 128]) ?>
 
@@ -113,7 +113,7 @@ use yii\widgets\ActiveForm;
                 'name' => 'published',
                 'type' => DateTimePicker::TYPE_COMPONENT_APPEND,
                 'options' => [
-                    'placeholder' => Module::t('Select Publish Datetime'),
+                    'placeholder' => Module::t('', 'Select Publish Datetime'),
                     'value' => $model->getPublished()
                 ],
                 'convertFormat' => true,

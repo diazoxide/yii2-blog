@@ -39,7 +39,7 @@ class BlogWidgetType extends \yii\db\ActiveRecord
     public function getBreadcrumbs()
     {
         $result = $this->getModule()->breadcrumbs;
-        $result[] = ['label' => Module::t('Widget Types'), 'url' => ['index']];
+        $result[] = ['label' => Module::t('', 'Widget Types'), 'url' => ['index']];
         return $result;
     }
 
@@ -74,9 +74,9 @@ class BlogWidgetType extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         $labels = [
-            'id' => Module::t('ID'),
-            'config' => Module::t('Config'),
-            'title' => Module::t('Title'),
+            'id' => Module::t('', 'ID'),
+            'config' => Module::t('', 'Config'),
+            'title' => Module::t('', 'Title'),
         ];
     }
 

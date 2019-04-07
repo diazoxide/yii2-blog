@@ -11,8 +11,8 @@ use diazoxide\blog\Module;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\blog\models\BlogComment */
 
-$this->title = Module::t('Create ') . Module::t('Blog Comment');
-$this->params['breadcrumbs'][] = ['label' => Module::t('Blog Comments'), 'url' => ['index']];
+$this->title = Module::t('', 'Create ') . Module::t('', 'Blog Comment');
+$this->params['breadcrumbs'][] = ['label' => Module::t('', 'Blog Comments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-comment-create">

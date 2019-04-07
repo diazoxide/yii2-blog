@@ -30,6 +30,24 @@ class DefaultController extends Controller
 {
     use ModuleTrait;
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => 'yii\filters\PageCache',
+                'only' => ['index','view','archive'],
+                'duration' => 60,
+                'variations' => [
+                    Yii::$app->request->url
+                ],
+                'dependency' => [
+                    'class' => 'yii\caching\DbDependency',
+                    'sql' => 'SELECT SUM(updated_at) FROM '.BlogPost::tableName(),
+                ],
+            ],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -75,15 +93,21 @@ class DefaultController extends Controller
         $searchModel = new BlogPostSearch();
 
         $searchModel->scenario = BlogPostSearch::SCENARIO_USER;
+
         if (Yii::$app->request->getQueryParam('slug')) {
             $category = BlogCategory::findOne(['slug' => Yii::$app->request->getQueryParam('slug')]);
             $searchModel->category_id = $category->id;
+        } else {
+            $category = BlogCategory::findOne(1);
+            $searchModel->category_id = 1;
+
         }
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render($this->module->getView(), [
-            'title' => isset($category) ? $category->title : Module::t("Գրառումներ"),
+            'title' => isset($category) ? $category->title : Module::t('', "Գրառումներ"),
+            'category' => $category,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -160,7 +184,7 @@ class DefaultController extends Controller
         $comment->scenario = BlogComment::SCENARIO_USER;
 
         if ($comment->load(Yii::$app->request->post()) && $post->addComment($comment)) {
-            Yii::$app->session->setFlash('success', Module::t('A comment has been added and is awaiting validation'));
+            Yii::$app->session->setFlash('success', Module::t('', 'A comment has been added and is awaiting validation'));
             return $this->redirect(['view', 'id' => $post->id, '#' => $comment->id]);
         }
 

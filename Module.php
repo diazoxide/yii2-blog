@@ -9,6 +9,7 @@ namespace diazoxide\blog;
 
 use diazoxide\blog\assets\AdminAsset;
 use diazoxide\blog\assets\AppAsset;
+use diazoxide\blog\components\JsonLDHelper;
 use diazoxide\blog\components\OpenGraph;
 use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogPost;
@@ -23,9 +24,12 @@ use yii\i18n\PhpMessageSource;
 
 /**
  * @property array breadcrumbs
+ * @property JsonLDHelper JsonLD
  */
 class Module extends \yii\base\Module
 {
+
+    const EVENT_HEADER_END = 99;
 
     const EVENT_BEFORE_POST_CONTENT_VIEW = 1;
     const EVENT_AFTER_POST_CONTENT_VIEW = 2;
@@ -43,7 +47,7 @@ class Module extends \yii\base\Module
     public $frontendLayoutMap = [];
 
     public $frontendTitleMap = [];
-    
+
     public $urlManager = 'urlManager';
 
     public $imgFilePath = '@frontend/web/img/blog';
@@ -152,7 +156,6 @@ class Module extends \yii\base\Module
     public function init()
     {
         parent::init();
-
         $this->modules = [
             'sitemap' => [
                 'class' => \himiklab\sitemap\Sitemap::class,
@@ -213,13 +216,26 @@ class Module extends \yii\base\Module
             ],
         ];
 
-
+        $this->components = [
+            'JsonLD' => [
+                "class" => JsonLDHelper::class,
+                "publisher" => (object)[
+                    "@type" => "Organization",
+                    "http://schema.org/name" => isset($this->schemaOrg['publisher']['name']) ? $this->schemaOrg['publisher']['name'] : "",
+                    "http://schema.org/logo" => (object)[
+                        "@type" => "http://schema.org/ImageObject",
+                        "http://schema.org/url" => isset($this->schemaOrg['publisher']['logo']) ? $this->schemaOrg['publisher']['logo'] : "",
+                    ],
+                    "http://schema.org/url"=>Url::home(true)
+                ]
+            ]
+        ];
         if ($this->getIsBackend() === true) {
             $this->setViewPath($this->backendViewPath);
             AdminAsset::register(Yii::$app->view);
         } else {
-            $this->setViewPath($this->frontendViewPath);
             AppAsset::register(Yii::$app->view);
+            $this->setViewPath($this->frontendViewPath);
         }
         $this->registerRedactorModule();
         $this->registerTranslations();
@@ -261,15 +277,19 @@ class Module extends \yii\base\Module
 
 
     /**
+     * @param $category
      * @param $message
-     * @param array $params
      * @param null $language
+     * @param array $params
      * @return string
      */
-    public static function t($message, $params = [], $language = null)
+    public static function t($category, $message, $language = null, $params = [])
     {
-        return Yii::t('diazoxide/blog', $message, $params, $language);
+//        return Yii::t('diazoxide/blog', $message, $params, $language);
+        return Yii::t('diazoxide/blog' . $category, $message, $params, $language);
+
     }
+
 
     /**
      * Check if module is used for backend application.
@@ -302,12 +322,12 @@ class Module extends \yii\base\Module
     public function getNavigation()
     {
         return [
-            ['label' => Module::t('Blog'), 'items' => [
-                ['label' => Module::t('Posts'), 'url' => ["/{$this->id}/blog-post"], 'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS")],
-                ['label' => Module::t('Categories'), 'url' => ["/{$this->id}/blog-category"], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
-                ['label' => Module::t('Comments'), 'url' => ["/{$this->id}/blog-comment"], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
-                ['label' => Module::t('Tags'), 'url' => ["/{$this->id}/blog-tag"], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
-                ['label' => Module::t('Widget Types'), 'url' => ["/{$this->id}/widget-type/index"], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
+            ['label' => Module::t('', 'Blog'), 'items' => [
+                ['label' => Module::t('', 'Posts'), 'url' => ["/{$this->id}/blog-post"], 'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS")],
+                ['label' => Module::t('', 'Categories'), 'url' => ["/{$this->id}/blog-category"], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
+                ['label' => Module::t('', 'Comments'), 'url' => ["/{$this->id}/blog-comment"], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
+                ['label' => Module::t('', 'Tags'), 'url' => ["/{$this->id}/blog-tag"], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
+                ['label' => Module::t('', 'Widget Types'), 'url' => ["/{$this->id}/widget-type/index"], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
             ]],
         ];
     }
@@ -366,7 +386,7 @@ class Module extends \yii\base\Module
     public function getBreadcrumbs()
     {
         $result = [];
-        $result[] = ['label' => Module::t('Blog'), 'url' => $this->homeUrl];
+        $result[] = ['label' => Module::t('', 'Blog'), 'url' => $this->homeUrl];
         return $result;
     }
 
@@ -376,7 +396,7 @@ class Module extends \yii\base\Module
     public function getCategoryBreadcrumbs()
     {
         $result = $this->breadcrumbs;
-        $result[] = ['label' => Module::t('Categories'), 'url' => $this->categoriesUrl];
+        $result[] = ['label' => Module::t('', 'Categories'), 'url' => $this->categoriesUrl];
         return $result;
     }
 

@@ -19,11 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="blog-post-view">
     
     <p>
-        <?= Html::a(Module::t('Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Module::t('Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Module::t('', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Module::t('', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Module::t('Are you sure you want to delete this item?'),
+                'confirm' => Module::t('', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>

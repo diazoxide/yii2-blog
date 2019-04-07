@@ -294,9 +294,9 @@ class Feed extends \yii\bootstrap\Widget
         $tag = ArrayHelper::remove($options, 'tag', 'div');
 
         echo Html::beginTag($tag, $options);
-        echo Html::tag('div', Module::t('Loading...'), ['class' => 'infinite-scroll-request']);
-        echo Html::tag('div', Module::t('End of content.'), ['class' => 'infinite-scroll-last']);
-        echo Html::tag('div', Module::t('No more posts to load.'), ['class' => 'infinite-scroll-error']);
+        echo Html::tag('div', Module::t('', 'Loading...'), ['class' => 'infinite-scroll-request']);
+        echo Html::tag('div', Module::t('', 'End of content.'), ['class' => 'infinite-scroll-last']);
+        echo Html::tag('div', Module::t('', 'No more posts to load.'), ['class' => 'infinite-scroll-error']);
         echo Html::endTag($tag);
     }
 
@@ -312,7 +312,7 @@ class Feed extends \yii\bootstrap\Widget
             'size' => Select2::SIZE_MEDIUM,
             'value' => $this->category_id,
             'options' => [
-                'placeholder' => Module::t('Select Category'),
+                'placeholder' => Module::t('', 'Select Category'),
                 'multiple' => false,
                 'onchange' => 'this.form.submit()'
             ],

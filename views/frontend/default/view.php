@@ -13,6 +13,7 @@ use diazoxide\blog\Module;
 use yii\base\Event;
 use yii\helpers\Html;
 use kartik\social\FacebookPlugin;
+use \diazoxide\blog\components\JsonLDHelper;
 
 \diazoxide\blog\assets\AppAsset::register($this);
 
@@ -21,6 +22,41 @@ $this->title = $post->title;
 
 $this->params['breadcrumbs'] = $post->breadcrumbs;
 $this->params['breadcrumbs'][] = $this->title;
+
+$schema = (object)[
+    "@type" => "http://schema.org/NewsArticle",
+    "http://schema.org/headline" => $post->title,
+    "http://schema.org/description" => $post->brief,
+    "http://schema.org/backstory" => $post->brief,
+    "http://schema.org/articleBody" => $post->content,
+    "http://schema.org/articleSection" => $post->category->title,
+    "http://schema.org/dateline" => Module::t('', 'Published: ').$post->getPublished(),
+    "http://schema.org/wordCount" => \yii\helpers\StringHelper::countWords($post->content),
+    "http://schema.org/datePublished" => date_format(date_timestamp_set(new DateTime(), $post->published_at), 'c'),
+    "http://schema.org/dateModified" => date_format(date_timestamp_set(new DateTime(), $post->updated_at), 'c'),
+    "http://schema.org/mainEntityOfPage" => (object)[
+        "@type" => "http://schema.org/WebPage",
+        '@id' => $post->url
+    ],
+    "http://schema.org/image" => [
+        $post->getImageFileUrl('banner'),
+        $post->getThumbFileUrl('banner', 'xsthumb'),
+        $post->getThumbFileUrl('banner', 'sthumb'),
+        $post->getThumbFileUrl('banner', 'mthumb'),
+        $post->getThumbFileUrl('banner', 'xthumb'),
+        $post->getThumbFileUrl('banner', 'thumb'),
+        $post->getThumbFileUrl('banner', 'thumb'),
+    ],
+    "http://schema.org/thumbnailUrl" =>$post->getThumbFileUrl('banner', 'thumb'),
+    "http://schema.org/author" => (object)[
+        "@type" => "http://schema.org/Person",
+        "http://schema.org/name" => $post->user->{$this->context->module->userName}
+    ],
+    "http://schema.org/publisher" => $this->context->module->JsonLD->publisher,
+
+];
+$this->context->module->JsonLD->add($schema);
+$this->context->module->JsonLD->registerScripts();
 
 ?>
 <div class="row blog-post__wrapper">
@@ -51,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <section id="comments" class="top-buffer-20-xs">
 
         <div class="row">
-            <div class="widget_title"><?= Module::t('Comments'); ?></div>
+            <div class="widget_title"><?= Module::t('', 'Comments'); ?></div>
 
             <?php if ($post->module->enableFacebookComments): ?>
 
@@ -77,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="col-sm-12">
-                    <h3><?= Module::t('Write comments'); ?></h3>
+                    <h3><?= Module::t('', 'Write comments'); ?></h3>
                     <?= $this->render('_form', [
                         'model' => $comment,
                     ]); ?>
@@ -97,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'category_id' => $post->category_id,
         'show_title' => true,
         'title_options' => ['class' => 'widget_title'],
-        'title' => Module::t('Related Posts'),
+        'title' => Module::t('', 'Related Posts'),
         'show_item_brief' => false,
         'body_options' => ['class' => 'row'],
         'show_item_category_icon' => false,

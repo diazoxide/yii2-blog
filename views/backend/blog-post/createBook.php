@@ -9,10 +9,10 @@ use diazoxide\blog\Module;
 
 /* @var $this yii\web\View */
 
-$this->title = Module::t('Create ');
-$this->params['breadcrumbs'][] = ['label' => Module::t('Blog Posts'), 'url' => ['index']];
+$this->title = Module::t('', 'Create ');
+$this->params['breadcrumbs'][] = ['label' => Module::t('', 'Blog Posts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->post->title, 'url' => ['update', 'id' => $model->post_id]];
-$this->params['breadcrumbs'][] = ['label' => Module::t('Books')];
+$this->params['breadcrumbs'][] = ['label' => Module::t('', 'Books')];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-post-book-create">

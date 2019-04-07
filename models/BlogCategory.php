@@ -50,6 +50,7 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @method \yii\db\ActiveQuery getChildren()
  * @property \yii\db\ActiveQuery children
  * @property Breadcrumbs breadcrumbs
+ * @property BlogCategory parent
  */
 class BlogCategory extends \yii\db\ActiveRecord
 {
@@ -84,8 +85,8 @@ class BlogCategory extends \yii\db\ActiveRecord
     public static function getArrayIsNav()
     {
         return [
-            self::IS_NAV_YES => Module::t('YES'),
-            self::IS_NAV_NO => Module::t('NO'),
+            self::IS_NAV_YES => Module::t('', 'YES'),
+            self::IS_NAV_NO => Module::t('', 'NO'),
         ];
     }
 
@@ -95,8 +96,8 @@ class BlogCategory extends \yii\db\ActiveRecord
     public static function getArrayIsFeatured()
     {
         return [
-            self::IS_FEATURED_YES => Module::t('YES'),
-            self::IS_FEATURED_NO => Module::t('NO'),
+            self::IS_FEATURED_YES => Module::t('', 'YES'),
+            self::IS_FEATURED_NO => Module::t('', 'NO'),
         ];
     }
 
@@ -123,7 +124,15 @@ class BlogCategory extends \yii\db\ActiveRecord
 
     public function getBreadcrumbs()
     {
-        $result = $this->getModule()->categoryBreadcrumbs;
+        if ($this->parent) {
+            $result = $this->parent->breadcrumbs;
+        } else {
+            $result = $this->getModule()->categoryBreadcrumbs;
+        }
+        $result[] = [
+            'label' => $this->title,
+            'url' => $this->url
+        ];
         return $result;
     }
 
@@ -137,8 +146,8 @@ class BlogCategory extends \yii\db\ActiveRecord
         return [
             [
                 'class' => AdjacencyListBehavior::className(),
-                'sortable'=>[
-                    'sortAttribute'=>'sort_order'
+                'sortable' => [
+                    'sortAttribute' => 'sort_order'
                 ]
             ],
             TimestampBehavior::class,
@@ -181,10 +190,10 @@ class BlogCategory extends \yii\db\ActiveRecord
     {
         if ($this->id == $this->parent_id) {
             // no real check at the moment to be sure that the error is triggered
-            $this->addError($attribute, Module::t('The element cannot use itself as a parent.'));
+            $this->addError($attribute, Module::t('', 'The element cannot use itself as a parent.'));
         }
         if ($this->id != 1 && $this->parent_id == null) {
-            $this->addError($attribute, Module::t('You can not create root element.'));
+            $this->addError($attribute, Module::t('', 'You can not create root element.'));
 
         }
     }
@@ -195,24 +204,24 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Module::t('ID'),
-            'parent_id' => Module::t('Parent'),
-            'title' => Module::t('Title'),
-            'slug' => Module::t('Slug'),
-            'banner' => Module::t('Banner'),
-            'icon_class' => Module::t('Icon Class'),
-            'read_icon_class' => Module::t('Read Icon Class'),
-            'read_more_text' => Module::t('Read More Text'),
-            'is_nav' => Module::t('Is Nav'),
-            'is_featured' => Module::t('Is Featured'),
-            'sort_order' => Module::t('Sort Order'),
-            'sort' => Module::t('Sort'),
-            'page_size' => Module::t('Page Size'),
-            'template' => Module::t('Template'),
-            'redirect_url' => Module::t('Redirect Url'),
-            'status' => Module::t('Status'),
-            'created_at' => Module::t('Created At'),
-            'updated_at' => Module::t('Updated At'),
+            'id' => Module::t('', 'ID'),
+            'parent_id' => Module::t('', 'Parent'),
+            'title' => Module::t('', 'Title'),
+            'slug' => Module::t('', 'Slug'),
+            'banner' => Module::t('', 'Banner'),
+            'icon_class' => Module::t('', 'Icon Class'),
+            'read_icon_class' => Module::t('', 'Read Icon Class'),
+            'read_more_text' => Module::t('', 'Read More Text'),
+            'is_nav' => Module::t('', 'Is Nav'),
+            'is_featured' => Module::t('', 'Is Featured'),
+            'sort_order' => Module::t('', 'Sort Order'),
+            'sort' => Module::t('', 'Sort'),
+            'page_size' => Module::t('', 'Page Size'),
+            'template' => Module::t('', 'Template'),
+            'redirect_url' => Module::t('', 'Redirect Url'),
+            'status' => Module::t('', 'Status'),
+            'created_at' => Module::t('', 'Created At'),
+            'updated_at' => Module::t('', 'Updated At'),
         ];
     }
 
@@ -299,13 +308,13 @@ class BlogCategory extends \yii\db\ActiveRecord
     }
 
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getParent()
-    {
-        return $this->hasOne(BlogCategory::class, ['id' => 'parent_id']);
-    }
+//    /**
+//     * @return \yii\db\ActiveQuery
+//     */
+//    public function getParent()
+//    {
+//        return $this->hasOne(BlogCategory::class, ['id' => 'parent_id']);
+//    }
 
     /**
      * @return \yii\db\ActiveQuery

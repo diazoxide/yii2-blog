@@ -14,7 +14,7 @@ use yii\helpers\Url;
 /* @var \diazoxide\blog\models\BlogPost $model */
 /* @var $this yii\web\View */
 
-$this->title = Module::t('Update ') . Module::t('Blog Post') . ' ' . $model->title;
+$this->title = Module::t('', 'Update ') . Module::t('', 'Blog Post') . ' ' . $model->title;
 $this->params['breadcrumbs'] = $model->breadcrumbs;
 $this->params['breadcrumbs'][] = ['label' => $model->title];
 ?>
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->title];
 
 
     <div class="col-sm-6">
-        <h4><?= Module::t('Books') ?></h4>
+        <h4><?= Module::t('', 'Books') ?></h4>
         <div class="text-right">
             <?= Html::a('Create Book', ['create-book', 'post_id' => $model->id], ['class' => 'btn btn-default']) ?>
         </div>

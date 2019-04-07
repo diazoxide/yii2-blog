@@ -13,13 +13,13 @@ use yii\helpers\Html;
 /* @var $searchModel diazoxide\blog\models\BlogCategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Module::t('Widget Types');
+$this->title = Module::t('', 'Widget Types');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-widget-type-index">
 
     <p>
-        <?= Html::a(Module::t('Create ') . Module::t('Blog Post'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Module::t('', 'Create ') . Module::t('', 'Blog Post'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?php \yii\widgets\Pjax::begin();?>
 

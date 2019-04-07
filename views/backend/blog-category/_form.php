@@ -49,7 +49,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'is_featured')->dropDownList(BlogCategory::getArrayIsFeatured()) ?>
 
-    <?= $form->field($model, 'widget_type_id')->dropDownList(ArrayHelper::map(\diazoxide\blog\models\BlogWidgetType::find()->all(), 'id', 'title'),['prompt'=>Module::t('Select value')]) ?>
+    <?= $form->field($model, 'widget_type_id')->dropDownList(ArrayHelper::map(\diazoxide\blog\models\BlogWidgetType::find()->all(), 'id', 'title'),['prompt'=>Module::t('', 'Select value')]) ?>
 
     <?= $form->field($model, 'sort_order')->textInput() ?>
 
@@ -63,7 +63,7 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group">
         <label class="col-lg-2 control-label" for="">&nbsp;</label>
-        <?= Html::submitButton($model->isNewRecord ? Module::t('Create') : Module::t('Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Module::t('', 'Create') : Module::t('', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

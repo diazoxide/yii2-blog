@@ -104,16 +104,16 @@ class BlogPostBook extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Module::t('ID'),
-            'title' => Module::t('Title'),
-            'brief' => Module::t('Brief'),
-            'slug' => Module::t('Slug'),
-            'bbcode' => Module::t('BBCode'),
-            'banner' => Module::t('Banner'),
-            'post_id' => Module::t('Author'),
-            'status' => Module::t('Status'),
-            'created_at' => Module::t('Created At'),
-            'updated_at' => Module::t('Updated At'),
+            'id' => Module::t('', 'ID'),
+            'title' => Module::t('', 'Title'),
+            'brief' => Module::t('', 'Brief'),
+            'slug' => Module::t('', 'Slug'),
+            'bbcode' => Module::t('', 'BBCode'),
+            'banner' => Module::t('', 'Banner'),
+            'post_id' => Module::t('', 'Author'),
+            'status' => Module::t('', 'Status'),
+            'created_at' => Module::t('', 'Created At'),
+            'updated_at' => Module::t('', 'Updated At'),
 
         ];
     }

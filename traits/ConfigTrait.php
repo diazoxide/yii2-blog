@@ -91,11 +91,11 @@ trait ConfigTrait
 
         return [
             'controllerNamespace'=>[
-                'title'=>Module::t('Controller Namespace'),
+                'title'=>Module::t('', 'Controller Namespace'),
                 'type'=>'string',
             ],
              'backendViewPath'=>[
-                'title'=>Module::t('Backend View Path'),
+                'title'=>Module::t('', 'Backend View Path'),
                 'type'=>'string',
              ],
 

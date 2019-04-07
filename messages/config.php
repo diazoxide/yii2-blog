@@ -13,10 +13,12 @@ return [
     'color' => null,
     'interactive' => true,
     'help' => null,
-    'sourcePath' => '@vendor/diazoxide/yii-blog/',
-    'messagePath' => '@vendor/diazoxide/yii-blog//messages',
+    'sourcePath' => '@vendor/diazoxide/yii2-blog/',
+    'messagePath' => '@vendor/diazoxide/yii2-blog/messages',
     'languages' => [
+        'en-US',
         'ru-RU',
+        'hy',
     ],
     'translator' => 'Module::t',
     'sort' => false,
@@ -41,10 +43,10 @@ return [
     'only' => [
         '*.php',
     ],
-    'format' => 'php',
-    /*'db' => 'db',
+    'format' => 'db',
+    'db' => 'db',
     'sourceMessageTable' => '{{%source_message}}',
-    'messageTable' => '{{%message}}',*/
+    'messageTable' => '{{%message}}',
     'catalog' => 'messages',
     'ignoreCategories' => [],
     'phpFileHeader' => '',

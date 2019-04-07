@@ -112,7 +112,7 @@ if ($showBrief) {
 if ($showReadMoreButton) {
 
     echo Html::a(
-        '<i class="' . $readMoreButtonIconClass . '"></i> ' . \diazoxide\blog\Module::t($readMoreButtonText),
+        '<i class="' . $readMoreButtonIconClass . '"></i> ' . $readMoreButtonText,
         $model->url,
         $readMoreButtonOptions
     );

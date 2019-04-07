@@ -94,7 +94,7 @@ $this->title = $title;
             <div class="home-feed nopadding-xs" id="home-feed-container">
                 <div id="home_feed" class="top-buffer-20-xs top-buffer-0-md">
                     <?= Feed::widget([
-                        'title' => '<i class="fa fa-newspaper-o"></i> ' . \diazoxide\blog\Module::t('Feed'),
+                        'title' => '<i class="fa fa-newspaper-o"></i> ' . \diazoxide\blog\Module::t('', 'Feed'),
                         'items_count' => 15,
                         'show_item_brief' => false,
                         'active_title' => true,

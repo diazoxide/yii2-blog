@@ -1,10 +1,8 @@
 <?php
 namespace diazoxide\blog\components;
 use Yii;
-use yii\base\Component;
-use yii\web\View;
 
-use yii\base\BaseObject;
+use yii\base\Component;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use ML\JsonLD\JsonLD;
@@ -15,10 +13,16 @@ use ML\JsonLD\JsonLD;
  */
 class JsonLDHelper extends Component
 {
+    public $publisher;
+
+    public function init(){
+        $this->addBreadcrumbList();
+        $this->add($this->publisher);
+    }
     /**
      * Adds BreadcrumbList schema.org markup based on the application view `breadcrumbs` parameter
      */
-    public static function addBreadcrumbList()
+    public function addBreadcrumbList()
     {
         $view = Yii::$app->getView();
         $breadcrumbList = [];
@@ -42,6 +46,7 @@ class JsonLDHelper extends Component
                         "http://schema.org/position" => $position,
                         "http://schema.org/item" => (object)[
                             "http://schema.org/name" => $breadcrumb,
+                            "@id"=>''
                         ]
                     ];
                 }
@@ -60,7 +65,7 @@ class JsonLDHelper extends Component
      * @param array|object $doc The JSON-LD document
      * @param array|null|object|string $context optional context. If not specified, schema.org vocabulary will be used.
      */
-    public static function add($doc, $context = null)
+    public function add($doc, $context = null)
     {
         if (is_null($context)) {
             // Using a simple context from the following comment would end up replacing `@type` keyword with `type` alias,
@@ -81,7 +86,7 @@ class JsonLDHelper extends Component
      * Registers JSON-LD scripts stored in the application view `jsonld` parameter.
      * This should be invoked in the <head> section of your layout.
      */
-    public static function registerScripts()
+    public function registerScripts()
     {
         $view = Yii::$app->getView();
         if (isset($view->params['jsonld'])) {

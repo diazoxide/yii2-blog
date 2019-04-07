@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
         ->field($model, 'q',
             ['errorOptions' => ['tag' => null]]
         )
-        ->textInput((['maxlength' => 255, 'placeholder' => Module::t('Search')]))
+        ->textInput((['maxlength' => 255, 'placeholder' => Module::t('', 'Search')]))
         ->label(false); ?>
 
 

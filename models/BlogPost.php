@@ -152,25 +152,25 @@ class BlogPost extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Module::t('ID'),
-            'category_id' => Module::t('Category'),
-            'category_ids' => Module::t('Categories'),
-            'title' => Module::t('Title'),
-            'brief' => Module::t('Brief'),
-            'content' => Module::t('Content'),
-            'tags' => Module::t('Tags'),
-            'slug' => Module::t('Slug'),
-            'banner' => Module::t('Banner'),
-            'show_comments' => Module::t('Show Comments'),
-            'click' => Module::t('Click'),
-            'user_id' => Module::t('Author'),
-            'status' => Module::t('Status'),
-            'created_at' => Module::t('Created At'),
-            'updated_at' => Module::t('Updated At'),
-            'published_at' => Module::t('Published At'),
-            'is_slide' => Module::t('Show In Slider'),
-            'commentsCount' => Module::t('Comments Count'),
-            'created' => Module::t('Created'),
+            'id' => Module::t('', 'ID'),
+            'category_id' => Module::t('', 'Category'),
+            'category_ids' => Module::t('', 'Categories'),
+            'title' => Module::t('', 'Title'),
+            'brief' => Module::t('', 'Brief'),
+            'content' => Module::t('', 'Content'),
+            'tags' => Module::t('', 'Tags'),
+            'slug' => Module::t('', 'Slug'),
+            'banner' => Module::t('', 'Banner'),
+            'show_comments' => Module::t('', 'Show Comments'),
+            'click' => Module::t('', 'Click'),
+            'user_id' => Module::t('', 'Author'),
+            'status' => Module::t('', 'Status'),
+            'created_at' => Module::t('', 'Created At'),
+            'updated_at' => Module::t('', 'Updated At'),
+            'published_at' => Module::t('', 'Published At'),
+            'is_slide' => Module::t('', 'Show In Slider'),
+            'commentsCount' => Module::t('', 'Comments Count'),
+            'created' => Module::t('', 'Created'),
         ];
     }
 
@@ -361,7 +361,6 @@ class BlogPost extends \yii\db\ActiveRecord
     public function getBreadcrumbs()
     {
         $result = $this->category->breadcrumbs;
-        $result[] = ['label' => $this->category->title, 'url' => $this->category->url];
         return $result;
     }
 

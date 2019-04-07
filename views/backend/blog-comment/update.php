@@ -10,10 +10,10 @@ use diazoxide\blog\Module;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\blog\models\BlogComment */
 
-$this->title = Module::t('Update ') . Module::t('Blog Comment') . ' ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Module::t('Blog Comments'), 'url' => ['index']];
+$this->title = Module::t('', 'Update ') . Module::t('', 'Blog Comment') . ' ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => Module::t('', 'Blog Comments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Module::t('Update');
+$this->params['breadcrumbs'][] = Module::t('', 'Update');
 ?>
 <div class="blog-comment-update">
 

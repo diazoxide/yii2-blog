@@ -8,17 +8,17 @@ use yii\widgets\DetailView;
 /* @var $model diazoxide\blog\models\BlogCategory */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => Module::t('Blog Categorys'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Module::t('', 'Blog Categorys'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-category-view">
     
     <p>
-        <?= Html::a(Module::t('Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Module::t('Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Module::t('', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Module::t('', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Module::t('Are you sure you want to delete this item?'),
+                'confirm' => Module::t('', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             [
                 'attribute' => 'parent_id',
-                'value' => $model->parent_id ? $model->parent->title : Module::t('Root Category'),
+                'value' => $model->parent_id ? $model->parent->title : Module::t('', 'Root Category'),
             ],
             'title',
             'slug',

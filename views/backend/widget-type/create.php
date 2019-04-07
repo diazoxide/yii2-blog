@@ -10,7 +10,7 @@ use diazoxide\blog\Module;
 /* @var $this yii\web\View */
 /* @var $model diazoxide\blog\models\BlogWidgetType */
 
-$this->title = Module::t('Create ') . Module::t('Widget Type');
+$this->title = Module::t('', 'Create ') . Module::t('', 'Widget Type');
 $this->params['breadcrumbs'] = $model->breadcrumbs;
 $this->params['breadcrumbs'][] = $this->title;
 ?>

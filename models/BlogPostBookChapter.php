@@ -106,14 +106,14 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Module::t('ID'),
-            'title' => Module::t('Title'),
-            'brief' => Module::t('Brief'),
-            'bbcode' => Module::t('BBCode'),
-            'banner' => Module::t('Banner'),
-            'book_id' => Module::t('Book'),
-            'keywords' => Module::t('Keywords'),
-            'content' => Module::t('Content'),
+            'id' => Module::t('', 'ID'),
+            'title' => Module::t('', 'Title'),
+            'brief' => Module::t('', 'Brief'),
+            'bbcode' => Module::t('', 'BBCode'),
+            'banner' => Module::t('', 'Banner'),
+            'book_id' => Module::t('', 'Book'),
+            'keywords' => Module::t('', 'Keywords'),
+            'content' => Module::t('', 'Content'),
         ];
     }
 

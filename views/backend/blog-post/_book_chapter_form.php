@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-12 text-right">
-            <?= Html::submitButton($model->isNewRecord ? Module::t('Create') : Module::t('Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-warning']) ?>
+            <?= Html::submitButton($model->isNewRecord ? Module::t('', 'Create') : Module::t('', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-warning']) ?>
         </div>
     </div>
 

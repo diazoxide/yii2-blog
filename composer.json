@@ -47,7 +47,8 @@
     "chriskonnertz/bbcode": "dev-master",
     "paulzi/yii2-json-behavior": "~1.0.0",
     "himiklab/yii2-sitemap-module" : "*",
-    "ml/json-ld": "1.*"
+    "ml/json-ld": "1.*",
+    "zelenin/yii2-i18n-module": "dev-master"
   },
   "repositories": [
     {
