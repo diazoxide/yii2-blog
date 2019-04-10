@@ -30,15 +30,15 @@ class DefaultController extends BaseAdminController
 
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','thumbnails','regenerate-thumbnails'],
+                'only' => ['index', 'thumbnails', 'regenerate-thumbnails'],
                 'rules' => [
                     [
                         'actions' => ['index'],
                         'allow' => true,
-                        'roles' => ['@','?']
+                        'roles' => ['@', '?']
                     ],
                     [
-                        'actions' => ['thumbnails','regenerate-thumbnails'],
+                        'actions' => ['thumbnails', 'regenerate-thumbnails'],
                         'allow' => true,
                         'roles' => ['BLOG_REGENERATE_THUMBNAILS']
                     ],
