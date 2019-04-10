@@ -24,6 +24,7 @@ use yii\i18n\PhpMessageSource;
 /**
  * @property array breadcrumbs
  * @property JsonLDHelper JsonLD
+ * @property string homeUrl
  */
 class Module extends \yii\base\Module
 {
@@ -260,7 +261,7 @@ class Module extends \yii\base\Module
                         "@type" => "http://schema.org/ImageObject",
                         "http://schema.org/url" => isset($this->schemaOrg['publisher']['logo']) ? $this->schemaOrg['publisher']['logo'] : "",
                     ],
-                    "http://schema.org/url" => Url::home(true)
+                    "http://schema.org/url" => $this->homeUrl
                 ]
             ]
         ];
