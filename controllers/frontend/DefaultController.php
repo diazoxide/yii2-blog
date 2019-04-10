@@ -7,6 +7,9 @@
 
 namespace diazoxide\blog\controllers\frontend;
 
+use Yii;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogComment;
 use diazoxide\blog\models\BlogCommentSearch;
@@ -18,10 +21,6 @@ use diazoxide\blog\models\BlogPostSearch;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use diazoxide\blog\traits\ModuleTrait;
-use diazoxide\blog\traits\StatusTrait;
-use Yii;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 
 /**
  * @property Module module
@@ -35,14 +34,14 @@ class DefaultController extends Controller
         return [
             [
                 'class' => 'yii\filters\PageCache',
-                'only' => ['index','view','archive'],
-                'duration' => 60,
+                'only' => ['index', 'view', 'archive'],
+                'duration' => 999999,
                 'variations' => [
                     Yii::$app->request->url
                 ],
                 'dependency' => [
                     'class' => 'yii\caching\DbDependency',
-                    'sql' => 'SELECT SUM(updated_at) FROM '.BlogPost::tableName(),
+                    'sql' => "SELECT updated_at FROM " . BlogPost::tableName() . " ORDER BY updated_at DESC LIMIT 1",
                 ],
             ],
         ];

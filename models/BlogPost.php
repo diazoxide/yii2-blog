@@ -109,6 +109,7 @@ class BlogPost extends \yii\db\ActiveRecord
                     'xsthumb' => ['width' => 64, 'height' => 64],
                     'sthumb' => ['width' => 128, 'height' => 128],
                     'mthumb' => ['width' => 240, 'height' => 240],
+                    'nthumb' => ['width' => 320, 'height' => 320],
                     'xthumb' => ['width' => 480, 'height' => 480],
                     'thumb' => ['width' => 400, 'height' => 300],
                     'facebook' => ['width' => 600, 'height' => 315],
@@ -139,7 +140,7 @@ class BlogPost extends \yii\db\ActiveRecord
             [['is_slide', 'show_comments'], 'boolean'],
             [['show_comments'], 'default', 'value' => true],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
-            [['title', 'tags'], 'string', 'max' => 255],
+            [['title', 'tags'], 'string', 'max' => 500],
             [['slug'], 'string', 'max' => 128],
             [['slug'], 'unique'],
             ['click', 'default', 'value' => 0]

@@ -31,13 +31,11 @@ class TinymceController extends Controller
     }
 
     /**
-     * @throws FileUploadException
      * @throws BadRequestHttpException
      * @throws \yii\base\InvalidConfigException
      */
     public function actionUpload()
     {
-        Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
         $imageFolder = Yii::getAlias($this->module->imgFilePath . '/' . $this->module->postContentImagesDirectory);
         $imageUrl = Yii::getAlias($this->module->imgFileUrl . '/' . $this->module->postContentImagesDirectory);
         $temp = UploadedFile::getInstanceByName('file');
@@ -50,9 +48,12 @@ class TinymceController extends Controller
 
             $fileurl = $imageUrl . '/' . $name;
 
-            return ['location' => $fileurl];
+            return json_encode(['location' => $fileurl]);
+
         } else {
+
             throw new BadRequestHttpException("Invalid upload.");
+
         }
     }
 

@@ -23,29 +23,27 @@ class Bootstrap implements BootstrapInterface
                 ],
                 //Fixing old posts issue
                 '/archives/<id:\d+>' => '/site/old-post',
-                '/sitemap'=>'blog/sitemap'
+                '/sitemap'=>'/blog/sitemap'
             ]
         );
         // Add module I18N category.
         if (!isset($app->i18n->translations['diazoxide/blog'])) {
             $app->i18n->translations['diazoxide/blog'] = [
-//                'class' => PhpMessageSource::class,
-//                'basePath' => __DIR__ . '/messages',
-//                'forceTranslation' => true,
-//                'fileMap' => [
-//                    'diazoxide/blog' => 'blog.php',
-//                ]
-                'class' => \yii\i18n\DbMessageSource::class,
-                'sourceMessageTable'=>'{{%source_message}}',
-                'messageTable'=>'{{%message}}',
-                'enableCaching' => true,
-                'cachingDuration' => 10,
-                'forceTranslation'=>true,
+                'class' => PhpMessageSource::class,
+                'basePath' => __DIR__ . '/messages',
+                'forceTranslation' => true,
+                'fileMap' => [
+                    'diazoxide/blog' => 'blog.php',
+                ]
+//                'class' => \yii\i18n\DbMessageSource::class,
+//                'sourceMessageTable'=>'{{%source_message}}',
+//                'messageTable'=>'{{%message}}',
+//                'enableCaching' => true,
+//                'cachingDuration' => 10,
+//                'forceTranslation'=>true,
 
             ];
         }
-
-        if(!$app->hasModule(''))
 
         \Yii::setAlias('@diazoxide', \Yii::getAlias('@vendor') . '/diazoxide');
     }

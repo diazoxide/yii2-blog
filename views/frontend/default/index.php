@@ -12,9 +12,8 @@ $this->title = $title;
 
             <div class="row">
                 <div class="nopadding-xs">
-
-                    <?= \diazoxide\blog\widgets\Slider::widget(
-                        ['itemsCount' => 5]
+                    <?= \diazoxide\blog\widgets\Slider2::widget(
+                        ['itemsCount' => 10]
                     ) ?>
                 </div>
             </div>

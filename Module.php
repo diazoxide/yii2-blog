@@ -13,7 +13,6 @@ use diazoxide\blog\components\JsonLDHelper;
 use diazoxide\blog\components\OpenGraph;
 use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogPost;
-use diazoxide\blog\traits\ConfigTrait;
 use diazoxide\blog\traits\IActiveStatus;
 use himiklab\sitemap\behaviors\SitemapBehavior;
 use Yii;
@@ -54,13 +53,47 @@ class Module extends \yii\base\Module
 
     public $imgFileUrl = '/img/blog';
 
+    public $social = [
+        // the global settings for the disqus widget
+        'disqus' => [
+            'settings' => ['shortname' => 'DISQUS_SHORTNAME'] // default settings
+        ],
+
+        // the global settings for the facebook plugins widget
+        'facebook' => [
+            'app_id' => '440598006382886',
+            'app_secret' => '528d7aa278399d3d5719a64b2f137e5e',
+        ],
+
+        // the global settings for the google plugins widget
+        'google' => [
+            'clientId' => 'GOOGLE_API_CLIENT_ID',
+            'pageId' => 'GOOGLE_PLUS_PAGE_ID',
+            'profileId' => 'GOOGLE_PLUS_PROFILE_ID',
+        ],
+
+        // the global settings for the google analytic plugin widget
+        'google_analytics' => [
+            'id' => 'UA-114602186-1',
+            'domain' => 'new.irakanum.am',
+        ],
+
+        // the global settings for the twitter plugins widget
+        'twitter' => [
+            'screenName' => 'TWITTER_SCREEN_NAME'
+        ],
+
+        'addthis' => [
+            'pubid' => 'ADDTHIS_ID'
+        ]
+    ];
+
     /* @var string
      * Final directory for post content uploads
      * When you use text redactor all uploaded images saving in
      * Directory: $imgFilePath/$_postContentImagesDirectory
      * */
     public $postContentImagesDirectory = "upload/post-content";
-
 
     public $adminAccessControl = null;
 
@@ -156,6 +189,7 @@ class Module extends \yii\base\Module
     public function init()
     {
         parent::init();
+
         $this->modules = [
             'sitemap' => [
                 'class' => \himiklab\sitemap\Sitemap::class,
@@ -226,10 +260,11 @@ class Module extends \yii\base\Module
                         "@type" => "http://schema.org/ImageObject",
                         "http://schema.org/url" => isset($this->schemaOrg['publisher']['logo']) ? $this->schemaOrg['publisher']['logo'] : "",
                     ],
-                    "http://schema.org/url"=>Url::home(true)
+                    "http://schema.org/url" => Url::home(true)
                 ]
             ]
         ];
+
         if ($this->getIsBackend() === true) {
             $this->setViewPath($this->backendViewPath);
             AdminAsset::register(Yii::$app->view);
@@ -237,44 +272,7 @@ class Module extends \yii\base\Module
             AppAsset::register(Yii::$app->view);
             $this->setViewPath($this->frontendViewPath);
         }
-        $this->registerRedactorModule();
-        $this->registerTranslations();
-
     }
-
-    /**
-     * @throws \yii\base\InvalidConfigException
-     */
-    protected function registerRedactorModule()
-    {
-        $redactorModule = $this->redactorModule;
-        if ($this->getIsBackend() && !Yii::$app->hasModule($redactorModule)) {
-            Yii::$app->setModule($redactorModule, [
-                'class' => 'yii\redactor\RedactorModule',
-                'imageUploadRoute' => ['/blog/upload/image'],
-                'uploadDir' => $this->imgFilePath . '/upload/',
-                'uploadUrl' => $this->getImgFullPathUrl() . '/upload',
-                'imageAllowExtensions' => ['jpg', 'png', 'gif', 'svg']
-            ]);
-        }
-    }
-
-    /**
-     *
-     */
-    protected function registerTranslations()
-    {
-//        Yii::$app->i18n->translations['diazoxide/blog'] = [
-//            'class' => PhpMessageSource::class,
-//            'basePath' => '@vendor/diazoxide/yii2-blog/messages',
-//            'forceTranslation' => true,
-//            'fileMap' => [
-//                'diazoxide/blog' => 'blog.php',
-//            ]
-//        ];
-
-    }
-
 
     /**
      * @param $category
@@ -285,15 +283,12 @@ class Module extends \yii\base\Module
      */
     public static function t($category, $message, $language = null, $params = [])
     {
-//        return Yii::t('diazoxide/blog', $message, $params, $language);
         return Yii::t('diazoxide/blog' . $category, $message, $params, $language);
-
     }
 
 
     /**
      * Check if module is used for backend application.
-     *
      * @return boolean true if it's used for backend application
      */
     public function getIsBackend()

@@ -38,7 +38,6 @@
     "voskobovich/yii2-many-many-behavior": "^3.0",
     "kartik-v/yii2-widget-select2": "@dev",
     "kartik-v/yii2-widget-datetimepicker": "dev-master",
-    "kartik-v/yii2-social": "@dev",
     "dektrium/yii2-user": "^0.9.14",
     "dektrium/yii2-rbac": "^1.0",
     "yiisoft/yii2-imagine": "*",

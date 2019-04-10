@@ -30,7 +30,7 @@ $schema = (object)[
     "http://schema.org/backstory" => $post->brief,
     "http://schema.org/articleBody" => $post->content,
     "http://schema.org/articleSection" => $post->category->title,
-    "http://schema.org/dateline" => Module::t('', 'Published: ').$post->getPublished(),
+    "http://schema.org/dateline" => Module::t('', 'Published: ') . $post->getPublished(),
     "http://schema.org/wordCount" => \yii\helpers\StringHelper::countWords($post->content),
     "http://schema.org/datePublished" => date_format(date_timestamp_set(new DateTime(), $post->published_at), 'c'),
     "http://schema.org/dateModified" => date_format(date_timestamp_set(new DateTime(), $post->updated_at), 'c'),
@@ -47,7 +47,7 @@ $schema = (object)[
         $post->getThumbFileUrl('banner', 'thumb'),
         $post->getThumbFileUrl('banner', 'thumb'),
     ],
-    "http://schema.org/thumbnailUrl" =>$post->getThumbFileUrl('banner', 'thumb'),
+    "http://schema.org/thumbnailUrl" => $post->getThumbFileUrl('banner', 'thumb'),
     "http://schema.org/author" => (object)[
         "@type" => "http://schema.org/Person",
         "http://schema.org/name" => $post->user->{$this->context->module->userName}
@@ -73,9 +73,9 @@ $this->context->module->JsonLD->registerScripts();
 <?php if ($post->module->enableShareButtons) : ?>
     <section id="share-box">
         <div class="row">
-            <?php if ($post->module->addthisId) : ?>
+            <?php if (isset($this->context->module->social['addthis']['pubid'])) : ?>
                 <script type="text/javascript"
-                        src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $post->module->addthisId; ?>"></script>
+                        src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $this->context->module->social['addthis']['pubid']; ?>"></script>
                 <div class="addthis_inline_share_toolbox_hty0"></div>
             <?php endif; ?>
         </div>
@@ -92,11 +92,18 @@ $this->context->module->JsonLD->registerScripts();
             <?php if ($post->module->enableFacebookComments): ?>
 
                 <div class="col-sm-12">
-                    <?= FacebookPlugin::widget(
-                        ['type' => FacebookPlugin::COMMENT, 'settings' => [/*'data-width' => '100%',*/
-                            'width' => '100%', 'data-numposts' => 5]]
-                    ) ?>
+                    <?php
+                    if (isset($this->context->module->social['facebook']['app_id'])) {
+                        echo \diazoxide\blog\widgets\social\FacebookComments::widget(
+                            [
+                                'app_id' => $this->context->module->social['facebook']['app_id'],
+                                'data' => ['width' => '100%', 'numposts' => '5']
+                            ]
+                        );
+                    }
+                    ?>
                 </div>
+
 
             <?php endif; ?>
 
@@ -107,7 +114,7 @@ $this->context->module->JsonLD->registerScripts();
                         'dataProvider' => $dataProvider,
                         'itemView' => '_comment',
                         'viewParams' => [
-                            'post' => $post
+                            'post' => $post,
                         ],
                     ]) ?>
                 </div>

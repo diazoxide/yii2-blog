@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Module::t('', 'Create ') . Module::t('', 'Blog Post'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php \yii\widgets\Pjax::begin();?>
+    <?php \yii\widgets\Pjax::begin(); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -37,21 +37,25 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'banner',
                 'value' => function ($model) {
-                    return Html::img($model->getThumbFileUrl('banner', 'thumb'), ['class' => 'img-responsive', 'width' => 100]);
+                    return Html::img($model->getThumbFileUrl('banner', 'xsthumb'));
                 },
                 'format' => 'raw',
                 'filter' => false
             ],
             [
+                'format' => 'raw',
                 'attribute' => 'title',
                 'value' => function ($model) {
-                    return \yii\helpers\StringHelper::truncate(Html::encode($model->title), 50, "...");
+                    return Html::a(\yii\helpers\StringHelper::truncate(Html::encode($model->title), 100, "..."), $model->url);
                 }
             ],
             [
+                'format' => 'raw',
                 'attribute' => 'category_id',
-                'value' => function ($model) {
-                    return \yii\helpers\StringHelper::truncate(Html::encode($model->category->title), 50, "...");
+                'value' => function ($model) use ($searchModel) {
+                    return Html::a(\yii\helpers\StringHelper::truncate(Html::encode($model->category->title), 50, "..."),
+                        ['', $searchModel->formName() => ['category_id' => $model->category->id]]
+                    );
                 },
                 'filter' => Html::activeDropDownList(
                     $searchModel,
@@ -85,11 +89,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'user_id',
-                'value'=>'user.username',
+                'value' => 'user.username',
                 'filter' => Html::activeDropDownList(
                     $searchModel,
                     'user_id',
-                    \yii\helpers\ArrayHelper::map(\dektrium\user\models\User::find()->all(),'id','username'),
+                    \yii\helpers\ArrayHelper::map(\dektrium\user\models\User::find()->all(), 'id', 'username'),
                     ['class' => 'form-control', 'prompt' => Module::t('', 'Author')]
                 )
             ],
@@ -99,6 +103,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-    <?php \yii\widgets\Pjax::end();?>
+    <?php \yii\widgets\Pjax::end(); ?>
 
 </div>

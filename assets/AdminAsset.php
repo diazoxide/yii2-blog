@@ -9,6 +9,7 @@ namespace diazoxide\blog\assets;
 
 use yii\bootstrap\BootstrapAsset;
 use yii\web\AssetBundle;
+use yii\web\JqueryAsset;
 
 class AdminAsset extends AssetBundle
 {
@@ -26,5 +27,6 @@ class AdminAsset extends AssetBundle
     public $depends = [
         BootstrapAsset::class,
         FontAwesomeAsset::class,
+        JqueryAsset::class
     ];
 }

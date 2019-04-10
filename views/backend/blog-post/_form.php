@@ -21,7 +21,6 @@ use yii\widgets\ActiveForm;
 
 <div class="blog-post-form">
 
-
     <?php $form = ActiveForm::begin([
         'options' => ['enctype' => 'multipart/form-data'],
     ]); ?>
@@ -38,7 +37,7 @@ use yii\widgets\ActiveForm;
     <div class="row top-buffer-20">
         <div class="col-md-8">
 
-            <?= $form->field($model, 'title')->textInput(['maxlength' => 128]) ?>
+            <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
 
             <?= $form->field($model, 'slug')->textInput(['maxlength' => 128, 'class' => 'form-control input-sm', 'readonly' => true, 'onclick' => "this.removeAttribute('readonly')"]) ?>
 
@@ -102,7 +101,7 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'show_comments')->dropDownList([0 => Module::t('', 'No'), 1 => Module::t('', 'Yes')], ['prompt' => Module::t('', 'Select value')]) ?>
 
-            <?= $form->field($model, 'tags')->textInput(['maxlength' => 128]) ?>
+            <?= $form->field($model, 'tags')->textInput(['maxlength' => 255]) ?>
 
             <?= $form->field($model, 'banner')->fileInput() ?>
 
