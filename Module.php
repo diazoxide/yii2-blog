@@ -183,7 +183,6 @@ class Module extends \yii\base\Module
         throw new ViewNotFoundException('The view file does not exist.');
     }
 
-
     /**
      * @throws \yii\base\InvalidConfigException
      */
