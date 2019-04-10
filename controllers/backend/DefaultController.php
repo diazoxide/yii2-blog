@@ -10,6 +10,7 @@ namespace diazoxide\blog\controllers\backend;
 use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\Module;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
 /**
@@ -26,6 +27,23 @@ class DefaultController extends BaseAdminController
                     'regenerate-thumbnails' => ['POST'],
                 ],
             ],
+
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index','thumbnails','regenerate-thumbnails'],
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['@','?']
+                    ],
+                    [
+                        'actions' => ['thumbnails','regenerate-thumbnails'],
+                        'allow' => true,
+                        'roles' => ['BLOG_REGENERATE_THUMBNAILS']
+                    ],
+                ]
+            ]
 
         ];
     }

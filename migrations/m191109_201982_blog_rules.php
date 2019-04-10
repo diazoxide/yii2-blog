@@ -8,18 +8,6 @@
 use yii\db\Migration;
 use yii\db\Schema;
 
-/**
- * CLass m141208_201480_blog_init
- * @package diazoxide\blog\migrations
- *
- * Create blog tables.
- *
- * Will be created 4 tables:
- * - `{{%blog_category}}` - Blog category
- * - `{{%blog_post}}` -
- * - `{{%blog_comment}}` -
- * - `{{%blog_tag}}` -
- */
 class m191109_201982_blog_rules extends Migration
 {
     use \diazoxide\blog\traits\ModuleTrait;
@@ -71,10 +59,13 @@ class m191109_201982_blog_rules extends Migration
         ['BLOG_CREATE_POST_BOOK', 'Create post book'],
         ['BLOG_DELETE_OWN_POST_BOOK', 'Delete own post book', ['blogIsAuthor']],
         ['BLOG_DELETE_POST_BOOK', 'Delete post book'],
+
+        ['BLOG_REGENERATE_THUMBNAILS','Regenerate thumbnails']
     ];
 
     public $roles = [
         ['BLOG_ADMIN', 'Blog Administrator', [
+            'BLOG_REGENERATE_THUMBNAILS',
             'BLOG_BULK_COMMENTS',
             'BLOG_CONFIRM_ALL_COMMENTS',
             'BLOG_CREATE_CATEGORY',
