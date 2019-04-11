@@ -14,7 +14,7 @@ class m190410_121102_blog_comment extends Migration
 
     public function safeUp()
     {
-        $tableOptions = 'ENGINE=InnoDB';
+        $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
 
         $this->createTable(
             '{{%blog_comment}}',

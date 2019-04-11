@@ -14,7 +14,7 @@ class m190410_121101_blog_category_map extends Migration
 
     public function safeUp()
     {
-        $tableOptions = 'ENGINE=InnoDB';
+        $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
 
         $this->createTable(
             '{{%blog_category_map}}',
