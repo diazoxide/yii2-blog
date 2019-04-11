@@ -317,13 +317,20 @@ class Module extends \yii\base\Module
     public function getNavigation()
     {
         return [
-            ['label' => Module::t('', 'Blog'), 'items' => [
-                ['label' => Module::t('', 'Posts'), 'url' => ["/{$this->id}/blog-post"], 'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS")],
-                ['label' => Module::t('', 'Categories'), 'url' => ["/{$this->id}/blog-category"], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
-                ['label' => Module::t('', 'Comments'), 'url' => ["/{$this->id}/blog-comment"], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
-                ['label' => Module::t('', 'Tags'), 'url' => ["/{$this->id}/blog-tag"], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
-                ['label' => Module::t('', 'Widget Types'), 'url' => ["/{$this->id}/widget-type/index"], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
-            ]],
+            ['label' => Module::t('', 'Blog'),
+                'items' => [
+                    ['label' => Module::t('', 'Posts'), 'url' => ["/{$this->id}/blog-post"], 'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS")],
+                    ['label' => Module::t('', 'Categories'), 'url' => ["/{$this->id}/blog-category"], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
+                    ['label' => Module::t('', 'Comments'), 'url' => ["/{$this->id}/blog-comment"], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
+                    ['label' => Module::t('', 'Tags'), 'url' => ["/{$this->id}/blog-tag"], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
+                    ['label' => Module::t('', 'Widget Types'), 'url' => ["/{$this->id}/widget-type/index"], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
+                    ['label' => Module::t('', 'Options'),
+                        'items' => [
+                            ['label' => 'Thumbnails', 'url' => ["/{$this->id}/default/thumbnails"]]
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 
