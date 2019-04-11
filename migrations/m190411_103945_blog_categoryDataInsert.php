@@ -41,9 +41,4 @@ class m190411_103945_blog_categoryDataInsert extends Migration
             ]
         );
     }
-
-    public function safeDown()
-    {
-        //$this->truncateTable('{{%blog_category}} CASCADE');
-    }
 }
