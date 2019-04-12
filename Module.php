@@ -326,6 +326,7 @@ class Module extends \yii\base\Module
                     ['label' => Module::t('', 'Widget Types'), 'url' => ["/{$this->id}/widget-type/index"], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
                     ['label' => Module::t('', 'Options'),
                         'items' => [
+                            ['label' => 'Importer', 'url' => ["/{$this->id}/importer/index"]],
                             ['label' => 'Thumbnails', 'url' => ["/{$this->id}/default/thumbnails"]]
                         ]
                     ]
