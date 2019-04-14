@@ -21,10 +21,14 @@ function renderItem($model)
 
 
         $menu = Html::beginTag('span', ['class' => 'btn-group']);
-        $menu .= Html::a('<i class="fa fa-eye"></i>', ['blog-category/view', 'id' => $item->id], ['class' => 'btn btn-default btn-sm', 'title' => Module::t('', 'View Category')]);
-        $menu .= Html::a('<i class="fa fa-plus"></i>', ['blog-category/create', 'parent_id' => $item->id], ['class' => 'btn btn-success btn-sm', 'title' => Module::t('', 'Add Sub Category')]);
-        $menu .= Html::a('<i class="fa fa-pencil"></i>', ['blog-category/update', 'id' => $item->id], ['class' => 'btn btn-warning btn-sm', 'title' => Module::t('', 'Update Category')]);
-        $menu .= Html::a('<i class="fa fa-remove"></i>', ['blog-category/delete', 'id' => $item->id], ['class' => 'btn btn-danger btn-sm', 'title' => Module::t('', 'Delete Category'), 'data-confirm' => Module::t('', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'data-pjax' => 0]);
+        $menu .= Html::a('<i class="fa fa-eye"></i>', ['blog-category/view', 'id' => $item->id], ['class' => 'btn btn-default btn-xs', 'title' => Module::t('', 'View Category')]);
+        $menu .= Html::a('<i class="fa fa-plus"></i>', ['blog-category/create', 'parent_id' => $item->id], ['class' => 'btn btn-success btn-xs', 'title' => Module::t('', 'Add Sub Category')]);
+        $menu .= Html::a('<i class="fa fa-pencil"></i>', ['blog-category/update', 'id' => $item->id], ['class' => 'btn btn-warning btn-xs', 'title' => Module::t('', 'Update Category')]);
+        $menu .= Html::a('<i class="fa fa-remove"></i>', ['blog-category/delete', 'id' => $item->id], ['class' => 'btn btn-danger btn-xs', 'title' => Module::t('', 'Delete Category'), 'data-confirm' => Module::t('', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'data-pjax' => 0]);
+        $menu .= Html::a('<i class="fa fa-arrow-up"></i>', ['blog-category/reorder', 'id' => $item->id, 'action' => 'up'], ['class' => 'btn btn-default btn-xs', 'title' => Module::t('', 'Move up')]);
+        $menu .= Html::a('<i class="fa fa-arrow-down"></i>', ['blog-category/reorder', 'id' => $item->id, 'action' => 'down'], ['class' => 'btn btn-default btn-xs', 'title' => Module::t('', 'Move up')]);
+        $menu .= Html::a('<i class="fa fa-long-arrow-up"></i>', ['blog-category/reorder', 'id' => $item->id, 'action' => 'first'], ['class' => 'btn btn-default btn-xs', 'title' => Module::t('', 'Move up')]);
+        $menu .= Html::a('<i class="fa fa-long-arrow-down"></i>', ['blog-category/reorder', 'id' => $item->id, 'action' => 'last'], ['class' => 'btn btn-default btn-xs', 'title' => Module::t('', 'Move up')]);
         $menu .= Html::endTag('span');
         echo Html::a('<i class="fa fa-plus"></i>', null, [
             'title' => Module::t('', 'Menu'),
@@ -39,11 +43,11 @@ function renderItem($model)
             ]
         ]);
 
-        if($item->children){
-        echo Html::beginTag('ul');
-        renderItem($item->children);
-        echo Html::endTag('ul');
-        echo Html::endTag('li');
+        if ($item->children) {
+            echo Html::beginTag('ul');
+            renderItem($item->children);
+            echo Html::endTag('ul');
+            echo Html::endTag('li');
         }
 
     }

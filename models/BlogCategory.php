@@ -249,40 +249,6 @@ class BlogCategory extends \yii\db\ActiveRecord
         return $this->count(BlogPost::class, ['category_id' => 'id']);
     }
 
-    /**
-     * @param bool $subCats
-     * @return array
-     */
-    public static function getAllMenuItems($subCats = false)
-    {
-        $items = [];
-        $model = self::find()->andWhere(['parent_id' => 1])->orderBy(['sort_order' => SORT_DESC])->andWhere(['is_nav' => true])->all();
-        /** @var BlogCategory $item */
-        foreach ($model as $item) {
-
-            $items[] = $item->getMenuItem($subCats);
-        }
-
-        return $items;
-    }
-
-    /**
-     * @param bool $subCats
-     * @return array
-     */
-    public function getMenuItem($subCats = false)
-    {
-        $item = [
-            'label' => $this->titleWithIcon,
-            'url' => $this->url,
-        ];
-        if ($subCats) {
-            foreach ($this->childs as $child) {
-                $item['items'][] = $child->getMenuItem();
-            }
-        }
-        return $item;
-    }
 
     /**
      * @return string
@@ -307,14 +273,6 @@ class BlogCategory extends \yii\db\ActiveRecord
 
     }
 
-
-//    /**
-//     * @return \yii\db\ActiveQuery
-//     */
-//    public function getParent()
-//    {
-//        return $this->hasOne(BlogCategory::class, ['id' => 'parent_id']);
-//    }
 
     /**
      * @return \yii\db\ActiveQuery

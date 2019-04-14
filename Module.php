@@ -327,7 +327,7 @@ class Module extends \yii\base\Module
                     ['label' => Module::t('', 'Options'),
                         'items' => [
                             ['label' => 'Importer', 'url' => ["/{$this->id}/importer/index"]],
-                            ['label' => 'Thumbnails', 'url' => ["/{$this->id}/default/thumbnails"]]
+                            ['label' => 'Thumbnails', 'url' => ["/{$this->id}/default/thumbnails"], 'visible' => Yii::$app->user->can("BLOG_REGENERATE_THUMBNAILS")]
                         ]
                     ]
                 ]

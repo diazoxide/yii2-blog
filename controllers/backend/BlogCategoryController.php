@@ -80,7 +80,7 @@ class BlogCategoryController extends Controller
         $model = $this->findModel(1);
         $dataProvider = $model->children;
         return $this->render('index', [
-            'breadcrumbs'=>$this->module->breadcrumbs,
+            'breadcrumbs' => $this->module->breadcrumbs,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -177,5 +177,31 @@ class BlogCategoryController extends Controller
         $model->save();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * @param $id
+     * @param bool $top
+     * @throws NotFoundHttpException
+     */
+    public function actionReorder($id, $action)
+    {
+        $model = $this->findModel($id);
+        if ($action == 'up') {
+            $neighbor = $model->getPrev()->one();
+            if ($neighbor) {
+                $model->moveBefore($neighbor)->save();
+            }
+        } elseif ($action == 'down') {
+            $neighbor = $model->getNext()->one();
+            if ($neighbor) {
+                $model->moveAfter($neighbor)->save();
+            }
+        } elseif ($action == 'first') {
+            $model->moveFirst()->save();
+        } elseif ($action == 'last') {
+            $model->moveLast()->save();
+        }
+        $this->redirect(Yii::$app->request->referrer);
     }
 }

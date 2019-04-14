@@ -12,13 +12,22 @@ namespace diazoxide\blog\models\importer;
 use diazoxide\blog\Module;
 use Yii;
 use yii\base\Model;
+use yii\helpers\Url;
 use yii\httpclient\Client;
+use yii\web\HttpException;
+use yii\web\NotFoundHttpException;
+use yii\web\Request;
+use yii\web\Response;
 
 class Wordpress extends Model
 {
     public $url;
 
-    public $data;
+    public $per_page = 10;
+    public $page = 1;
+
+    public $total;
+    public $total_pages;
 
     protected $rest_path = '/wp-json/wp/v2/';
 
@@ -29,6 +38,7 @@ class Wordpress extends Model
             [['url'], 'required'],
             [['url'], 'url'],
             [['url'], 'wordpress_rest'],
+            [['page', 'per_page'], 'integer'],
         ];
     }
 
@@ -40,7 +50,7 @@ class Wordpress extends Model
      */
     public function wordpress_rest($attribute_name, $params)
     {
-        if (!$this->setData()) {
+        if (!$this->initWordpressJsonApi()) {
             $this->addError($attribute_name, Module::t('', 'The wordpress rest api url not working.'));
             return false;
         }
@@ -49,12 +59,13 @@ class Wordpress extends Model
 
     /**
      * @param $url
-     * @return array
+     * @return bool|array
      * @throws \yii\base\InvalidConfigException
      */
-    private static function sendGet($url)
+    private function sendGet($url)
     {
         $client = new Client();
+        /** @var Response $response */
         $response = $client->createRequest()
             ->setMethod('GET')
             ->setFormat(Client::FORMAT_JSON)
@@ -62,7 +73,7 @@ class Wordpress extends Model
             ->setData([])
             ->send();
         if ($response->isOk) {
-            return $response->data;
+            return ['data'=>$response->data,'headers'=>$response->getHeaders()];
         }
         return false;
     }
@@ -70,15 +81,14 @@ class Wordpress extends Model
     /**
      * @throws \yii\base\InvalidConfigException
      */
-    private function setData()
+    private function initWordpressJsonApi()
     {
-        $data = self::sendGet($this->getRestURL());
+        $data = $this->sendGet($this->getRestURL())['data'];
 
         if ($data) {
             if ($data['namespace'] != 'wp/v2') {
                 return false;
             }
-            $this->data = $data;
             return true;
         }
 
@@ -86,25 +96,61 @@ class Wordpress extends Model
     }
 
     /**
-     * @param $name
-     * @param null $params
+     * @param array $params
      * @return array|bool
      * @throws \yii\base\InvalidConfigException
      */
-    public function getEndpoint($name, $params = null)
+    public function getEndpoint($params)
     {
-        $endpoint_name = "/wp/v2/" . $name;
-        if (isset($this->data['routes'][$endpoint_name])) {
+        $name = is_array($params[0]) ? implode($params[0], '/') : $params[0];
 
-            $args = $params ? http_build_query($params) : '';
+        unset($params[0]);
 
-            $url = $this->getRestURL() . $name . '?' . $args;
+        $args = empty($params) ? '' : '?' . http_build_query($params, false);
 
-            return self::sendGet($url);
-        }
-        return false;
+        $url = $this->getRestURL() . $name . $args;
+
+        return $this->sendGet($url);
+
     }
 
+    /**
+     * @return array|bool
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getPosts()
+    {
+        $endpoint = $this->getEndpoint(['posts', '_embed' => true, 'per_page' => $this->per_page, 'page' => $this->page]);
+
+        $this->total = $endpoint['headers']['X-WP-Total'];
+        $this->total_pages = $endpoint['headers']['X-WP-TotalPages'];
+
+        return $endpoint['data'];
+    }
+
+    /**
+     * @return array|bool
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getCategories()
+    {
+        $endpoint = $this->getEndpoint(['categories', '_embed' => true, 'per_page' => $this->per_page, 'page' => $this->page]);
+        return $endpoint['data'];
+    }
+
+    /**
+     * @return $this
+     */
+    public function nextPage()
+    {
+        $this->page++;
+        return $this;
+    }
+
+
+    /**
+     * @return array
+     */
     public function attributeLabels()
     {
         return [

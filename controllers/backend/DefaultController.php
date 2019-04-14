@@ -22,20 +22,20 @@ class DefaultController extends BaseAdminController
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'regenerate-thumbnails' => ['POST'],
                 ],
             ],
 
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['index', 'thumbnails', 'regenerate-thumbnails'],
                 'rules' => [
                     [
                         'actions' => ['index'],
                         'allow' => true,
-                        'roles' => ['@', '?']
+                        'roles' => ['@']
                     ],
                     [
                         'actions' => ['thumbnails', 'regenerate-thumbnails'],
@@ -53,9 +53,6 @@ class DefaultController extends BaseAdminController
      */
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
-            $this->redirect("user/login");
-        }
         return $this->render('index');
     }
 

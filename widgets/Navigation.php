@@ -1,5 +1,8 @@
 <?php
+
 namespace diazoxide\blog\widgets;
+
+use diazoxide\blog\models\BlogCategory;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 
@@ -11,42 +14,59 @@ class Navigation extends \yii\bootstrap\Widget
     {
         parent::init();
 
-        if($this->vertical){
+        if ($this->vertical) {
             $this->buildNav();
             return;
         }
 
         NavBar::begin([
-            'brandLabel'=>'Բաժիններ',
-            'brandOptions'=>[
-                'class'=>'visible-xs'
+            'brandLabel' => 'Բաժիններ',
+            'brandOptions' => [
+                'class' => 'visible-xs'
             ],
             'innerContainerOptions' => ['class' => 'container nopadding-sm'],
-            'containerOptions' => [ 'class'=>'nopadding-sm'],
+            'containerOptions' => ['class' => 'nopadding-sm'],
 
             'options' => [
                 'class' => 'navbar-default',
-                'id'=>$this->options['id'],
+                'id' => $this->options['id'],
 
             ],
         ]);
 
         $this->buildNav();
 
-        echo \diazoxide\blog\widgets\Search::widget([]);
+        echo Search::widget([]);
 
         NavBar::end();
     }
-    public function buildNav(){
+
+    /**
+     * @param $parent
+     * @return array
+     */
+    private function buildItems($parent)
+    {
+        $items = [];
+        foreach ($parent->children as $child) {
+            $items[] = ['label' => $child->titleWithIcon, 'url' => $child->url, 'items' => $this->buildItems($child)];
+        }
+        return $items;
+    }
+
+    public function buildNav()
+    {
         $class = 'navbar-nav navbar-left';
-        if($this->vertical){
+        if ($this->vertical) {
             $class = 'nav-pills nav-stacked';
         }
+
+        $model = BlogCategory::findOne(1);
 
         echo Nav::widget([
             'encodeLabels' => false,
             'options' => ['class' => $class],
-            'items' => \diazoxide\blog\models\BlogCategory::getAllMenuItems(true)
+            'items' => $this->buildItems($model)
         ]);
     }
 }
