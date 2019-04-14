@@ -3,6 +3,7 @@
 namespace diazoxide\blog\widgets;
 
 use diazoxide\blog\models\BlogCategory;
+use diazoxide\blog\traits\IActiveStatus;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 
@@ -48,7 +49,7 @@ class Navigation extends \yii\bootstrap\Widget
     private function buildItems($parent)
     {
         $items = [];
-        foreach ($parent->children as $child) {
+        foreach ($parent->getChildren()->where(['is_nav' => true, 'status' => IActiveStatus::STATUS_ACTIVE])->all() as $child) {
             $items[] = ['label' => $child->titleWithIcon, 'url' => $child->url, 'items' => $this->buildItems($child)];
         }
         return $items;
