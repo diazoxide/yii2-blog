@@ -51,8 +51,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'widget_type_id')->dropDownList(ArrayHelper::map(\diazoxide\blog\models\BlogWidgetType::find()->all(), 'id', 'title'),['prompt'=>Module::t('', 'Select value')]) ?>
 
-    <?= $form->field($model, 'sort_order')->textInput() ?>
-
     <?= $form->field($model, 'page_size')->textInput() ?>
 
     <?= $form->field($model, 'template')->textInput(['maxlength' => 255]) ?>

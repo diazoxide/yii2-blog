@@ -28,8 +28,8 @@ function renderItem($model)
         $menu .= Html::a('<i class="fa fa-remove"></i> ' . Module::t('', 'Delete'), ['blog-category/delete', 'id' => $item->id], ['class' => 'btn btn-danger btn-xs', 'title' => Module::t('', 'Delete Category'), 'data-confirm' => Module::t('', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'data-pjax' => 0]);
         $menu .= Html::endTag('span');
 
-        echo Html::a('<i class="fa fa-plus"></i>', null, [
-            'title' => Module::t('', 'Menu'),
+        echo Html::a('<i class="fa fa-bars"></i>', null, [
+            'title' => Module::t('', 'Options'),
             'class' => 'btn btn-default btn-xs',
             'tabindex' => $key,
             'data' => [
@@ -50,7 +50,7 @@ function renderItem($model)
         $menu .= Html::endTag('span');
 
         echo Html::a('<i class="fa  fa-arrows-v"></i>', null, [
-            'title' => Module::t('', 'Menu'),
+            'title' => Module::t('', 'Sorting'),
             'class' => 'btn btn-default btn-xs',
             'tabindex' => $key,
             'data' => [
