@@ -59,6 +59,7 @@ $this->context->module->JsonLD->add($schema);
 $this->context->module->JsonLD->registerScripts();
 
 ?>
+
 <div class="row blog-post__wrapper">
     <?= $this->render('_article', [
         'post' => $post,

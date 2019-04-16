@@ -25,8 +25,8 @@ class Navigation extends \yii\bootstrap\Widget
             'brandOptions' => [
                 'class' => 'visible-xs'
             ],
-            'innerContainerOptions' => ['class' => 'container nopadding-sm'],
-            'containerOptions' => ['class' => 'nopadding-sm'],
+            'innerContainerOptions' => ['class' => 'nopadding-sm'],
+            'containerOptions' => ['class' => 'container nopadding-sm'],
 
             'options' => [
                 'class' => 'navbar-default',

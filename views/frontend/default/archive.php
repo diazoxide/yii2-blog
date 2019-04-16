@@ -35,8 +35,8 @@ $itemListElement = [];
 foreach ($dataProvider->models as $key => $post) {
     $itemListElement[] = (object)[
         "@type" => "ListItem",
-        "http://schema.org/position"=>$key,
-        "http://schema.org/url"=>$post->absoluteUrl,
+        "http://schema.org/position" => $key,
+        "http://schema.org/url" => $post->absoluteUrl,
     ];
 }
 $itemList = (object)[
@@ -48,7 +48,6 @@ $this->context->module->JsonLD->add($itemList);
 $this->context->module->JsonLD->registerScripts();
 
 ?>
-
 <div class="blog-index">
 
     <div class="row">

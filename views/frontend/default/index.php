@@ -1,12 +1,15 @@
 <?php
 
+use diazoxide\blog\widgets\Navigation;
 use yii\helpers\Html;
 use \diazoxide\blog\widgets\Feed;
 
 /** @var String $title */
+
 $this->title = $title;
+
 ?>
-    <div id="blog-container">
+<div id="blog-container">
 
         <div class="col-md-8 col-md-push-4 home-slider-container">
 
@@ -17,7 +20,6 @@ $this->title = $title;
                     ) ?>
                 </div>
             </div>
-
 
             <div class="top-buffer-20-xs home-white-content row">
                 <?php

@@ -106,7 +106,7 @@ class Slider2 extends \yii\bootstrap\Widget
 
         foreach ($posts as $post) {
             $items[] = [
-                'content' => Html::tag('div', null, ['style' => 'height:40vh; width:100%; background-image:url(' . $post->getImageFileUrl('banner') . '); background-size:cover']),
+                'content' => Html::tag('div', null, ['style' => 'height:450px; width:100%; background-image:url(' . $post->getImageFileUrl('banner') . '); background-size:cover']),
                 'caption' =>
                     implode('', [
                         Html::a(
