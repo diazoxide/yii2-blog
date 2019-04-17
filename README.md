@@ -2,6 +2,15 @@
 
 Advanced Yii2 Blog module. Posts, Categories, Comments, Tags, With Slider Revolution, SEO tags, Social Tags
 
+Flexible blog module like wordpress, you can use this module as CMS, or can use it as simple blog system. 
+Easy to use and user friendly administrator dashboard. 
+
+Responsive Bootstrap 3 user interface. (BS4 coming soon)
+Mobile friendly, web browser optimised front end.
+
+Fully configurable frontend design, without codding.
+
+
 # Features
 
 - Blog Posts
