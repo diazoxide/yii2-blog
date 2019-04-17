@@ -1,50 +1,41 @@
 # diazoxide/yii2-blog
 
-<h4>Advanced Yii2 Blog module. Posts, Categories, Comments, Tags, With Slider Revolution, SEO tags, Social Tags</h4>
+Advanced Yii2 Blog module. Posts, Categories, Comments, Tags, With Slider Revolution, SEO tags, Social Tags
 
-<h5>Features</h5>
-<ul>
-  <li>Blog Posts
-  <ul>
-    <li>Title</li>
-    <li>Slug</li>
-    <li>Multiple Categories for each post</li>
-    <li>Brief</li>
-    <li>Content
-        <ul>
-            <li>Custom Redactor/wysiwyg editor</li>
-        </ul>
-    </li>
-    <li>Books
-        <ul>
-            <li>Chapters and sub Chapters</li>
-            <li>Nested structure</li>
-            <li>Nested breadcrumbs</li>
-            <li>BBCode support</li>
-            <li>Custom BBCode styling</li>
-        </ul>
-    </li>
-  </ul>
-  </li>
-  <li>Blog Categories</li>
-  <li>Blog Tags</li>
-  <li>Blog Comments</li>
-  <li>Custom Widgets
-    <ul>
-        <li>Dynamic widgets</li>
-        <li>Custom backend panel</li>
-        <li>Custom Styling</li>
-        <li>Custom Javascript</li>
-        <li>Infinite Scroll for each widgted</li>
-        <li>Category integration</li>
-    </ul>
-  </li>
-  <li>Slider Revolution</li>
-</ul>
+# Features
+
+- Blog Posts
+    - Title
+    - Slug
+    - Multiple Categories for each post
+    - Brief
+    - Content
+            - TinyMCE/wysiwyg editor
+    - Books
+            - Chapters and sub Chapters
+            - Nested structure
+            - Nested breadcrumbs
+            - BBCode support
+            - Custom BBCode styling
+- Blog Categories
+    - Nested hierarchy structure
+    - UI sorting
+- Blog Tags
+- Blog Comments
+    - Local comments
+    - Facebook comments
+- Custom Widgets
+    - Dynamic widgets
+    - Custom backend panel
+    - Custom Styling
+    - Custom Javascript
+    - Infinite Scroll for each widgted
+    - Category integration
+- Slider Revolution
 
 # installation
 
-> add to composer.json
+## add to composer.json
 
 ```json
 {
@@ -54,7 +45,7 @@
 }
 ```
 
-> common configuration
+## common configuration
 
 ```php
  'modules'=>[
@@ -93,7 +84,7 @@
  ]
 ```
 
-> backend configuration
+## backend configuration
 
 ```php
 $config['modules']['blog']['controllerNamespace'] = 'diazoxide\blog\controllers\backend';
@@ -107,8 +98,11 @@ $config['modules']['blog']['controllerNamespace'] = 'diazoxide\blog\controllers\
 php yii migrate --migrationPath=@vendor/diazoxide/yii2-blog/migrations
 ```
 
+# Customisation
 
-# Custom urlManager rules for beautiful links
+Module is flexible. You can customize everything in module
+
+## UrlManager and custom routes
 
 > archive url in frontend
 
@@ -142,3 +136,56 @@ https://blog.com/2019/11/21/your-post-slug
     ],
 ],
 ```
+
+## Navigation elements
+
+> Integration backend navigation menu
+
+Simply you can use Module builtin function "getNavigation"
+
+>> Yii::$app->getModule('blog')->getNavigation()
+
+```php
+echo Nav::widget([
+    'encodeLabels' => false,
+    'options' => ['class' => $class],
+    'items' => Yii::$app->getModule('blog')->getNavigation()
+]);
+```
+
+## View files customisation
+
+In config file you can simply customise any view file. 
+
+You can create your custom view files and connect it from config.php
+
+```php
+'frontendViewsMap' => [
+     'blog/default/index'=>'@app/views/blog/index',
+     'blog/default/index' => 'index',
+     'blog/default/view' => 'view',
+     'blog/default/archive' => 'archive',
+     'blog/default/book' => 'viewBook',
+     'blog/default/chapter' => 'viewChapter',
+     'blog/default/chapter-search' => 'searchBookChapter',
+],
+```
+
+## Layout files customisations
+
+```php
+'frontendLayoutMap'=>[
+    'blog/default/view'=>'@app/views/layouts/my-custom-layout-1',
+    'blog/default/archive'=>'@app/views/layouts/my-custom-layout-2',
+    ...
+],
+```
+
+# Support
+
+## Contacts
+
+ - Email: aaron.yor@gmail.com
+ - Mobile: +374 (98) 47 11 11
+ - Linkedin։ <https://www.linkedin.com/in/aaron-yor/>
+ 

@@ -7,6 +7,9 @@
 
 namespace diazoxide\blog;
 
+use Yii;
+use yii\base\ViewNotFoundException;
+use yii\db\ActiveRecord;
 use diazoxide\blog\assets\AdminAsset;
 use diazoxide\blog\assets\AppAsset;
 use diazoxide\blog\components\JsonLDHelper;
@@ -15,11 +18,6 @@ use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\traits\IActiveStatus;
 use himiklab\sitemap\behaviors\SitemapBehavior;
-use Yii;
-use yii\base\ViewNotFoundException;
-use yii\db\ActiveRecord;
-use yii\helpers\Url;
-use yii\i18n\PhpMessageSource;
 
 /**
  * @property array breadcrumbs
@@ -149,6 +147,9 @@ class Module extends \yii\base\Module
 
     protected $_isBackend;
 
+    /*
+     * Default view files for routes
+     * */
     protected function _frontendViewsMap()
     {
         return [
@@ -162,6 +163,8 @@ class Module extends \yii\base\Module
     }
 
     /**
+     * Getting the view file for current route
+     * Using this method in controller actions
      * @return mixed|string
      */
     public function getView()
@@ -183,9 +186,18 @@ class Module extends \yii\base\Module
         throw new ViewNotFoundException('The view file does not exist.');
     }
 
-    /**
-     * @throws \yii\base\InvalidConfigException
-     */
+
+    /*
+     * Init module.
+     * Registering sub modules
+     * Sitemap module "\himiklab\sitemap\Sitemap"
+     * Automatic generation sitemap.xml files for SEO integration
+     *
+     * Registering module components
+     * JsonLD component JsonLDHelper
+     * Automatic JsonLD generation for each post and categories SEO Optimisation
+     *
+     * */
     public function init()
     {
         parent::init();
@@ -302,7 +314,6 @@ class Module extends \yii\base\Module
 
     /**
      * Need correct Full IMG URL for Backend
-     *
      * @return string
      * @throws \yii\base\InvalidConfigException
      */
@@ -312,6 +323,8 @@ class Module extends \yii\base\Module
     }
 
     /**
+     * Backend navigation items
+     * You can easily integrate this function in your backend panel
      * @return array
      */
     public function getNavigation()
@@ -346,6 +359,8 @@ class Module extends \yii\base\Module
     }
 
     /**
+     * Get the categories url for breadcrumbs and e.t.c.
+     * For backend and frontend different urls
      * @return string
      */
     public function getCategoriesUrl()
@@ -358,6 +373,8 @@ class Module extends \yii\base\Module
     }
 
     /**
+     * Getting blog home url
+     * For backend and frontend
      * @return string
      */
     public function getHomeUrl()
@@ -371,6 +388,8 @@ class Module extends \yii\base\Module
     }
 
     /**
+     * Getting archive url
+     * For backend and frontend
      * @return string
      */
     public function getArchiveUrl()
@@ -384,6 +403,9 @@ class Module extends \yii\base\Module
     }
 
     /**
+     * Getting the nested breadcrumbs element
+     * For global breadcrumbs
+     * This is Module root breadcrumb element
      * @return array
      */
     public function getBreadcrumbs()
@@ -394,6 +416,8 @@ class Module extends \yii\base\Module
     }
 
     /**
+     * Getting the nested breadcrumbs element
+     * For global breadcrumbs
      * @return array|mixed
      */
     public function getCategoryBreadcrumbs()
@@ -405,6 +429,7 @@ class Module extends \yii\base\Module
 
 
     /**
+     * Helper method for converting date, time, dateTime
      * @param $dateStr
      * @param string $type
      * @param null $format
