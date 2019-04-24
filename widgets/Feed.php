@@ -6,10 +6,7 @@ use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
-use diazoxide\blog\traits\FeedTrait;
 use kartik\select2\Select2;
-use kop\y2sp\ScrollPager;
-use nirvana\infinitescroll\InfiniteScrollPager;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
@@ -23,6 +20,7 @@ class Feed extends \yii\bootstrap\Widget
     const TYPE_POPULAR = 2;
     const TYPE_RECENT = 3;
 
+    public $post_type_id = 1;
     public $category_id;
     public $show_category_filter = false;
 
@@ -231,7 +229,7 @@ class Feed extends \yii\bootstrap\Widget
     {
         $query = BlogPost::find();
 
-        $query->where(['status' => IActiveStatus::STATUS_ACTIVE])
+        $query->where(['status' => IActiveStatus::STATUS_ACTIVE, 'type_id' => $this->post_type_id])
             ->orderBy($this->getOrderFromType());
 
         $query->andWhere('FROM_UNIXTIME(published_at) <= NOW()');

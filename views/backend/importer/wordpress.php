@@ -8,10 +8,11 @@
 
 use diazoxide\blog\controllers\backend\ImporterController;
 use diazoxide\blog\models\importer\Wordpress;
-use \diazoxide\blog\Module;
-use \yii\helpers\Html;
+use diazoxide\blog\Module;
+use diazoxide\blog\models\BlogPostType;
+use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\bootstrap\Progress;
+use yii\helpers\ArrayHelper;
 
 /** @var Wordpress $wordpress */
 ?>
@@ -35,13 +36,16 @@ use yii\bootstrap\Progress;
                     <?= $form->field($wordpress, 'url')->textInput(['maxlength' => 255]) ?>
                     <?= $form->field($wordpress, 'per_page')->textInput(['type' => 'number']) ?>
                     <?= $form->field($wordpress, 'page')->textInput(['type' => 'number']) ?>
+                    <?= $form->field($wordpress, 'import_categories')->checkbox() ?>
+                    <?= $form->field($wordpress, 'overwrite')->checkbox() ?>
+                    <?= $form->field($wordpress, 'localize_content')->checkbox() ?>
+                    <?= $form->field($wordpress, 'post_type_id')->dropDownList(ArrayHelper::map(BlogPostType::find()->all(), 'id', 'name'), ['prompt' => Module::t('', 'Select Post Type')]) ?>
                     <?= Html::submitButton(Module::t('', 'Start Importing'), ['class' => 'btn btn-warning']) ?>
                 </div>
             </div>
             <?= Html::hiddenInput('action', ImporterController::ACTION_IMPORT_CATEGORIES) ?>
             <?php ActiveForm::end(); ?>
         <?php elseif ($action == ImporterController::ACTION_SUCCESS): ?>
-
 
             <h1><?= Module::t('', 'Importing done.') ?></h1>
 

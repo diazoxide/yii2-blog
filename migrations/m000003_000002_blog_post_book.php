@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m190410_121104_blog_post_book extends Migration
+class m000003_000002_blog_post_book extends Migration
 {
 
     public function init()
@@ -33,10 +33,17 @@ class m190410_121104_blog_post_book extends Migration
         );
         $this->createIndex('post_id','{{%blog_post_book}}',['post_id'],false);
 
+        $this->addForeignKey('fk_blog_post_book_post_id',
+            '{{%blog_post_book}}', 'post_id',
+            '{{%blog_post}}', 'id',
+            'CASCADE', 'CASCADE'
+        );
+
     }
 
     public function safeDown()
     {
+        $this->dropForeignKey('fk_blog_post_book_post_id', '{{%blog_post_book}}');
         $this->dropIndex('post_id', '{{%blog_post_book}}');
         $this->dropTable('{{%blog_post_book}}');
     }

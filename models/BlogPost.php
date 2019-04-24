@@ -19,17 +19,20 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\web\UrlRule;
 use yiidreamteam\upload\ImageUploadBehavior;
 
 /**
  * This is the model class for table "blog_post".
  *
  * @property integer $id
+ * @property integer $type_id
  * @property integer $category_id
+ * @property integer[] $category_ids
  * @property string $title
  * @property string $url
  * @property boolean $show_comments
- * @method getThumbFileUrl($attribute, $thumbType)
  * @property string $content
  * @property string $brief
  * @property string $tags
@@ -41,13 +44,14 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $published_at
- *
  * @property BlogComment[] $blogComments
  * @property BlogCategory $category
  * @property BlogPostBook $books
  * @property Module module
+ * @property BlogPostType $type
+ * @method getThumbFileUrl($attribute, $thumbType)
  */
-class BlogPost extends \yii\db\ActiveRecord
+class BlogPost extends ActiveRecord
 {
     use StatusTrait, ModuleTrait;
 
@@ -83,8 +87,7 @@ class BlogPost extends \yii\db\ActiveRecord
                 'attribute' => 'title',
                 'slugAttribute' => 'slug',
                 'immutable' => true,
-                'ensureUnique'=>true,
-
+                'ensureUnique' => true,
             ],
             [
                 'class' => AttributeBehavior::class,
@@ -96,7 +99,7 @@ class BlogPost extends \yii\db\ActiveRecord
                 },
             ],
             [
-                'class' => ManyToManyBehavior::className(),
+                'class' => ManyToManyBehavior::class,
                 'relations' => [
                     'category_ids' => 'categories',
                 ],
@@ -128,23 +131,60 @@ class BlogPost extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            /*
+             * Title always required for every type of post
+             * */
+            [['title'], 'required'],
+
+            /*
+             * Additional property for many_to_many behavior
+             * For multiple categories
+             * */
             [['category_ids'], 'each', 'rule' => ['integer']],
 
-            [['category_id', 'title', 'content'], 'required'],
-            [['category_id', 'click', 'user_id', 'status', 'created_at', 'updated_at', 'published_at'], 'integer'],
+            /*
+             * Require category_id when post type has_category property is true
+             * Also disable client validation for this property
+             * */
+            [
+                'category_id', 'required',
+                'when' => function ($model) {
+                    return $model->type->has_category;
+                }, 'enableClientValidation' => false
+            ],
 
+            /*
+             * Check if category type is same of post type
+             * */
+            ['category_id', 'categoryValidation'],
+
+            [['slug'], 'string', 'max' => 128],
+
+            [['slug'], 'unique'],
+
+            [['category_id', 'click', 'type_id', 'user_id', 'status', 'created_at', 'updated_at', 'published_at'], 'integer'],
             [['brief', 'content'], 'string'],
-
-            [['created', 'updated', 'published'], 'date', 'format' => Yii::$app->formatter->datetimeFormat],
-
             [['is_slide', 'show_comments'], 'boolean'],
             [['show_comments'], 'default', 'value' => true],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
-            [['title', 'tags'], 'string', 'max' => 500],
-            [['slug'], 'string', 'max' => 128],
-            [['slug'], 'unique'],
-            ['click', 'default', 'value' => 0]
+            [['title', 'tags'], 'string', 'max' => 255],
+            ['click', 'default', 'value' => 0],
+
+            [['created', 'updated', 'published'], 'date', 'format' => Yii::$app->formatter->datetimeFormat],
+
+            /*
+             * Check if type id is exists in BlogPostType table
+             * */
+            ['type_id', 'exist', 'targetClass' => BlogPostType::class, 'targetAttribute' => 'id']
+
         ];
+    }
+
+    public function categoryValidation($attribute, $params)
+    {
+        if ($this->category->type_id != $this->type_id && $this->category->type_id != null) {
+            $this->addError($attribute, Module::t('', 'Post type must be same type as the category type.'));
+        }
     }
 
     /**
@@ -180,7 +220,7 @@ class BlogPost extends \yii\db\ActiveRecord
      */
     public function getBlogComments()
     {
-        return $this->hasMany(BlogComment::className(), ['post_id' => 'id']);
+        return $this->hasMany(BlogComment::class, ['post_id' => 'id']);
     }
 
     /**
@@ -188,7 +228,7 @@ class BlogPost extends \yii\db\ActiveRecord
      */
     public function getBooks()
     {
-        return $this->hasMany(BlogPostBook::className(), ['post_id' => 'id']);
+        return $this->hasMany(BlogPostBook::class, ['post_id' => 'id']);
     }
 
     /**
@@ -196,7 +236,7 @@ class BlogPost extends \yii\db\ActiveRecord
      */
     public function getCommentsCount()
     {
-        return $this->hasMany(BlogComment::className(), ['post_id' => 'id'])->count('post_id');
+        return $this->hasMany(BlogComment::class, ['post_id' => 'id'])->count('post_id');
     }
 
     /**
@@ -204,7 +244,7 @@ class BlogPost extends \yii\db\ActiveRecord
      */
     public function getCategory()
     {
-        return $this->hasOne(BlogCategory::className(), ['id' => 'category_id']);
+        return $this->hasOne(BlogCategory::class, ['id' => 'category_id']);
     }
 
 
@@ -214,10 +254,15 @@ class BlogPost extends \yii\db\ActiveRecord
      */
     public function getCategories()
     {
-        return $this->hasMany(BlogCategory::className(), ['id' => 'category_id'])
+        return $this->hasMany(BlogCategory::class, ['id' => 'category_id'])
             ->viaTable('{{%blog_category_map}}', ['post_id' => 'id']);
     }
 
+
+    public function getType()
+    {
+        return $this->hasOne(BlogPostType::class, ['id' => 'type_id']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -235,12 +280,13 @@ class BlogPost extends \yii\db\ActiveRecord
      */
     public function getComments()
     {
-        return $this->hasMany(BlogComment::className(), ['post_id' => 'id']);
+        return $this->hasMany(BlogComment::class, ['post_id' => 'id']);
     }
 
     /**
      * After save.
-     *
+     * @param $insert
+     * @param $changedAttributes
      */
     public function afterSave($insert, $changedAttributes)
     {
@@ -256,7 +302,6 @@ class BlogPost extends \yii\db\ActiveRecord
     public function afterDelete()
     {
         parent::afterDelete();
-        // add your code here
         BlogTag::updateFrequencyOnDelete($this->_oldTags);
     }
 
@@ -287,31 +332,86 @@ class BlogPost extends \yii\db\ActiveRecord
 
 
     /**
+     * Building post url,
+     * Using post type url pattern for building custom url
+     * For each post type you can create different url routes
      * @return string
+     * @throws \yii\base\InvalidConfigException
      */
     public function getUrl()
     {
+        /*
+         * If backend detected
+         * Than return post edit url
+         * */
         if ($this->getModule()->getIsBackend()) {
             return Yii::$app->getUrlManager()->createUrl(['blog/blog-post/update', 'id' => $this->id]);
         }
+
+        /*
+         * Datetime parameters
+         * Additional parameters for beauty urls
+         * */
         $year = date('Y', $this->published_at);
         $month = date('m', $this->published_at);
         $day = date('d', $this->published_at);
-        return Yii::$app->getUrlManager()->createUrl(['blog/default/view', 'year' => $year, 'month' => $month, 'day' => $day, 'slug' => $this->slug]);
+
+        /*
+         * If post type has custom url pattern
+         * Then method must generate custom rule and rule must generate final url
+         * After generation final url "strtok" function deletes last unnecessary get parameters from query string
+         * and return url string
+         * */
+        if ($this->type->url_pattern) {
+
+            $rule = new UrlRule([
+                'pattern' => $this->type->url_pattern,
+                'route' => 'blog/default/view'
+            ]);
+
+            $url = $rule->createUrl(
+                Yii::$app->getUrlManager(),
+                'blog/default/view',
+                ['type' => $this->type->name, 'year' => $year, 'month' => $month, 'day' => $day, 'slug' => $this->slug, 'id' => $this->id]
+            );
+
+            $baseUrl = Yii::$app->urlManager->showScriptName || !Yii::$app->urlManager->enablePrettyUrl ? Yii::$app->urlManager->getScriptUrl() : Yii::$app->urlManager->getBaseUrl();
+
+            return $baseUrl . '/' . strtok($url, '?');
+        }
+
+        /*
+         * If post type don't have url pattern
+         * Than return default url
+         * */
+        return Yii::$app->getUrlManager()->createUrl(
+            ['blog/default/view', 'type' => $this->type->name, 'year' => $year, 'month' => $month, 'day' => $day, 'slug' => $this->slug]
+        );
     }
 
     /**
+     * Getting absolute url of post
+     * Including the host info and scheme
+     * @param null $scheme
      * @return string
+     * @throws \yii\base\InvalidConfigException
      */
-    public function getAbsoluteUrl()
+    public function getAbsoluteUrl($scheme = null)
     {
         if ($this->getModule()->getIsBackend()) {
             return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/blog-post/update', 'id' => $this->id]);
         }
-        $year = date('Y', $this->published_at);
-        $month = date('m', $this->published_at);
-        $day = date('d', $this->published_at);
-        return Yii::$app->getUrlManager()->createAbsoluteUrl(['blog/default/view', 'year' => $year, 'month' => $month, 'day' => $day, 'slug' => $this->slug]);
+
+        $url = $this->getUrl();
+        if (strpos($url, '://') === false) {
+            $hostInfo = Yii::$app->urlManager->getHostInfo();
+            if (strncmp($url, '//', 2) === 0) {
+                $url = substr($hostInfo, 0, strpos($hostInfo, '://')) . ':' . $url;
+            } else {
+                $url = $hostInfo . $url;
+            }
+        }
+        return Url::ensureScheme($url, $scheme);
     }
 
 
@@ -361,7 +461,14 @@ class BlogPost extends \yii\db\ActiveRecord
      */
     public function getBreadcrumbs()
     {
-        $result = $this->category->breadcrumbs;
+        $result = [];
+
+        $result[] = ['label' => $this->type->title, 'url' => $this->type->url];
+
+        if ($this->type->has_category) {
+            $result = $this->category->breadcrumbs;
+        }
+
         return $result;
     }
 

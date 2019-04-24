@@ -14,6 +14,7 @@ use diazoxide\blog\traits\IActiveStatus;
 use paulzi\adjacencyList\AdjacencyListBehavior;
 use paulzi\adjacencyList\AdjacencyListQueryTrait;
 use Yii;
+use yii\base\NotSupportedException;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\filters\AccessControl;
@@ -24,7 +25,7 @@ use yii\web\NotFoundHttpException;
 /**
  * BlogCategoryController implements the CRUD actions for BlogCategory model.
  */
-class BlogCategoryController extends Controller
+class PostTypeController extends Controller
 {
     use AdjacencyListQueryTrait;
 
@@ -73,51 +74,32 @@ class BlogCategoryController extends Controller
 
     /**
      * Lists all BlogCategory models.
-     * @param $type
      * @return mixed
-     * @throws NotFoundHttpException
      */
-    public function actionIndex($type)
+    public function actionIndex()
     {
-        $type_model = BlogPostType::findOne(['name' => $type]);
+        $query = BlogPostType::find();
 
-        if (!$type_model) {
-            throw new NotFoundHttpException('The requested post type does not exist.');
-        }
-
-        $model = $this->findModel(1);
-        $dataProvider = $model->getChildren()->andWhere(['type_id' => $type_model->id])->all();
-
+        $dataprovider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
         return $this->render('index', [
-            'breadcrumbs' => $this->module->breadcrumbs,
-            'dataProvider' => $dataProvider,
-            'type' => $type_model
+            'dataprovider' => $dataprovider
         ]);
     }
 
-    /**
-     * Displays a single BlogCategory model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
 
     /**
-     * Finds the BlogCategory model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return BlogCategory the loaded model
+     * @return BlogPostType
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = BlogCategory::findOne($id)) !== null) {
+        if (($model = BlogPostType::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -127,32 +109,15 @@ class BlogCategoryController extends Controller
     /**
      * Creates a new BlogCategory model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @param string $type
-     * @param int $parent_id
      * @return mixed
-     * @throws NotFoundHttpException
      */
-    public function actionCreate($type='article',$parent_id=1)
+    public function actionCreate()
     {
-        $type_model = BlogPostType::findOne(['name' => $type]);
+        $model = new BlogPostType();
 
-        if (!$type_model) {
-            throw new NotFoundHttpException('The requested post type does not exist.');
-        }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-        $model = new BlogCategory();
-
-        $parent = $this->findModel($parent_id);
-
-        $model->parent_id = $parent_id;
-
-        $model->type_id = $type_model->id;
-
-        if ($model->load(Yii::$app->request->post())) {
-
-            $model->prependTo($parent)->save();
-
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['update', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -171,7 +136,7 @@ class BlogCategoryController extends Controller
     {
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['update', 'id' => $model->id]);
         }
         return $this->render('update', [
             'model' => $model,
@@ -184,40 +149,19 @@ class BlogCategoryController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
-        //$this->findModel($id)->delete();
         $model = $this->findModel($id);
-        $model->status = IActiveStatus::STATUS_ARCHIVE;
-        $model->save();
 
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * @param $id
-     * @param bool $top
-     * @throws NotFoundHttpException
-     */
-    public function actionReorder($id, $action)
-    {
-        $model = $this->findModel($id);
-        if ($action == 'up') {
-            $neighbor = $model->getPrev()->one();
-            if ($neighbor) {
-                $model->moveBefore($neighbor)->save();
-            }
-        } elseif ($action == 'down') {
-            $neighbor = $model->getNext()->one();
-            if ($neighbor) {
-                $model->moveAfter($neighbor)->save();
-            }
-        } elseif ($action == 'first') {
-            $model->moveFirst()->save();
-        } elseif ($action == 'last') {
-            $model->moveLast()->save();
+        if ($model->locked) {
+            throw new NotSupportedException('You can not delete locked post types.');
+        } else {
+            $model->delete();
+            return $this->redirect(['index']);
         }
-        $this->redirect(Yii::$app->request->referrer);
     }
+
 }

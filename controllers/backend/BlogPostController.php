@@ -11,6 +11,7 @@ use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\models\BlogPostBook;
 use diazoxide\blog\models\BlogPostBookChapter;
 use diazoxide\blog\models\BlogPostSearch;
+use diazoxide\blog\models\BlogPostType;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use Yii;
@@ -127,12 +128,21 @@ class BlogPostController extends BaseAdminController
 
     /**
      * Lists all BlogPost models.
+     * @param string $type
      * @return mixed
+     * @throws NotFoundHttpException
      */
-    public function actionIndex()
+    public function actionIndex($type = 'article')
     {
+        $type_model = BlogPostType::findOne(['name' => $type]);
+
+        if (!$type_model) {
+            throw new NotFoundHttpException('The requested post type does not exist.');
+        }
+
         $searchModel = new BlogPostSearch();
         $searchModel->scenario = BlogPostSearch::SCENARIO_ADMIN;
+        $searchModel->type_id = $type_model->id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $arrayCategory = BlogPost::getArrayCategory();
 
@@ -140,7 +150,8 @@ class BlogPostController extends BaseAdminController
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'arrayCategory' => $arrayCategory,
-            'breadcrumbs'=>$this->module->breadcrumbs
+            'breadcrumbs' => $this->module->breadcrumbs,
+            'type' => $type_model
         ]);
     }
 
@@ -157,6 +168,7 @@ class BlogPostController extends BaseAdminController
         ]);
     }
 
+
     /**
      * Finds the BlogPost model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -172,7 +184,6 @@ class BlogPostController extends BaseAdminController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
 
     /**
      * @param $id
@@ -207,10 +218,19 @@ class BlogPostController extends BaseAdminController
      * Creates a new BlogPost model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @throws NotFoundHttpException
      */
-    public function actionCreate()
+    public function actionCreate($type)
     {
         $model = new BlogPost();
+
+        $type_model = BlogPostType::findOne(['name' => $type]);
+
+        if (!$type_model) {
+            throw new NotFoundHttpException('The requested post type does not exist.');
+        }
+
+        $model->type_id = $type_model->id;
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -223,6 +243,8 @@ class BlogPostController extends BaseAdminController
 
         return $this->render('create', [
             'model' => $model,
+            'type' => $type_model
+
         ]);
 
     }
@@ -274,7 +296,7 @@ class BlogPostController extends BaseAdminController
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        if($model->status == IActiveStatus::STATUS_ARCHIVE){
+        if ($model->status == IActiveStatus::STATUS_ARCHIVE) {
             $model->delete();
         } else {
             $model->status = IActiveStatus::STATUS_ARCHIVE;
@@ -282,7 +304,6 @@ class BlogPostController extends BaseAdminController
         }
         return $this->redirect(Yii::$app->request->referrer);
     }
-
 
     public function actionCreateBook($post_id)
     {
@@ -329,7 +350,7 @@ class BlogPostController extends BaseAdminController
     public function actionDeleteBook($id)
     {
         $model = $this->findBookModel($id);
-        if($model->status == IActiveStatus::STATUS_ARCHIVE){
+        if ($model->status == IActiveStatus::STATUS_ARCHIVE) {
             $model->delete();
         } else {
             $model->status = IActiveStatus::STATUS_ARCHIVE;
@@ -376,32 +397,6 @@ class BlogPostController extends BaseAdminController
 
     }
 
-    public function actionFix()
-    {
-        $model = BlogPostBookChapter::find()->where('content!=""')->limit(50)->offset(0);
-        //echo $model;
-        //die();
-        foreach ($model->all() as $key => $item) {
-            $content = $item->content;
-
-            $content = trim(preg_replace('/\s+/', ' ', $content));
-
-//            $content = preg_replace("/(<verse)( id=\")(\d+)(\">)/m", '$1><num>$3</num>', $content);
-//            $content = preg_replace("/(\[note\])(.*?)(\[\/note\])/m", '[note=$2]$3', $content);
-//            $content = preg_replace('/(\<)(\/?\w+)(.*?)(>)/m', '[$2$3]', $content);
-
-//            $item->content = $content;
-//            if ($item->save()) {
-//                echo $key;
-//            }
-
-
-//            echo "<textarea cols='100' rows='20'>";
-            echo "$content";
-//            echo "</textarea>";
-        }
-    }
-
     /**
      * @param $id
      * @return \yii\web\Response
@@ -415,6 +410,7 @@ class BlogPostController extends BaseAdminController
         $model->delete();
         return $this->redirect(Yii::$app->request->referrer);
     }
+
 
 
 }

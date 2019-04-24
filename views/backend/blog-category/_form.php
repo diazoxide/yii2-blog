@@ -15,9 +15,6 @@ use yii\widgets\ActiveForm;
 /* @var $model diazoxide\blog\models\BlogCategory */
 /* @var $form yii\widgets\ActiveForm */
 
-//fix the issue that it can assign itself as parent
-//$parentCategory = ArrayHelper::merge([0 => Module::t('Root Category')], ArrayHelper::map(BlogCategory::get(0, BlogCategory::find()->all()), 'id', 'str_label'));
-//unset($parentCategory[$model->id]);
 
 ?>
 
@@ -31,7 +28,7 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'parent_id')->dropDownList(ArrayHelper::map(BlogCategory::find()->all(),'id','title')) ?>
+    <?= $form->field($model, 'parent_id')->dropDownList(ArrayHelper::map(BlogCategory::find()->andWhere(['type_id'=>$model->type->id])->orWhere(['type_id'=>null])->all(),'id','title')) ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
 

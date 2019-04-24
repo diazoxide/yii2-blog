@@ -3,7 +3,9 @@
 namespace diazoxide\blog\widgets;
 
 use diazoxide\blog\models\BlogCategory;
+use diazoxide\blog\models\BlogPostType;
 use diazoxide\blog\traits\IActiveStatus;
+use yii\base\NotSupportedException;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 
@@ -11,9 +13,22 @@ class Navigation extends \yii\bootstrap\Widget
 {
     public $vertical = false;
 
+    public $type = 'article';
+
+    protected $_type;
+
+    /**
+     * @throws NotSupportedException
+     */
     public function init()
     {
         parent::init();
+
+        $this->_type = BlogPostType::findOne(['name' => $this->type]);
+
+        if (!$this->_type) {
+            throw new NotSupportedException('Navigation widget: Post type not found.');
+        }
 
         if ($this->vertical) {
             $this->buildNav();
@@ -43,13 +58,13 @@ class Navigation extends \yii\bootstrap\Widget
     }
 
     /**
-     * @param $parent
+     * @param BlogCategory $parent
      * @return array
      */
     private function buildItems($parent)
     {
         $items = [];
-        foreach ($parent->getChildren()->where(['is_nav' => true, 'status' => IActiveStatus::STATUS_ACTIVE])->all() as $child) {
+        foreach ($parent->getChildren()->where(['type_id' => $this->_type->id, 'is_nav' => true, 'status' => IActiveStatus::STATUS_ACTIVE])->all() as $child) {
             $items[] = ['label' => $child->titleWithIcon, 'url' => $child->url, 'items' => $this->buildItems($child)];
         }
         return $items;

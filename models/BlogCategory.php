@@ -22,11 +22,9 @@ use yiidreamteam\upload\ImageUploadBehavior;
 /**
  * This is the model class for table "blog_category".
  *
- * Это досталось от китайского модуля, еще не рефакторил
- *
- *
  * @property integer $id
  * @property integer $parent_id
+ * @property integer $type_id
  * @property string $title
  * @property string $slug
  * @property string $banner
@@ -35,10 +33,11 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @property integer $page_size
  * @property string $template
  * @property string $redirect_url
- * @property string icon_class
- * @property string icon
- * @property string read_more_text
- * @property string read_icon_class
+ * @property string $icon_class
+ * @property string $icon
+ * @property string $data
+ * @property string $read_more_text
+ * @property string $read_icon_class
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -69,6 +68,8 @@ class BlogCategory extends \yii\db\ActiveRecord
     private $_isNavLabel;
     private $_status;
 
+
+    protected $_data = [];
 
     /**
      * @inheritdoc
@@ -129,13 +130,19 @@ class BlogCategory extends \yii\db\ActiveRecord
         } else {
             $result = $this->getModule()->categoryBreadcrumbs;
         }
-        $result[] = [
-            'label' => $this->title,
-            'url' => $this->url
-        ];
+        if (!$this->isNewRecord) {
+            $result[] = [
+                'label' => $this->title,
+                'url' => $this->url
+            ];
+        }
         return $result;
     }
 
+    public function getType()
+    {
+        return $this->hasOne(BlogPostType::class, ['id' => 'type_id']);
+    }
 
     /**
      * created_at, updated_at to now()
@@ -176,13 +183,14 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'is_nav', 'is_featured', 'sort_order', 'widget_type_id', 'page_size', 'status', 'sort'], 'integer'],
+            [['parent_id', 'type_id', 'is_nav', 'is_featured', 'sort_order', 'widget_type_id', 'page_size', 'status', 'sort'], 'integer'],
             [['title'], 'required'],
+            [['data'], 'string'],
             [['parent_id'], 'parentValidation'],
             [['sort_order', 'page_size'], 'default', 'value' => 0],
             [['icon_class', 'read_icon_class', 'read_more_text'], 'string', 'max' => 60],
             [['title', 'template', 'redirect_url', 'slug'], 'string', 'max' => 255],
-            [['banner'], 'file', 'extensions' => 'jpg, png, webp', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
+            [['banner'], 'file', 'extensions' => 'jpg, png, webp', 'mimeTypes' => 'image/jpeg, image/png, image/webp'],
         ];
     }
 
@@ -192,6 +200,12 @@ class BlogCategory extends \yii\db\ActiveRecord
             // no real check at the moment to be sure that the error is triggered
             $this->addError($attribute, Module::t('', 'The element cannot use itself as a parent.'));
         }
+
+        if ($this->parent->type_id != $this->type_id && $this->parent->type_id != null) {
+            $this->addError($attribute, Module::t('', 'Category type must be same type as the parent category.'));
+
+        }
+
         if ($this->id != 1 && $this->parent_id == null) {
             $this->addError($attribute, Module::t('', 'You can not create root element.'));
 
@@ -223,6 +237,99 @@ class BlogCategory extends \yii\db\ActiveRecord
             'created_at' => Module::t('', 'Created At'),
             'updated_at' => Module::t('', 'Updated At'),
         ];
+    }
+
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getData()
+    {
+        return $this->hasMany(BlogCategoryData::class, ['category_id' => 'id']);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        foreach ($this->_data as $data) {
+            $this->setDataValue($data[0], $data[1], $data[2]);
+        }
+    }
+
+    /**
+     * @param $name
+     * @param null $default
+     * @return array|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
+     */
+    public function getDataValue($name, $default = null)
+    {
+        $query = $this->getData()->andWhere(['name' => $name]);
+
+        if ($query->count() == 1) {
+            return $query->one();
+        } elseif ($query->count() > 1) {
+            return $query->all();
+        }
+
+        return $default;
+    }
+
+    /**
+     * Saving Dynamic data to db
+     * @param $name
+     * @param $value
+     * @param bool $overwrite
+     * @return array|bool
+     */
+    public function setDataValue($name, $value, $overwrite = true)
+    {
+        if ($this->isNewRecord) {
+            $this->_data[] = [$name, $value, $overwrite];
+            return true;
+        }
+
+        $errors = [];
+        $data = $this->getDataValue($name);
+
+        if (!is_array($value)) {
+            $value = [$value];
+        }
+
+        if (!$data || !$overwrite) {
+
+            foreach ($value as $item) {
+                $model = new BlogCategoryData();
+                $model->category_id = $this->id;
+                $model->name = $name;
+                $model->value = (string)$item;
+                if (!$model->save()) {
+                    $errors[] = $model->errors;
+                }
+            }
+
+        } elseif ($overwrite) {
+
+            if (!is_array($data)) {
+                $data = [$data];
+            }
+
+            foreach ($value as $key => $item) {
+                $model = isset($data[$key]) ? $data[$key] : new BlogCategoryData();
+                $model->category_id = $this->id;
+                $model->name = $name;
+                $model->value = (string)$item;
+                if (!$model->save()) {
+                    $errors[] = $model->errors;
+                }
+            }
+        }
+
+        if (!empty($errors)) {
+            return $errors;
+        }
+
+        return true;
     }
 
     /**
@@ -269,7 +376,7 @@ class BlogCategory extends \yii\db\ActiveRecord
         if ($this->getModule()->getIsBackend()) {
             return Yii::$app->getUrlManager()->createUrl([$this->getModule()->id . '/blog-category/update', 'id' => $this->id]);
         }
-        return Yii::$app->getUrlManager()->createUrl([$this->getModule()->id . '/default/archive', 'slug' => $this->slug]);
+        return Yii::$app->getUrlManager()->createUrl([$this->getModule()->id . '/default/archive', 'type' => $this->type ? $this->type->name : null, 'slug' => $this->slug]);
 
     }
 

@@ -1,16 +1,21 @@
 <?php
+
 use yii\base\Event;
 use yii\helpers\Html;
 use diazoxide\blog\Module;
+
 /** @var \diazoxide\blog\models\BlogPost $post */
 ?>
 
 <article class="blog-post">
     <div class="blog-post__nav">
-        <p class="blog-post__category">
-            <?= Module::t('', 'Category'); ?>
-            : <?= Html::a($post->category->title, $post->category->url); ?>
-        </p>
+        <?php if ($post->type->has_category): ?>
+            <p class="blog-post__category">
+                <?= Module::t('', 'Category'); ?>
+                : <?= Html::a($post->category->title, $post->category->url); ?>
+            </p>
+        <?php endif; ?>
+
         <p class="blog-post__info">
 
             <?php /** @var boolean $showDate */
@@ -35,30 +40,50 @@ use diazoxide\blog\Module;
             <?php endif; ?>
         </p>
     </div>
-    <?php if ($post->banner) : ?>
+
+    <?php if ($post->type->has_banner && $post->banner && $post->module->showBannerInPost) : ?>
         <div class="blog-post__img">
-            <?php if ($post->module->showBannerInPost): ?>
-                <img src="<?= $post->getThumbFileUrl('banner', 'thumb'); ?>"
-                     alt="<?= $post->title; ?>" class="img-responsive">
-            <?php endif; ?>
+            <img src="<?= $post->getThumbFileUrl('banner', 'thumb'); ?>"
+                 alt="<?= $post->title; ?>" class="img-responsive">
         </div>
     <?php endif; ?>
 
-    <h1>
-        <small><?= Html::encode($post->title); ?></small>
-    </h1>
+    <?php if ($post->type->has_title): ?>
+        <h1>
+            <small><?= Html::encode($post->title); ?></small>
+        </h1>
+    <?php endif; ?>
 
-    <?php /* Before post content Event */
-    $this->context->module->trigger(
-        $this->context->module::EVENT_BEFORE_POST_CONTENT_VIEW,
-        new Event(['sender' => $this, 'data' => ['post' => $post]])
-    );
-    ?>
     <div id="blog-post-content" class="blog-post__content">
 
         <?php
-        /* Print post content*/
-        echo $post->content;
+        /*
+         * Print post content
+         * If post type has content
+         * */
+        if ($post->type->has_content) {
+
+            /*
+             * Before post content Event
+             * */
+            $this->context->module->trigger(
+                $this->context->module::EVENT_BEFORE_POST_CONTENT_VIEW,
+                new Event(['sender' => $this, 'data' => ['post' => $post]])
+            );
+
+            /*
+             * Printing main post content property value
+             * */
+            echo $post->content;
+
+            /*
+             * After post content event
+            * */
+            $this->context->module->trigger(
+                $this->context->module::EVENT_AFTER_POST_CONTENT_VIEW,
+                new Event(['sender' => $this, 'data' => ['post' => $post]])
+            );
+        }
 
         /* Before books */
         $this->context->module->trigger(
@@ -76,9 +101,4 @@ use diazoxide\blog\Module;
         );
         ?>
     </div>
-    <?php /* After post content event*/
-    $this->context->module->trigger(
-        $this->context->module::EVENT_AFTER_POST_CONTENT_VIEW,
-        new Event(['sender' => $this, 'data' => ['post' => $post]])
-    ); ?>
 </article>

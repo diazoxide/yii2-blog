@@ -17,8 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-post-create">
 
-    <?= $this->render('_form', [
+    <?= /** @var \diazoxide\blog\models\BlogPostType $type */
+    $this->render('_form', [
         'model' => $model,
+        'type'=>$type
     ]) ?>
 
 </div>

@@ -14,6 +14,7 @@ $this->title = Module::t('', 'Create ') . Module::t('', 'Blog Category');
 $this->params['breadcrumbs'] = $model->breadcrumbs;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="blog-category-create">
 
     <?= $this->render('_form', [

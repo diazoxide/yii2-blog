@@ -9,14 +9,11 @@
 namespace diazoxide\blog\models\importer;
 
 
+use diazoxide\blog\models\BlogPostType;
 use diazoxide\blog\Module;
 use Yii;
 use yii\base\Model;
-use yii\helpers\Url;
 use yii\httpclient\Client;
-use yii\web\HttpException;
-use yii\web\NotFoundHttpException;
-use yii\web\Request;
 use yii\web\Response;
 
 class Wordpress extends Model
@@ -26,20 +23,47 @@ class Wordpress extends Model
     public $per_page = 10;
     public $page = 1;
 
+    public $identifier = 'id';
+    public $post_type_id;
+
+    public $overwrite = true;
+    public $import_categories = true;
+    public $localize_content = true;
+
     public $total;
     public $total_pages;
 
     protected $rest_path = '/wp-json/wp/v2/';
 
-
     public function rules()
     {
         return [
-            [['url'], 'required'],
+            [['url', 'post_type_id'], 'required'],
             [['url'], 'url'],
             [['url'], 'wordpress_rest'],
             [['page', 'per_page'], 'integer'],
+            [['post_type_id'], 'integer'],
+            [['overwrite', 'import_categories'], 'boolean'],
+            ['post_type_id', 'exist', 'targetClass' => BlogPostType::class, 'targetAttribute' => 'id'],
+            ['import_categories', 'import_categories_validator']
         ];
+    }
+
+    public function import_categories_validator($attribute_name, $params)
+    {
+        $type = BlogPostType::findOne($this->post_type_id);
+
+        if (!$type) {
+            return false;
+        }
+        if (!$type->has_category && $this->{$attribute_name}) {
+
+            $this->addError($attribute_name, Yii::t('user', 'Categories for selected post type disabled.'));
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -73,7 +97,7 @@ class Wordpress extends Model
             ->setData([])
             ->send();
         if ($response->isOk) {
-            return ['data'=>$response->data,'headers'=>$response->getHeaders()];
+            return ['data' => $response->data, 'headers' => $response->getHeaders()];
         }
         return false;
     }
@@ -162,4 +186,5 @@ class Wordpress extends Model
     {
         return $this->url . $this->rest_path;
     }
+
 }

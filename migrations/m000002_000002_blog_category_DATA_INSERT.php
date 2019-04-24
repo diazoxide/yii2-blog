@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m190411_103945_blog_categoryDataInsert extends Migration
+class m000002_000002_blog_category_DATA_INSERT extends Migration
 {
 
     public function init()

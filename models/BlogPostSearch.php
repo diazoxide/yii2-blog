@@ -24,7 +24,7 @@ class BlogPostSearch extends BlogPost
     public function rules()
     {
         return [
-            [['id', 'category_id', 'click', 'user_id', 'status'], 'integer'],
+            [['id', 'category_id', 'type_id', 'click', 'user_id', 'status'], 'integer'],
             [['title', 'q'], 'string'],
         ];
     }
@@ -47,8 +47,8 @@ class BlogPostSearch extends BlogPost
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ADMIN] = ['id', 'category_id', 'click', 'user_id', 'status', 'title'];
-        $scenarios[self::SCENARIO_USER] = ['category_id', 'q'];
+        $scenarios[self::SCENARIO_ADMIN] = ['id', 'category_id', 'type_id', 'click', 'user_id', 'status', 'title'];
+        $scenarios[self::SCENARIO_USER] = ['category_id', 'type_id', 'q'];
         return $scenarios;
     }
 
@@ -62,6 +62,8 @@ class BlogPostSearch extends BlogPost
     public function search($params)
     {
         $query = BlogPost::find();
+
+        $query->andFilterWhere([$this::tableName() . '.type_id' => $this->type_id]);
 
         if ($this->scenario == self::SCENARIO_ADMIN) {
             $query->orderBy(['id' => SORT_DESC]);

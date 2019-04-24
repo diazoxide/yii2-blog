@@ -17,6 +17,10 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model diazoxide\blog\models\BlogPost */
 /* @var $form yii\widgets\ActiveForm */
+/* @var \diazoxide\blog\models\BlogPostType $type */
+
+$categories = ArrayHelper::map(BlogCategory::find()->andWhere(['type_id'=>$model->type->id])->orWhere(['type_id'=>null])->all(),'id','title');
+
 ?>
 
 <div class="blog-post-form">
@@ -37,14 +41,13 @@ use yii\widgets\ActiveForm;
     <div class="row top-buffer-20">
         <div class="col-md-8">
 
-            <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
+            <?= $type->has_title ? $form->field($model, 'title')->textInput(['maxlength' => 255]) : null ?>
 
             <?= $form->field($model, 'slug')->textInput(['maxlength' => 128, 'class' => 'form-control input-sm', 'readonly' => true, 'onclick' => "this.removeAttribute('readonly')"]) ?>
 
+            <?= $type->has_brief ? $form->field($model, 'brief')->textarea(['rows' => 4]) : null ?>
 
-            <?= $form->field($model, 'brief')->textarea(['rows' => 4]) ?>
-
-            <?= $form->field($model, 'content')->widget(\dosamigos\tinymce\TinyMce::className(), [
+            <?= $type->has_content ? $form->field($model, 'content')->widget(\dosamigos\tinymce\TinyMce::className(), [
                 'options' => ['rows' => 6],
                 'language' => 'en',
                 'clientOptions' => [
@@ -64,46 +67,47 @@ use yii\widgets\ActiveForm;
                     "remove_script_host" => false,
                     "convert_urls" => true,
                 ]
-            ]) ?>
+            ]) : null ?>
 
         </div>
 
         <div class="col-md-4">
-            <?=
-            $form->field($model, 'category_ids')->widget(\kartik\select2\Select2::classname(), [
-                'data' => ArrayHelper::map(BlogCategory::find()->all(), 'id', 'title'),
-                //'language' => 'de',
-                'options' => [
-                    'placeholder' => Module::t('', 'Select Categories'),
-                    'multiple' => true
-                ],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]);
-            ?>
 
 
-            <?=
-            $form->field($model, 'category_id')->widget(\kartik\select2\Select2::classname(), [
-                'data' => ArrayHelper::map(BlogCategory::find()->all(), 'id', 'title'),
-                //'language' => 'de',
-                'options' => [
-                    'placeholder' => Module::t('', 'Select Main Category'),
-                ],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]);
+            <?= $type->has_category ?
+                $form->field($model, 'category_ids')->widget(\kartik\select2\Select2::classname(), [
+                    'data' => $categories,
+                    //'language' => 'de',
+                    'options' => [
+                        'placeholder' => Module::t('', 'Select Categories'),
+                        'multiple' => true
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]) : null ?>
+
+
+            <?= $type->has_category ?
+                $form->field($model, 'category_id')->widget(\kartik\select2\Select2::classname(), [
+                    'data' => $categories,
+                    //'language' => 'de',
+                    'options' => [
+                        'placeholder' => Module::t('', 'Select Main Category'),
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]) : null;
             ?>
 
             <?= $form->field($model, 'is_slide')->dropDownList([0 => Module::t('', 'No'), 1 => Module::t('', 'Yes')], ['prompt' => Module::t('', 'Select value')]) ?>
 
-            <?= $form->field($model, 'show_comments')->dropDownList([0 => Module::t('', 'No'), 1 => Module::t('', 'Yes')], ['prompt' => Module::t('', 'Select value')]) ?>
+            <?= $type->has_comment ? $form->field($model, 'show_comments')->dropDownList([0 => Module::t('', 'No'), 1 => Module::t('', 'Yes')], ['prompt' => Module::t('', 'Select value')]) : null ?>
 
-            <?= $form->field($model, 'tags')->textInput(['maxlength' => 255]) ?>
+            <?= $type->has_tag ? $form->field($model, 'tags')->textInput(['maxlength' => 255]) : null ?>
 
-            <?= $form->field($model, 'banner')->fileInput() ?>
+            <?= $type->has_banner ? $form->field($model, 'banner')->fileInput() : null ?>
 
             <?= $form->field($model, 'click')->textInput() ?>
 

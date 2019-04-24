@@ -4,18 +4,16 @@ namespace diazoxide\blog\controllers\backend;
 
 use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogPost;
+use diazoxide\blog\models\BlogPostType;
 use diazoxide\blog\models\importer\Wordpress;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
-use diazoxide\blog\traits\StatusTrait;
 use Yii;
-use yii\filters\VerbFilter;
 use yii\helpers\Html;
+use yii\helpers\HtmlPurifier;
+use yii\helpers\Json;
 use yii\helpers\Url;
-use yii\web\BadRequestHttpException;
-use yii\web\Response;
-use yii\web\UploadedFile;
-use yiidreamteam\upload\exceptions\FileUploadException;
+
 
 /**
  * @property Module module
@@ -65,54 +63,125 @@ class ImporterController extends \yii\web\Controller
     {
         $wordpress = new Wordpress();
         $posts = [];
+
         $action = Yii::$app->request->get('action') ? Yii::$app->request->get('action') : $this::ACTION_VALIDATE;
 
+        /*
+         * Loading model from get parameters
+         * */
         if ($wordpress->load(Yii::$app->request->get())) {
 
             if ($wordpress->validate()) {
+
+                /*
+                 * Getting url get params
+                 * */
                 $args = Yii::$app->request->get();
 
+                /*
+                 * Getting post type model
+                 * */
+                $post_type = BlogPostType::findOne($wordpress->post_type_id);
+
+                /*
+                 * Validation action
+                 * */
                 if ($action == $this::ACTION_VALIDATE) {
 
                     Yii::$app->session->setFlash('success', Module::t('', "System ready to start importing."));
 
                 } elseif ($action == $this::ACTION_IMPORT_CATEGORIES) {
 
+                    /*
+                     * If Post type not supported categories
+                     * Than redirect to post import action
+                     * */
+                    if (!$post_type->has_category) {
+                        $args['action'] = $this::ACTION_IMPORT_POSTS;
+                        array_unshift($args, 'wordpress');
+                        return $this->redirect($args);
+                    }
+
+                    /*
+                     * Getting categories from already initialised wordpress rest api object
+                     * */
                     $categories = $wordpress->getCategories();
+
+                    /*
+                     * If current page of categories
+                     * Is empty than
+                     * Update hierarchy of categories
+                     * Redirect already to post import action
+                     * */
                     if (empty($categories)) {
+
+                        /*
+                         * Updating hierarchy
+                         * */
+                        foreach (BlogCategory::findAll(['type_id' => $wordpress->post_type_id]) as $category) {
+                            $origin_parent_id = $category->getDataValue('wordpress_origin_parent_id');
+                            if ($origin_parent_id) {
+                                $parent = BlogCategory::find()->joinWith(['data data'])->where(['type_id' => $wordpress->post_type_id, 'data.name' => 'wordpress_origin_id', 'data.value' => $origin_parent_id->value])->one();
+                                if ($parent) {
+                                    $category->prependTo($parent)->save();
+                                }
+                            }
+                        }
+
+                        /*
+                         * Redirecting to import post action
+                         * */
                         $args[$wordpress->formName()]['page'] = 1;
                         $args['action'] = $this::ACTION_IMPORT_POSTS;
                         array_unshift($args, 'wordpress');
                         return $this->redirect($args);
                     }
+
                     foreach ($categories as $key => $category) {
+
+                        /*
+                         * Skipping id=1 category
+                         * Because first category is main root category
+                         * And in wordpress first category is uncategoriezed
+                         * */
                         if ($category['id'] == 1) {
                             continue;
                         }
-                        $model = BlogCategory::findOne($category['id']);
+
+                        /*
+                         * Inserting new category to database
+                         * Or update existing model
+                         * */
+                        $model = BlogCategory::find()->joinWith(['data data'])->where(['type_id' => $wordpress->post_type_id, 'data.name' => 'wordpress_origin_id', 'data.value' => $category['id']])->one();
                         $model = $model ? $model : new BlogCategory();
-                        $model->id = $category['id'];
+                        $model->type_id = $wordpress->post_type_id;
                         $model->title = $category['name'];
                         $model->slug = urldecode($category['slug']);
                         $parent_id = $category['parent'] == 0 ? 1 : $category['parent'];
-                        $parent = BlogCategory::findOne($parent_id);
-                        if (!$parent) {
-                            $parent = new BlogCategory();
-                            $parent->id = $parent_id;
-                            $parent->title = 'Waiting...';
-                            $parent->slug = 'waiting_' . $key;
-                            $parent->prependTo(BlogCategory::findOne(1))->save();
-                        }
-                        $model->prependTo($parent)->save();
+                        $model->setDataValue('wordpress_origin_id', $category['id']);
+                        $model->setDataValue('wordpress_origin_parent_id', $parent_id);
+                        $model->prependTo(BlogCategory::findOne(1))->save();
                     }
 
+                    /*
+                     * After complete the import action
+                     * Change number of page and redirect to new page
+                     * */
                     $args[$wordpress->formName()]['page']++;
                     array_unshift($args, 'wordpress');
                     return $this->redirect($args);
 
                 } elseif ($action == $this::ACTION_IMPORT_POSTS) {
+
+                    /*
+                     * Getting post from already initialised wordpress rest api
+                     * */
                     $posts = $wordpress->getPosts();
 
+                    /*
+                     * If current page of posts
+                     * Is empty than redirect already to success action
+                     * */
                     if (empty($posts)) {
                         $args['action'] = $this::ACTION_SUCCESS;
                         array_unshift($args, 'wordpress');
@@ -120,39 +189,96 @@ class ImporterController extends \yii\web\Controller
                     }
 
                     foreach ($posts as $post) {
-                        $model = BlogPost::findOne($post['id']);
-                        $model = $model ? $model : new BlogPost();
-                        $model->id = $post['id'];
 
-                        $model->content = $post['content']['rendered'];
+                        /*
+                         * Creating new BlogPost object model
+                         * */
+                        $model = new BlogPost();
+
+                        /*
+                         * If overwrite enabled than for first finding old post
+                         * If old post detected than overwriting old post
+                         * But if old post not detected than setting new model id from origin
+                         * */
+                        if ($wordpress->overwrite) {
+                            $old_model = BlogPost::findOne($post['id']);
+                            if ($old_model) {
+                                $model = $old_model;
+                            } else {
+                                $model->id = $post['id'];
+                            }
+                        }
+
+                        /*
+                         * Setting post type_id property
+                         * */
+                        $model->type_id = $wordpress->post_type_id;
+
+                        /*
+                         * If localize content is enabled
+                         * Than download all content images in server
+                         * */
+                        $model->content = $wordpress->localize_content ? $this->localizeContent($post['content']['rendered']) : $post['content']['rendered'];
+
+                        $model->brief = urldecode(trim(html_entity_decode(strip_tags($post['excerpt']['rendered']))));
                         $model->created_at = Yii::$app->formatter->asTimestamp($post['date']);
                         $model->published_at = Yii::$app->formatter->asTimestamp($post['date']);
 
-                        if (urldecode($post['slug'] == '')) {
-                            $model->slug = urldecode($post['slug']);
+                        $slug = HtmlPurifier::process(urldecode($post['slug']));
+
+                        /*
+                         * If slug is not empty than setting slug
+                         * But if empty slug generating automatically
+                         * */
+                        if ($slug != '') {
+                            $model->slug = $slug;
                         }
 
                         $model->title = Html::encode($post['title']['rendered']);
-                        $model->category_id = $post['categories'][0];
-                        $model->category_ids = $post['categories'];
+
+                        $category = BlogCategory::find()->joinWith(['data data'])->where(['type_id' => $wordpress->post_type_id, 'data.name' => 'wordpress_origin_id', 'data.value' => $post['categories'][0]])->one();
+
+                        $model->category_id = $category->id;
+//                        $model->category_ids = $post['categories'];
                         $model->status = IActiveStatus::STATUS_ACTIVE;
 
-                        if (isset($post['_embedded']['wp:featuredmedia'])) {
+                        /*
+                         * If post type has banner
+                         * And isset featured media in original post
+                         * Than for first downloading image from url
+                         * Finally creating thumbs
+                         * */
+                        if ($post_type->has_banner && isset($post['_embedded']['wp:featuredmedia'])) {
                             foreach ($post['_embedded']['wp:featuredmedia'] as $media) {
                                 if (isset($media['id']) && $media['id'] == $post['featured_media']) {
                                     $model->banner = $this->downloadImage($media['source_url'], $model->id);
                                 }
                             }
-                            if ($model->validate() && $model->save()) {
-                                $model->createThumbs();
-                            }
+                            $model->createThumbs();
+                        }
+
+                        /*
+                         * Validate and save model in DB
+                         * */
+                        if ($model->validate() && $model->save()) {
+
+                            /*
+                             * Logging complete message
+                             * */
+                            Yii::info('Import complete - ' . $post['id'] . ' - slug - ' . $slug, self::class);
+
+                        } else {
+                            /*
+                             * Logging error message
+                             * With model errors
+                             * */
+                            Yii::error('Import not complete - ' . $post['id'] . ' - slug - ' . $slug . print_r($model->errors, true), self::class);
                         }
                     }
                     $args[$wordpress->formName()]['page']++;
                     array_unshift($args, 'wordpress');
                     $redirect_url = Url::to($args);
                     $this->view->registerJs('setTimeout(function(){window.location.href="' . $redirect_url . '";},2000)');
-//                    return $this->redirect($args);
                 }
             } else {
                 $action = $this::ACTION_VALIDATE;
@@ -165,8 +291,75 @@ class ImporterController extends \yii\web\Controller
         ]);
     }
 
+    /**
+     * @param $content
+     * @return null|string|string[]
+     */
+    public function localizeContent($content)
+    {
+        if ($content) {
+            $final = preg_replace_callback(
+                '/\<img.*\ src="(.[^"]+)\"/i',
+                function ($m) {
+                    $url = $m[1];
+                    $url = str_replace("https://", "http://", $url);
+
+                    $extPattern = '/\.([A-Za-z0-9]+)$/i';
+                    $name = md5($url);
+                    preg_match($extPattern, $url, $matches, PREG_OFFSET_CAPTURE, 0);
+
+                    $ext = isset($matches[0][0]) ? $matches[0][0] : false;
+                    Yii::warning('EXT - ' . $ext, self::class);
+
+                    if (!$ext) {
+                        return $url;
+                    };
+
+                    $path = Yii::getAlias($this->module->imgFilePath . '/' . $this->module->postContentImagesDirectory) . '/' . $name . $ext;
+                    $localUrl = Yii::getAlias($this->module->imgFileUrl . '/' . $this->module->postContentImagesDirectory) . '/' . $name . $ext;
+
+                    Yii::warning('Path - ' . $path, self::class);
+                    Yii::warning('LocalUrl - ' . $localUrl, self::class);
+
+                    if (!file_exists($path)) {
+
+                        Yii::warning('File Not Exists - ' . $url, self::class);
+
+                        try {
+
+                            file_put_contents($path, fopen($url, 'r'));
+                            $url = $localUrl;
+
+                        } catch (\Exception $exception) {
+                        }
+                    } else {
+                        $url = $localUrl;
+                        Yii::warning('File Exists - ' . $url, self::class);
+
+                    }
+
+                    Yii::warning('Final URL IS - ' . $url, self::class);
+
+
+                    return '<img src="' . $url . '"';
+                },
+                $content
+            );
+            return $final;
+        } else return null;
+
+    }
+
     public function actionIndex()
     {
         return $this->render('index');
     }
+
+
+    public function actionTest()
+    {
+        $model = BlogCategory::find()->joinWith(['data data'])->where(['data.name' => 'wordpress_origin_id', 'data.value' => '140'])->one();
+        echo $model->title;
+    }
+
 }

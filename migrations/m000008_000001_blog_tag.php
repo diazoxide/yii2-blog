@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m190410_121107_blog_widget_type extends Migration
+class m000008_000001_blog_tag extends Migration
 {
 
     public function init()
@@ -17,18 +17,20 @@ class m190410_121107_blog_widget_type extends Migration
         $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
 
         $this->createTable(
-            '{{%blog_widget_type}}',
+            '{{%blog_tag}}',
             [
                 'id'=> $this->primaryKey(11),
-                'title'=> $this->string(255)->notNull(),
-                'config'=> $this->text()->notNull(),
+                'name'=> $this->string(128)->notNull(),
+                'frequency'=> $this->integer(11)->notNull()->defaultValue(1),
             ],$tableOptions
         );
+        $this->createIndex('frequency','{{%blog_tag}}',['frequency'],false);
 
     }
 
     public function safeDown()
     {
-        $this->dropTable('{{%blog_widget_type}}');
+        $this->dropIndex('frequency', '{{%blog_tag}}');
+        $this->dropTable('{{%blog_tag}}');
     }
 }

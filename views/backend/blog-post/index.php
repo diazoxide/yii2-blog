@@ -25,83 +25,86 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Module::t('', 'Create ') . Module::t('', 'Blog Post'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= /** @var \diazoxide\blog\models\BlogPostType $type */
+        Html::a(Module::t('', 'Create ') . Module::t('', 'Blog Post'), ['create', 'type' => $type->name], ['class' => 'btn btn-success']) ?>
     </p>
     <?php \yii\widgets\Pjax::begin(); ?>
 
-    <?= GridView::widget([
+    <?php
+
+    $columns = [
+        ['class' => 'yii\grid\CheckboxColumn'],
+    ];
+    if ($type->has_banner) {
+        $columns[] = [
+            'attribute' => 'banner',
+            'value' => function ($model) {
+                return Html::img($model->getThumbFileUrl('banner', 'xsthumb'));
+            },
+            'format' => 'raw',
+            'filter' => false
+        ];
+    }
+    $columns[] = [
+        'format' => 'raw',
+        'attribute' => 'title',
+        'value' => function ($model) {
+            return Html::a(\yii\helpers\StringHelper::truncate(Html::encode($model->title), 100, "..."), $model->url);
+        }
+    ];
+
+    if ($type->has_category) {
+        $columns[] = [
+            'format' => 'raw',
+            'attribute' => 'category_id',
+            'value' => function ($model) use ($searchModel) {
+                return Html::a(\yii\helpers\StringHelper::truncate(Html::encode($model->category->title), 50, "..."),
+                    ['', $searchModel->formName() => ['category_id' => $model->category->id]]
+                );
+            },
+            'filter' => Html::activeDropDownList(
+                $searchModel,
+                'category_id',
+                BlogPost::getArrayCategory(),
+                ['class' => 'form-control', 'prompt' => Module::t('', 'Please Filter')]
+            )
+        ];
+    }
+    $columns[] = 'click';
+
+    if ($type->has_comment) {
+        $columns[] = 'commentsCount';
+    }
+    $columns[] = [
+        'attribute' => 'status',
+        'format' => 'html',
+        'value' => function ($model) {
+            if ($model->status === IActiveStatus::STATUS_ACTIVE) {
+                $class = 'label-success';
+            } elseif ($model->status === IActiveStatus::STATUS_INACTIVE) {
+                $class = 'label-warning';
+            } else {
+                $class = 'label-danger';
+            }
+
+            return '<span class="label ' . $class . '">' . $model->getStatus() . '</span>';
+        },
+        'filter' => Html::activeDropDownList(
+            $searchModel,
+            'status',
+            BlogPost::getStatusList(),
+            ['class' => 'form-control', 'prompt' => Module::t('', 'PROMPT_STATUS')]
+        )
+    ];
+
+    $columns[] = 'published_at:relativeTime';
+    $columns[] = 'created_at:dateTime';
+    $columns[] = 'updated_at:dateTime';
+    $columns[] = ['class' => 'yii\grid\ActionColumn'];
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\CheckboxColumn'],
-            [
-                'attribute' => 'banner',
-                'value' => function ($model) {
-                    return Html::img($model->getThumbFileUrl('banner', 'xsthumb'));
-                },
-                'format' => 'raw',
-                'filter' => false
-            ],
-            [
-                'format' => 'raw',
-                'attribute' => 'title',
-                'value' => function ($model) {
-                    return Html::a(\yii\helpers\StringHelper::truncate(Html::encode($model->title), 100, "..."), $model->url);
-                }
-            ],
-            [
-                'format' => 'raw',
-                'attribute' => 'category_id',
-                'value' => function ($model) use ($searchModel) {
-                    return Html::a(\yii\helpers\StringHelper::truncate(Html::encode($model->category->title), 50, "..."),
-                        ['', $searchModel->formName() => ['category_id' => $model->category->id]]
-                    );
-                },
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'category_id',
-                    BlogPost::getArrayCategory(),
-                    ['class' => 'form-control', 'prompt' => Module::t('', 'Please Filter')]
-                )
-            ],
-            'click',
-            'commentsCount',
-            [
-                'attribute' => 'status',
-                'format' => 'html',
-                'value' => function ($model) {
-                    if ($model->status === IActiveStatus::STATUS_ACTIVE) {
-                        $class = 'label-success';
-                    } elseif ($model->status === IActiveStatus::STATUS_INACTIVE) {
-                        $class = 'label-warning';
-                    } else {
-                        $class = 'label-danger';
-                    }
-
-                    return '<span class="label ' . $class . '">' . $model->getStatus() . '</span>';
-                },
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'status',
-                    BlogPost::getStatusList(),
-                    ['class' => 'form-control', 'prompt' => Module::t('', 'PROMPT_STATUS')]
-                )
-            ],
-            [
-                'attribute' => 'user_id',
-                'value' => 'user.username',
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'user_id',
-                    \yii\helpers\ArrayHelper::map(\dektrium\user\models\User::find()->all(), 'id', 'username'),
-                    ['class' => 'form-control', 'prompt' => Module::t('', 'Author')]
-                )
-            ],
-            'published_at:relativeTime',
-            'created_at:dateTime',
-            'updated_at:dateTime',
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
+        'columns' => $columns,
     ]); ?>
     <?php \yii\widgets\Pjax::end(); ?>
 

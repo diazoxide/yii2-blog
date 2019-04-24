@@ -7,6 +7,10 @@
 
 namespace diazoxide\blog;
 
+use diazoxide\blog\models\BlogComment;
+use diazoxide\blog\models\BlogPostType;
+use diazoxide\blog\models\BlogTag;
+use diazoxide\blog\models\BlogWidgetType;
 use Yii;
 use yii\base\ViewNotFoundException;
 use yii\db\ActiveRecord;
@@ -26,8 +30,6 @@ use himiklab\sitemap\behaviors\SitemapBehavior;
  */
 class Module extends \yii\base\Module
 {
-
-    const EVENT_HEADER_END = 99;
 
     const EVENT_BEFORE_POST_CONTENT_VIEW = 1;
     const EVENT_AFTER_POST_CONTENT_VIEW = 2;
@@ -329,14 +331,34 @@ class Module extends \yii\base\Module
      */
     public function getNavigation()
     {
+        $post_types = BlogPostType::find()->all();
+        $post_types_items = [];
+        /** @var BlogPostType $type */
+        foreach ($post_types as $type) {
+            $post_types_items[] = [
+                'label' => $type->title,
+                'url' => ["/{$this->id}/blog-post", 'type' => $type->name,],
+                'items' => [
+                    [
+                        'label' => Module::t('', 'Categories'),
+                        'url' => ["/{$this->id}/blog-category", 'type' => $type->name],
+                        'visible' => $type->has_category && Yii::$app->user->can("BLOG_VIEW_CATEGORIES")
+                    ]
+                ]
+            ];
+        }
         return [
             ['label' => Module::t('', 'Blog'),
                 'items' => [
-                    ['label' => Module::t('', 'Posts'), 'url' => ["/{$this->id}/blog-post"], 'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS")],
-                    ['label' => Module::t('', 'Categories'), 'url' => ["/{$this->id}/blog-category"], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
-                    ['label' => Module::t('', 'Comments'), 'url' => ["/{$this->id}/blog-comment"], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
-                    ['label' => Module::t('', 'Tags'), 'url' => ["/{$this->id}/blog-tag"], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
-                    ['label' => Module::t('', 'Widget Types'), 'url' => ["/{$this->id}/widget-type/index"], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
+                    ['label' => Module::t('', 'Posts Types'),
+                        'url' => ["/{$this->id}/post-type"],
+                        'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS"),
+                        'items' => $post_types_items
+                    ],
+//                    ['label' => Module::t('', 'Categories') . ' (' . BlogCategory::find()->count() . ')', 'url' => ["/{$this->id}/blog-category"], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
+                    ['label' => Module::t('', 'Comments') . ' (' . BlogComment::find()->count() . ')', 'url' => ["/{$this->id}/blog-comment"], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
+                    ['label' => Module::t('', 'Tags') . ' (' . BlogTag::find()->count() . ')', 'url' => ["/{$this->id}/blog-tag"], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
+                    ['label' => Module::t('', 'Widget Types') . ' (' . BlogWidgetType::find()->count() . ')', 'url' => ["/{$this->id}/widget-type/index"], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
                     ['label' => Module::t('', 'Options'),
                         'items' => [
                             ['label' => 'Importer', 'url' => ["/{$this->id}/importer/index"]],

@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m190410_121100_blog_category extends Migration
+class m000002_000001_blog_category extends Migration
 {
 
     public function init()
@@ -26,10 +26,10 @@ class m190410_121100_blog_category extends Migration
                 'banner'=> $this->string(255)->null()->defaultValue(null),
                 'icon_class'=> $this->string(60)->null()->defaultValue(null),
                 'is_nav'=> $this->integer(11)->notNull()->defaultValue(1),
-                'is_featured'=> $this->tinyInteger(1)->notNull(),
+                'is_featured'=> $this->tinyInteger(1)->defaultValue(0),
                 'widget_type_id'=> $this->integer(11)->null()->defaultValue(null),
-                'read_icon_class'=> $this->string(60)->notNull(),
-                'read_more_text'=> $this->string(60)->notNull(),
+                'read_icon_class'=> $this->string(60)->null(),
+                'read_more_text'=> $this->string(60)->null(),
                 'sort_order'=> $this->integer(11)->notNull()->defaultValue(50),
                 'sort'=> $this->integer(11)->notNull(),
                 'page_size'=> $this->integer(11)->notNull()->defaultValue(10),
@@ -38,6 +38,7 @@ class m190410_121100_blog_category extends Migration
                 'status'=> $this->integer(11)->notNull()->defaultValue(1),
                 'created_at'=> $this->integer(11)->notNull(),
                 'updated_at'=> $this->integer(11)->notNull(),
+                'type_id' => $this->integer(11)->notNull()->defaultValue(1),
             ],$tableOptions
         );
         $this->createIndex('is_nav','{{%blog_category}}',['is_nav'],false);
@@ -45,10 +46,17 @@ class m190410_121100_blog_category extends Migration
         $this->createIndex('status','{{%blog_category}}',['status'],false);
         $this->createIndex('created_at','{{%blog_category}}',['created_at'],false);
 
+        $this->addForeignKey('fk_blog_category_type_id',
+            '{{%blog_category}}', 'type_id',
+            '{{%blog_post_type}}', 'id',
+            'CASCADE', 'CASCADE'
+        );
     }
 
     public function safeDown()
     {
+        $this->dropForeignKey('fk_blog_category_type_id', '{{%blog_category}}');
+
         $this->dropIndex('is_nav', '{{%blog_category}}');
         $this->dropIndex('sort_order', '{{%blog_category}}');
         $this->dropIndex('status', '{{%blog_category}}');

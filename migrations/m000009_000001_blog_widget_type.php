@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m190410_121101_blog_category_map extends Migration
+class m000009_000001_blog_widget_type extends Migration
 {
 
     public function init()
@@ -17,10 +17,11 @@ class m190410_121101_blog_category_map extends Migration
         $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
 
         $this->createTable(
-            '{{%blog_category_map}}',
+            '{{%blog_widget_type}}',
             [
-                'post_id'=> $this->integer(11)->notNull(),
-                'category_id'=> $this->integer(11)->notNull(),
+                'id'=> $this->primaryKey(11),
+                'title'=> $this->string(255)->notNull(),
+                'config'=> $this->text()->notNull(),
             ],$tableOptions
         );
 
@@ -28,6 +29,6 @@ class m190410_121101_blog_category_map extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('{{%blog_category_map}}');
+        $this->dropTable('{{%blog_widget_type}}');
     }
 }

@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m190410_121102_blog_comment extends Migration
+class m000007_000001_blog_comment extends Migration
 {
 
     public function init()
@@ -34,10 +34,17 @@ class m190410_121102_blog_comment extends Migration
         $this->createIndex('status','{{%blog_comment}}',['status'],false);
         $this->createIndex('created_at','{{%blog_comment}}',['created_at'],false);
 
+        $this->addForeignKey('fk_blog_comment_post_id',
+            '{{%blog_comment}}','post_id',
+            '{{%blog_post}}','id',
+            'CASCADE','CASCADE'
+         );
     }
 
     public function safeDown()
     {
+        $this->dropForeignKey('fk_blog_comment_post_id', '{{%blog_comment}}');
+
         $this->dropIndex('post_id', '{{%blog_comment}}');
         $this->dropIndex('status', '{{%blog_comment}}');
         $this->dropIndex('created_at', '{{%blog_comment}}');

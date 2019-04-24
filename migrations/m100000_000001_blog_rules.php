@@ -8,7 +8,7 @@
 use yii\db\Migration;
 use yii\db\Schema;
 
-class m191109_201982_blog_rules extends Migration
+class m100000_000001_blog_rules extends Migration
 {
     use \diazoxide\blog\traits\ModuleTrait;
 

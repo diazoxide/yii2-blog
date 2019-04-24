@@ -7,6 +7,7 @@
 
 namespace diazoxide\blog\controllers\frontend;
 
+use diazoxide\blog\models\BlogPostType;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -87,19 +88,30 @@ class DefaultController extends Controller
     }
 
 
-    public function actionArchive()
+    /**
+     * @param string $type
+     * @param null $slug
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionArchive($type = 'article', $slug = null)
     {
-        $searchModel = new BlogPostSearch();
+        $type_model = BlogPostType::findOne(['name' => $type]);
 
+        if (!$type_model) {
+            throw new NotFoundHttpException('The requested post type does not exist.');
+        }
+
+        $searchModel = new BlogPostSearch();
+        $searchModel->type_id = $type_model->id;
         $searchModel->scenario = BlogPostSearch::SCENARIO_USER;
 
-        if (Yii::$app->request->getQueryParam('slug')) {
-            $category = BlogCategory::findOne(['slug' => Yii::$app->request->getQueryParam('slug')]);
+        if ($slug) {
+            $category = BlogCategory::findOne(['slug' => $slug]);
             $searchModel->category_id = $category->id;
         } else {
             $category = BlogCategory::findOne(1);
             $searchModel->category_id = 1;
-
         }
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -153,6 +165,12 @@ class DefaultController extends Controller
 
         if ($post === null) {
             throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+        }
+
+
+        /** @var BlogPost $post */
+        if ($post->type->layout) {
+            $this->layout = $post->type->layout;
         }
 
         $this->module->openGraph->set([

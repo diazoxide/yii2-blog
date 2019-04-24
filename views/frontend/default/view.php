@@ -10,10 +10,7 @@
 /* @var $dataProvider \yii\data\ActiveDataProvider */
 
 use diazoxide\blog\Module;
-use yii\base\Event;
-use yii\helpers\Html;
-use kartik\social\FacebookPlugin;
-use \diazoxide\blog\components\JsonLDHelper;
+
 
 \diazoxide\blog\assets\AppAsset::register($this);
 
@@ -29,7 +26,7 @@ $schema = (object)[
     "http://schema.org/description" => $post->brief,
     "http://schema.org/backstory" => $post->brief,
     "http://schema.org/articleBody" => $post->content,
-    "http://schema.org/articleSection" => $post->category->title,
+    "http://schema.org/articleSection" => $post->type->has_category ? $post->category->title : $post->type->title,
     "http://schema.org/dateline" => Module::t('', 'Published: ') . $post->getPublished(),
     "http://schema.org/wordCount" => \yii\helpers\StringHelper::countWords($post->content),
     "http://schema.org/datePublished" => date_format(date_timestamp_set(new DateTime(), $post->published_at), 'c'),
@@ -84,7 +81,7 @@ $this->context->module->JsonLD->registerScripts();
 <?php endif; ?>
 
 
-<?php if ($post->module->enableComments && $post->show_comments) : ?>
+<?php if ($post->module->enableComments && $post->show_comments && $post->type->has_comment) : ?>
     <section id="comments" class="top-buffer-20-xs">
 
         <div class="row">
@@ -145,15 +142,12 @@ $this->context->module->JsonLD->registerScripts();
         'show_item_brief' => false,
         'body_options' => ['class' => 'row'],
         'show_item_category_icon' => false,
-//        'infinite_scroll' => true,
-//        'infinite_scroll_element_scroll' => false,
         'item_brief_length' => 50,
         'item_options' => ['class' => 'col-md-4 col-xs-12 top-buffer-20-xs'],
         'item_image_container_options' => ['class' => 'col-xs-4 col-md-12'],
         'item_content_container_options' => ['class' => 'col-xs-8 col-md-12'],
         'item_date_type' => 'dateTime',
         'item_info_container_options' => ['class' => 'text-warning text-right small'],
-//            'item_date_options'=>['class'=>'text-right text-warning'],
         'id' => 'related_post_widget'
     ]);
     ?>
