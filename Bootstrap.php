@@ -14,9 +14,12 @@ class Bootstrap implements BootstrapInterface
     public function bootstrap($app)
     {
 
+        if ($app->db->getTableSchema(BlogPostType::tableName(), true) === null) {
+            return;
+        }
+
         $post_types = BlogPostType::find()->all();
         $rules = [
-
             /*
              * Category rage rule
              * Each category has custom page

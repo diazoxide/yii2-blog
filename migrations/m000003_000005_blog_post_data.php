@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m000002_000004_blog_category_data extends Migration
+class m000003_000005_blog_post_data extends Migration
 {
 
     public function init()
@@ -17,7 +17,7 @@ class m000002_000004_blog_category_data extends Migration
         $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
 
         $this->createTable(
-            '{{%blog_category_data}}',
+            '{{%blog_post_data}}',
             [
                 'id' => $this->primaryKey(11),
                 'owner_id' => $this->integer(11)->notNull()->defaultValue(0),
@@ -26,11 +26,11 @@ class m000002_000004_blog_category_data extends Migration
             ], $tableOptions
         );
 
-        $this->createIndex('owner_id', '{{%blog_category_data}}', ['owner_id'], false);
+        $this->createIndex('owner_id', '{{%blog_post_data}}', ['owner_id'], false);
 
-        $this->addForeignKey('fk_blog_category_data_owner_id',
-            '{{%blog_category_data}}', 'owner_id',
-            '{{%blog_category}}', 'id',
+        $this->addForeignKey('fk_blog_post_data_owner_id',
+            '{{%blog_post_data}}', 'owner_id',
+            '{{%blog_post}}', 'id',
             'CASCADE', 'CASCADE'
         );
 
@@ -38,8 +38,8 @@ class m000002_000004_blog_category_data extends Migration
 
     public function safeDown()
     {
-        $this->dropForeignKey('fk_blog_category_data_owner_id', '{{%blog_category_data}}');
-        $this->dropIndex('owner_id', '{{%blog_category_data}}');
-        $this->dropTable('{{%blog_category_data}}');
+        $this->dropForeignKey('fk_blog_post_data_owner_id', '{{%blog_post_data}}');
+        $this->dropIndex('owner_id', '{{%blog_post_data}}');
+        $this->dropTable('{{%blog_post_data}}');
     }
 }

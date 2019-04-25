@@ -11,7 +11,6 @@ use diazoxide\blog\traits\IActiveStatus;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
-use yii\helpers\Json;
 use yii\helpers\Url;
 
 
@@ -119,9 +118,12 @@ class ImporterController extends \yii\web\Controller
                          * Updating hierarchy
                          * */
                         foreach (BlogCategory::findAll(['type_id' => $wordpress->post_type_id]) as $category) {
-                            $origin_parent_id = $category->getDataValue('wordpress_origin_parent_id');
+
+                            $origin_parent_id = $category->getDataValue($wordpress->key . '_origin_parent_id', false);
+
                             if ($origin_parent_id) {
-                                $parent = BlogCategory::find()->joinWith(['data data'])->where(['type_id' => $wordpress->post_type_id, 'data.name' => 'wordpress_origin_id', 'data.value' => $origin_parent_id->value])->one();
+                                echo $origin_parent_id->value;
+                                $parent = BlogCategory::find()->joinWith(['data data'])->where(['type_id' => $wordpress->post_type_id, 'data.name' => $wordpress->key . '_origin_id', 'data.value' => $origin_parent_id->value])->one();
                                 if ($parent) {
                                     $category->prependTo($parent)->save();
                                 }
@@ -152,14 +154,14 @@ class ImporterController extends \yii\web\Controller
                          * Inserting new category to database
                          * Or update existing model
                          * */
-                        $model = BlogCategory::find()->joinWith(['data data'])->where(['type_id' => $wordpress->post_type_id, 'data.name' => 'wordpress_origin_id', 'data.value' => $category['id']])->one();
+                        $model = BlogCategory::find()->joinWith(['data data'])->where(['type_id' => $wordpress->post_type_id, 'data.name' => $wordpress->key . '_origin_id', 'data.value' => $category['id']])->one();
                         $model = $model ? $model : new BlogCategory();
                         $model->type_id = $wordpress->post_type_id;
                         $model->title = $category['name'];
                         $model->slug = urldecode($category['slug']);
                         $parent_id = $category['parent'] == 0 ? 1 : $category['parent'];
-                        $model->setDataValue('wordpress_origin_id', $category['id']);
-                        $model->setDataValue('wordpress_origin_parent_id', $parent_id);
+                        $model->setDataValue($wordpress->key . '_origin_id', $category['id']);
+                        $model->setDataValue($wordpress->key . '_origin_parent_id', $parent_id);
                         $model->prependTo(BlogCategory::findOne(1))->save();
                     }
 
@@ -201,13 +203,17 @@ class ImporterController extends \yii\web\Controller
                          * But if old post not detected than setting new model id from origin
                          * */
                         if ($wordpress->overwrite) {
-                            $old_model = BlogPost::findOne($post['id']);
+                            $old_model = (new BlogCategory())->findByData($wordpress->key . '_origin_id', $post['id'])->andWhere(['type_id' => $wordpress->post_type_id])->one();
                             if ($old_model) {
                                 $model = $old_model;
-                            } else {
-                                $model->id = $post['id'];
                             }
                         }
+
+                        /*
+                         * Setting key attribute for next import
+                         * If post already created update the post uses this property
+                         * */
+                        $model->setDataValue($wordpress->key . '_origin_id', $post['id']);
 
                         /*
                          * Setting post type_id property
@@ -236,31 +242,39 @@ class ImporterController extends \yii\web\Controller
 
                         $model->title = Html::encode($post['title']['rendered']);
 
-                        $category = BlogCategory::find()->joinWith(['data data'])->where(['type_id' => $wordpress->post_type_id, 'data.name' => 'wordpress_origin_id', 'data.value' => $post['categories'][0]])->one();
+                        $category = (new BlogCategory())->findByData($wordpress->key . '_origin_id', $post['categories'][0])->andWhere(['type_id' => $wordpress->post_type_id])->one();
 
-                        $model->category_id = $category->id;
+                        if ($category) {
+                            $model->category_id = $category->id;
+                            Yii::info('Category exists ' . $category->id, self::class);
+                        } else {
+                            $model->category_id = 1;
+                            Yii::warning('Category not found ' . $post['categories'][0], self::class);
+                        }
+
 //                        $model->category_ids = $post['categories'];
                         $model->status = IActiveStatus::STATUS_ACTIVE;
-
-                        /*
-                         * If post type has banner
-                         * And isset featured media in original post
-                         * Than for first downloading image from url
-                         * Finally creating thumbs
-                         * */
-                        if ($post_type->has_banner && isset($post['_embedded']['wp:featuredmedia'])) {
-                            foreach ($post['_embedded']['wp:featuredmedia'] as $media) {
-                                if (isset($media['id']) && $media['id'] == $post['featured_media']) {
-                                    $model->banner = $this->downloadImage($media['source_url'], $model->id);
-                                }
-                            }
-                            $model->createThumbs();
-                        }
 
                         /*
                          * Validate and save model in DB
                          * */
                         if ($model->validate() && $model->save()) {
+
+                            /*
+                             * If post type has banner
+                             * And isset featured media in original post
+                             * Than for first downloading image from url
+                             * Finally creating thumbs
+                             * */
+                            if ($post_type->has_banner && isset($post['_embedded']['wp:featuredmedia'])) {
+                                foreach ($post['_embedded']['wp:featuredmedia'] as $media) {
+                                    if (isset($media['id']) && $media['id'] == $post['featured_media']) {
+                                        $model->banner = $this->downloadImage($media['source_url'], $model->id);
+                                        $model->save();
+                                    }
+                                }
+                                $model->createThumbs();
+                            }
 
                             /*
                              * Logging complete message
@@ -303,14 +317,10 @@ class ImporterController extends \yii\web\Controller
                 function ($m) {
                     $url = $m[1];
                     $url = str_replace("https://", "http://", $url);
-
                     $extPattern = '/\.([A-Za-z0-9]+)$/i';
                     $name = md5($url);
                     preg_match($extPattern, $url, $matches, PREG_OFFSET_CAPTURE, 0);
-
                     $ext = isset($matches[0][0]) ? $matches[0][0] : false;
-                    Yii::warning('EXT - ' . $ext, self::class);
-
                     if (!$ext) {
                         return $url;
                     };
@@ -318,12 +328,7 @@ class ImporterController extends \yii\web\Controller
                     $path = Yii::getAlias($this->module->imgFilePath . '/' . $this->module->postContentImagesDirectory) . '/' . $name . $ext;
                     $localUrl = Yii::getAlias($this->module->imgFileUrl . '/' . $this->module->postContentImagesDirectory) . '/' . $name . $ext;
 
-                    Yii::warning('Path - ' . $path, self::class);
-                    Yii::warning('LocalUrl - ' . $localUrl, self::class);
-
                     if (!file_exists($path)) {
-
-                        Yii::warning('File Not Exists - ' . $url, self::class);
 
                         try {
 
@@ -334,12 +339,8 @@ class ImporterController extends \yii\web\Controller
                         }
                     } else {
                         $url = $localUrl;
-                        Yii::warning('File Exists - ' . $url, self::class);
 
                     }
-
-                    Yii::warning('Final URL IS - ' . $url, self::class);
-
 
                     return '<img src="' . $url . '"';
                 },
@@ -353,13 +354,6 @@ class ImporterController extends \yii\web\Controller
     public function actionIndex()
     {
         return $this->render('index');
-    }
-
-
-    public function actionTest()
-    {
-        $model = BlogCategory::find()->joinWith(['data data'])->where(['data.name' => 'wordpress_origin_id', 'data.value' => '140'])->one();
-        echo $model->title;
     }
 
 }

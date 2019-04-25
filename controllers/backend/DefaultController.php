@@ -7,6 +7,7 @@
 
 namespace diazoxide\blog\controllers\backend;
 
+use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\Module;
 use Yii;
@@ -74,5 +75,10 @@ class DefaultController extends BaseAdminController
 
         echo Module::t(null, 'Thumbnails Generation Done: ' . $offset . ' - ' . ($limit + $offset)) . PHP_EOL;
 
+    }
+
+    public function actionTest(){
+        echo BlogCategory::find()->where(['type_id'=>1])->findByData('wordpress_origin_id',140)->one()->title;
+//        echo (new BlogCategory())->findByData('wordpress_origin_id',140)->andWhere(['type_id' =>1])->one()->title;
     }
 }

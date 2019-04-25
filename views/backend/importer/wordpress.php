@@ -58,6 +58,7 @@ use yii\helpers\ArrayHelper;
 
             <?php
             $percent = round($wordpress->page * 100 / $wordpress->total_pages);
+            $this->title = $percent.'% '.Module::t('','Post import in progress');
             echo yii\bootstrap\Progress::widget([
                 'percent' => $percent,
                 'barOptions' => ['class' => 'progress-bar-danger'],

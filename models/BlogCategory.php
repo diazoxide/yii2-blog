@@ -68,9 +68,6 @@ class BlogCategory extends \yii\db\ActiveRecord
     private $_isNavLabel;
     private $_status;
 
-
-    protected $_data = [];
-
     /**
      * @inheritdoc
      */
@@ -130,7 +127,8 @@ class BlogCategory extends \yii\db\ActiveRecord
         } else {
             $result = $this->getModule()->categoryBreadcrumbs;
         }
-        if (!$this->isNewRecord) {
+        if (!$this->isNewRecord && $this->id != 1) {
+
             $result[] = [
                 'label' => $this->title,
                 'url' => $this->url
@@ -144,13 +142,14 @@ class BlogCategory extends \yii\db\ActiveRecord
         return $this->hasOne(BlogPostType::class, ['id' => 'type_id']);
     }
 
-    /**
-     * created_at, updated_at to now()
-     * crate_user_id, update_user_id to current login user id
-     */
+
     public function behaviors()
     {
         return [
+            [
+                'class' => \diazoxide\blog\behaviors\DataOptionsBehavior\Behavior::class,
+                'data_model'=>BlogCategoryData::class
+            ],
             [
                 'class' => AdjacencyListBehavior::className(),
                 'sortable' => [
@@ -185,7 +184,6 @@ class BlogCategory extends \yii\db\ActiveRecord
         return [
             [['parent_id', 'type_id', 'is_nav', 'is_featured', 'sort_order', 'widget_type_id', 'page_size', 'status', 'sort'], 'integer'],
             [['title'], 'required'],
-            [['data'], 'string'],
             [['parent_id'], 'parentValidation'],
             [['sort_order', 'page_size'], 'default', 'value' => 0],
             [['icon_class', 'read_icon_class', 'read_more_text'], 'string', 'max' => 60],
@@ -243,110 +241,11 @@ class BlogCategory extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getData()
-    {
-        return $this->hasMany(BlogCategoryData::class, ['category_id' => 'id']);
-    }
-
-    public function afterSave($insert, $changedAttributes)
-    {
-        parent::afterSave($insert, $changedAttributes);
-
-        foreach ($this->_data as $data) {
-            $this->setDataValue($data[0], $data[1], $data[2]);
-        }
-    }
-
-    /**
-     * @param $name
-     * @param null $default
-     * @return array|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
-     */
-    public function getDataValue($name, $default = null)
-    {
-        $query = $this->getData()->andWhere(['name' => $name]);
-
-        if ($query->count() == 1) {
-            return $query->one();
-        } elseif ($query->count() > 1) {
-            return $query->all();
-        }
-
-        return $default;
-    }
-
-    /**
-     * Saving Dynamic data to db
-     * @param $name
-     * @param $value
-     * @param bool $overwrite
-     * @return array|bool
-     */
-    public function setDataValue($name, $value, $overwrite = true)
-    {
-        if ($this->isNewRecord) {
-            $this->_data[] = [$name, $value, $overwrite];
-            return true;
-        }
-
-        $errors = [];
-        $data = $this->getDataValue($name);
-
-        if (!is_array($value)) {
-            $value = [$value];
-        }
-
-        if (!$data || !$overwrite) {
-
-            foreach ($value as $item) {
-                $model = new BlogCategoryData();
-                $model->category_id = $this->id;
-                $model->name = $name;
-                $model->value = (string)$item;
-                if (!$model->save()) {
-                    $errors[] = $model->errors;
-                }
-            }
-
-        } elseif ($overwrite) {
-
-            if (!is_array($data)) {
-                $data = [$data];
-            }
-
-            foreach ($value as $key => $item) {
-                $model = isset($data[$key]) ? $data[$key] : new BlogCategoryData();
-                $model->category_id = $this->id;
-                $model->name = $name;
-                $model->value = (string)$item;
-                if (!$model->save()) {
-                    $errors[] = $model->errors;
-                }
-            }
-        }
-
-        if (!empty($errors)) {
-            return $errors;
-        }
-
-        return true;
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getBlogPosts()
     {
         return $this->hasMany(BlogPost::class, ['category_id' => 'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getChilds()
-    {
-        return $this->hasMany(BlogCategory::class, ['parent_id' => 'id'])->orderBy(['sort_order' => SORT_ASC]);
-    }
 
     /**
      * @return integer

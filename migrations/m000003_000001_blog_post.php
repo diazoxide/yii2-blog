@@ -39,7 +39,6 @@ class m000003_000001_blog_post extends Migration
             ], $tableOptions
         );
 
-        $this->createIndex('slug', '{{%blog_post}}', ['slug'], true);
         $this->createIndex('category_id', '{{%blog_post}}', ['category_id'], false);
         $this->createIndex('type_id', '{{%blog_post}}', ['type_id'], false);
         $this->createIndex('status', '{{%blog_post}}', ['status'], false);

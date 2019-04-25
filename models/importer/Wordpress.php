@@ -187,4 +187,11 @@ class Wordpress extends Model
         return $this->url . $this->rest_path;
     }
 
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return "wp_" . md5($this->url);
+    }
 }

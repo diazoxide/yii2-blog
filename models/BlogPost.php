@@ -7,6 +7,7 @@
 
 namespace diazoxide\blog\models;
 
+use diazoxide\blog;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use diazoxide\blog\traits\ModuleTrait;
@@ -81,7 +82,13 @@ class BlogPost extends ActiveRecord
     public function behaviors()
     {
         return [
-            'class' => TimestampBehavior::class,
+            [
+                'class' => TimestampBehavior::class
+            ],
+            [
+                'class' => blog\behaviors\DataOptionsBehavior\Behavior::class,
+                'data_model'=>BlogPostData::class
+            ],
             [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'title',
@@ -184,7 +191,9 @@ class BlogPost extends ActiveRecord
     {
         if ($this->category->type_id != $this->type_id && $this->category->type_id != null) {
             $this->addError($attribute, Module::t('', 'Post type must be same type as the category type.'));
+            return false;
         }
+        return true;
     }
 
     /**
