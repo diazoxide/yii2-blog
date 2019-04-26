@@ -11,6 +11,7 @@ use diazoxide\blog\traits\IActiveStatus;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\FileHelper;
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 use yii\helpers\Url;
@@ -27,10 +28,10 @@ class ImporterController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['index','wordpress'],
+                'only' => ['index', 'wordpress'],
                 'rules' => [
                     [
-                        'actions' => ['index','wordpress'],
+                        'actions' => ['index', 'wordpress'],
                         'allow' => true,
                         'roles' => ['BLOG_IMPORT_POSTS']
                     ],
@@ -46,7 +47,14 @@ class ImporterController extends \yii\web\Controller
     public const ACTION_IMPORT_POSTS = 'import-posts';
     public const ACTION_IMPORT_TAGS = 'import-tags';
 
-    public function downloadImage($url, $id)
+    /**
+     * @param $url
+     * @param $id
+     * @param $type_id
+     * @return null|string
+     * @throws \yii\base\Exception
+     */
+    public function downloadImage($url, $id, $type_id)
     {
         $url = str_replace("https://", "http://", $url);
 
@@ -59,10 +67,14 @@ class ImporterController extends \yii\web\Controller
         }
 
         $extension = $matches[1][0];
-
         $name = $id . '.' . $extension;
+        $dir_path = \Yii::getAlias($this->module->imgFilePath) . '/post/' . $type_id ;
 
-        $path = \Yii::getAlias($this->module->imgFilePath) . '/blogPost/' . $name;
+        if (!is_dir($dir_path)) {
+            FileHelper::createDirectory($dir_path, $mode = 0775, $recursive = true);
+        }
+
+        $path = \Yii::getAlias($this->module->imgFilePath) . '/post/' . $type_id . '/' . $name;
 
         if (!file_exists($path)) {
             try {
@@ -77,6 +89,7 @@ class ImporterController extends \yii\web\Controller
     /**
      * @return string
      * @throws \yii\base\InvalidConfigException
+     * @throws \yii\base\Exception
      */
     public function actionWordpress()
     {
@@ -289,7 +302,7 @@ class ImporterController extends \yii\web\Controller
                             if ($post_type->has_banner && isset($post['_embedded']['wp:featuredmedia'])) {
                                 foreach ($post['_embedded']['wp:featuredmedia'] as $media) {
                                     if (isset($media['id']) && $media['id'] == $post['featured_media']) {
-                                        $model->banner = $this->downloadImage($media['source_url'], $model->id);
+                                        $model->banner = $this->downloadImage($media['source_url'], $model->id, $wordpress->post_type_id);
                                         $model->save();
                                     }
                                 }
