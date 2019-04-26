@@ -124,10 +124,10 @@ class BlogPost extends ActiveRecord
                     'thumb' => ['width' => 400, 'height' => 300],
                     'facebook' => ['width' => 600, 'height' => 315],
                 ],
-                'filePath' => $this->module->imgFilePath . '/[[model]]/[[pk]].[[extension]]',
-                'fileUrl' => $this->module->getImgFullPathUrl() . '/[[model]]/[[pk]].[[extension]]',
-                'thumbPath' => $this->module->imgFilePath . '/[[model]]/[[profile]]_[[pk]].[[extension]]',
-                'thumbUrl' => $this->module->getImgFullPathUrl() . '/[[model]]/[[profile]]_[[pk]].[[extension]]',
+                'filePath' => $this->module->imgFilePath . '/post/[[attribute_type_id]]/[[pk]].[[extension]]',
+                'fileUrl' => $this->module->getImgFullPathUrl() . '/post/[[attribute_type_id]]/[[pk]].[[extension]]',
+                'thumbPath' => $this->module->imgFilePath . '/post/[[attribute_type_id]]/[[profile]]_[[pk]].[[extension]]',
+                'thumbUrl' => $this->module->getImgFullPathUrl() . '/post/[[attribute_type_id]]/[[profile]]_[[pk]].[[extension]]',
             ],
         ];
     }

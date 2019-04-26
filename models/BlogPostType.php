@@ -10,6 +10,7 @@ namespace diazoxide\blog\models;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\ModuleTrait;
 use Yii;
+use yii\helpers\FileHelper;
 
 /**
  * This is the model class for table "blog_post_type".
@@ -106,5 +107,23 @@ class BlogPostType extends \yii\db\ActiveRecord
         }
 
         return Yii::$app->getUrlManager()->createUrl(['/']);
+    }
+
+    /**
+     * Creating image upload directory
+     * @param bool $insert
+     * @param array $changedAttributes
+     * @throws \yii\base\Exception
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $path = Yii::getAlias($this->module->imgFilePath . '/post/' . $this->id);
+
+        if (!is_dir($path)) {
+            FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
+        }
+
     }
 }
