@@ -31,13 +31,13 @@ class m000002_000001_blog_category extends Migration
                 'read_icon_class' => $this->string(60)->null(),
                 'read_more_text' => $this->string(60)->null(),
                 'sort_order' => $this->integer(11)->notNull()->defaultValue(50),
-                'sort' => $this->integer(11)->notNull(),
+                'sort' => $this->integer(11)->notNull()->defaultValue(0),
                 'page_size' => $this->integer(11)->notNull()->defaultValue(10),
                 'template' => $this->string(255)->notNull()->defaultValue('post'),
                 'redirect_url' => $this->string(255)->null()->defaultValue(null),
                 'status' => $this->integer(11)->notNull()->defaultValue(1),
-                'created_at' => $this->integer(11)->notNull(),
-                'updated_at' => $this->integer(11)->notNull(),
+                'created_at' => $this->integer(11)->notNull()->defaultValue(0),
+                'updated_at' => $this->integer(11)->notNull()->defaultValue(0),
                 'type_id' => $this->integer(11)->null()->defaultValue(1),
             ], $tableOptions
         );
