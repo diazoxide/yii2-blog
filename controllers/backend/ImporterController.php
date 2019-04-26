@@ -74,7 +74,7 @@ class ImporterController extends \yii\web\Controller
             FileHelper::createDirectory($dir_path, $mode = 0775, $recursive = true);
         }
 
-        $path = \Yii::getAlias($this->module->imgFilePath) . '/post/' . $type_id . '/' . $name;
+        $path = $dir_path. '/' . $name;
 
         if (!file_exists($path)) {
             try {
