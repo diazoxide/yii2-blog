@@ -9,6 +9,8 @@ use diazoxide\blog\models\importer\Wordpress;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 use yii\helpers\Url;
@@ -19,6 +21,24 @@ use yii\helpers\Url;
  */
 class ImporterController extends \yii\web\Controller
 {
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index','wordpress'],
+                'rules' => [
+                    [
+                        'actions' => ['index','wordpress'],
+                        'allow' => true,
+                        'roles' => ['BLOG_IMPORT_POSTS']
+                    ],
+                ],
+            ],
+        ];
+    }
+
 
     public const ACTION_VALIDATE = 'validate';
     public const ACTION_SUCCESS = 'success';

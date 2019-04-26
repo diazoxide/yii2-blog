@@ -16,10 +16,29 @@ class m100000_000001_blog_rules extends Migration
         'diazoxide\blog\rbac\BlogAuthorRule',
     ];
     public $permissions = [
+        /*
+         * Post types permissions
+         * */
+        ['BLOG_VIEW_POST_TYPES', 'View post types'],
+        ['BLOG_VIEW_POST_TYPE', 'View post type'],
+        ['BLOG_DELETE_POST_TYPE', 'Delete post type'],
+        ['BLOG_CREATE_POST_TYPE', 'Create post type'],
+        ['BLOG_UPDATE_POST_TYPE', 'Update post type'],
+
+        /*
+         * Import permissions
+         * */
+        ['BLOG_IMPORT_POSTS', 'Import posts'],
+
+        /*
+         * Comments permissions
+         * */
         ['BLOG_BULK_COMMENTS', 'Bulk blog comments'],
         ['BLOG_CONFIRM_ALL_COMMENTS', 'Confirm all blog comments'],
         ['BLOG_CREATE_CATEGORY', 'Create blog category'],
         ['BLOG_CREATE_COMMENT', 'Create blog comment'],
+
+
         ['BLOG_CREATE_POST', 'Create blog post'],
         ['BLOG_CREATE_TAG', 'Create blog tag'],
         ['BLOG_DELETE_ALL_COMMENTS', 'Delete all blog comments'],
@@ -41,10 +60,10 @@ class m100000_000001_blog_rules extends Migration
         ['BLOG_VIEW_TAG', 'View blog tag'],
         ['BLOG_VIEW_TAGS', 'View blog tags'],
 
-        ['BLOG_VIEW_WIDGET_TYPES','View widget types'],
-        ['BLOG_CREATE_WIDGET_TYPE','Create widget type'],
-        ['BLOG_UPDATE_WIDGET_TYPE','Update widget type'],
-        ['BLOG_DELETE_WIDGET_TYPE','Delete widget type'],
+        ['BLOG_VIEW_WIDGET_TYPES', 'View widget types'],
+        ['BLOG_CREATE_WIDGET_TYPE', 'Create widget type'],
+        ['BLOG_UPDATE_WIDGET_TYPE', 'Update widget type'],
+        ['BLOG_DELETE_WIDGET_TYPE', 'Delete widget type'],
 
         ['BLOG_UPDATE_OWN_POST_BOOK_CHAPTER', 'Update own post book chapter', ['blogIsAuthor']],
         ['BLOG_UPDATE_POST_BOOK_CHAPTER', 'Update post book chapter'],
@@ -60,11 +79,17 @@ class m100000_000001_blog_rules extends Migration
         ['BLOG_DELETE_OWN_POST_BOOK', 'Delete own post book', ['blogIsAuthor']],
         ['BLOG_DELETE_POST_BOOK', 'Delete post book'],
 
-        ['BLOG_REGENERATE_THUMBNAILS','Regenerate thumbnails']
+        ['BLOG_REGENERATE_THUMBNAILS', 'Regenerate thumbnails']
     ];
 
     public $roles = [
         ['BLOG_ADMIN', 'Blog Administrator', [
+            'BLOG_IMPORT_POSTS',
+            'BLOG_VIEW_POST_TYPES',
+            'BLOG_VIEW_POST_TYPE',
+            'BLOG_DELETE_POST_TYPE',
+            'BLOG_CREATE_POST_TYPE',
+            'BLOG_UPDATE_POST_TYPE',
             'BLOG_REGENERATE_THUMBNAILS',
             'BLOG_BULK_COMMENTS',
             'BLOG_CONFIRM_ALL_COMMENTS',

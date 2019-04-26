@@ -13,6 +13,7 @@ use diazoxide\blog\models\BlogPostType;
 use diazoxide\blog\traits\IActiveStatus;
 use paulzi\adjacencyList\AdjacencyListBehavior;
 use paulzi\adjacencyList\AdjacencyListQueryTrait;
+use Throwable;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\data\ActiveDataProvider;
@@ -33,39 +34,39 @@ class PostTypeController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
             ],
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['index', 'delete', 'create', 'update', 'view'],
                 'rules' => [
                     [
                         'actions' => ['index'],
                         'allow' => true,
-                        'roles' => ['BLOG_VIEW_CATEGORIES']
+                        'roles' => ['BLOG_VIEW_POST_TYPES']
                     ],
                     [
                         'actions' => ['view'],
                         'allow' => true,
-                        'roles' => ['BLOG_VIEW_CATEGORY']
+                        'roles' => ['BLOG_VIEW_POST_TYPE']
                     ],
                     [
                         'actions' => ['delete'],
                         'allow' => true,
-                        'roles' => ['BLOG_DELETE_CATEGORY']
+                        'roles' => ['BLOG_DELETE_POST_TYPE']
                     ],
                     [
                         'actions' => ['create'],
                         'allow' => true,
-                        'roles' => ['BLOG_CREATE_CATEGORY']
+                        'roles' => ['BLOG_CREATE_POST_TYPE']
                     ],
                     [
                         'actions' => ['update'],
                         'allow' => true,
-                        'roles' => ['BLOG_UPDATE_CATEGORY']
+                        'roles' => ['BLOG_UPDATE_POST_TYPE']
                     ],
                 ],
             ],
@@ -107,7 +108,7 @@ class PostTypeController extends Controller
     }
 
     /**
-     * Creates a new BlogCategory model.
+     * Creates a new post type model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -126,7 +127,7 @@ class PostTypeController extends Controller
     }
 
     /**
-     * Updates an existing BlogCategory model.
+     * Updates an existing post type model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -144,12 +145,12 @@ class PostTypeController extends Controller
     }
 
     /**
-     * Deletes an existing BlogCategory model.
+     * Deletes an existing post type model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException
-     * @throws \Throwable
+     * @throws Throwable
      * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)

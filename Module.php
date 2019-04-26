@@ -350,20 +350,37 @@ class Module extends \yii\base\Module
         return [
             ['label' => Module::t('', 'Blog'),
                 'items' => [
-                    ['label' => Module::t('', 'Posts Types'),
-                        'url' => ["/{$this->id}/post-type"],
+                    ['label' => Module::t('', 'Posts'),
                         'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS"),
                         'items' => $post_types_items
                     ],
-//                    ['label' => Module::t('', 'Categories') . ' (' . BlogCategory::find()->count() . ')', 'url' => ["/{$this->id}/blog-category"], 'visible' => Yii::$app->user->can("BLOG_VIEW_CATEGORIES")],
                     ['label' => Module::t('', 'Comments') . ' (' . BlogComment::find()->count() . ')', 'url' => ["/{$this->id}/blog-comment"], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
                     ['label' => Module::t('', 'Tags') . ' (' . BlogTag::find()->count() . ')', 'url' => ["/{$this->id}/blog-tag"], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
                     ['label' => Module::t('', 'Widget Types') . ' (' . BlogWidgetType::find()->count() . ')', 'url' => ["/{$this->id}/widget-type/index"], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
                     ['label' => Module::t('', 'Options'),
                         'items' => [
-                            ['label' => 'Importer', 'url' => ["/{$this->id}/importer/index"]],
-                            ['label' => 'Thumbnails', 'url' => ["/{$this->id}/default/thumbnails"], 'visible' => Yii::$app->user->can("BLOG_REGENERATE_THUMBNAILS")]
-                        ]
+                            [
+                                'label' => Module::t('', 'Post Types'),
+                                'url' => ["/{$this->id}/post-type"],
+                                'visible' => Yii::$app->user->can("BLOG_VIEW_POST_TYPES"),
+                            ],
+
+                            [
+                                'label' => 'Importer', 'url' => ["/{$this->id}/importer/index"],
+                                'visible' => Yii::$app->user->can("BLOG_IMPORT_POSTS"),
+
+                            ],
+
+                            [
+                                'label' => Module::t('', 'Regenerate Thumbnails'),
+                                'url' => ["/{$this->id}/default/thumbnails"],
+                                'visible' => Yii::$app->user->can("BLOG_REGENERATE_THUMBNAILS")]
+                        ],
+                        'visible' =>
+                            Yii::$app->user->can("BLOG_VIEW_POST_TYPES") ||
+                            Yii::$app->user->can("BLOG_IMPORT_POSTS") ||
+                            Yii::$app->user->can("BLOG_REGENERATE_THUMBNAILS")
+
                     ]
                 ]
             ],

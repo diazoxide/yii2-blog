@@ -82,6 +82,8 @@ class Slider2 extends \yii\bootstrap\Widget
      */
     public function run()
     {
+        if(empty($this->items))
+            return null;
         return Carousel::widget([
             'items' => $this->items,
             'options' => ['class' => 'carousel slide', 'data-interval' => '5000'],

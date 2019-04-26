@@ -109,21 +109,21 @@ class BlogPostType extends \yii\db\ActiveRecord
         return Yii::$app->getUrlManager()->createUrl(['/']);
     }
 
-    /**
-     * Creating image upload directory
-     * @param bool $insert
-     * @param array $changedAttributes
-     * @throws \yii\base\Exception
-     */
-    public function afterSave($insert, $changedAttributes)
-    {
-        parent::afterSave($insert, $changedAttributes);
-
-        $path = Yii::getAlias($this->module->imgFilePath . '/post/' . $this->id);
-
-        if (!is_dir($path)) {
-            FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
-        }
-
-    }
+//    /**
+//     * Creating image upload directory
+//     * @param bool $insert
+//     * @param array $changedAttributes
+//     * @throws \yii\base\Exception
+//     */
+//    public function afterSave($insert, $changedAttributes)
+//    {
+//        parent::afterSave($insert, $changedAttributes);
+//
+//        $path = Yii::getAlias($this->module->imgFilePath . '/post/' . $this->id);
+//
+//        if (!is_dir($path)) {
+//            FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
+//        }
+//
+//    }
 }
