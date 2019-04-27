@@ -87,6 +87,52 @@ class ImporterController extends \yii\web\Controller
     }
 
     /**
+     * @param $content
+     * @return null|string|string[]
+     */
+    public function localizeContent($content)
+    {
+        if ($content) {
+            $final = preg_replace_callback(
+                '/\<img.*\ src="(.[^"]+)\"/i',
+                function ($m) {
+                    $url = $m[1];
+                    $url = str_replace("https://", "http://", $url);
+                    $extPattern = '/\.([A-Za-z0-9]+)$/i';
+                    $name = md5($url);
+                    preg_match($extPattern, $url, $matches, PREG_OFFSET_CAPTURE, 0);
+                    $ext = isset($matches[0][0]) ? $matches[0][0] : false;
+                    if (!$ext) {
+                        return $url;
+                    };
+
+                    $path = Yii::getAlias($this->module->imgFilePath . '/' . $this->module->postContentImagesDirectory) . '/' . $name . $ext;
+                    $localUrl = Yii::getAlias($this->module->imgFileUrl . '/' . $this->module->postContentImagesDirectory) . '/' . $name . $ext;
+
+                    if (!file_exists($path)) {
+
+                        try {
+
+                            file_put_contents($path, fopen($url, 'r'));
+                            $url = $localUrl;
+
+                        } catch (\Exception $exception) {
+                        }
+                    } else {
+                        $url = $localUrl;
+
+                    }
+
+                    return '<img src="' . $url . '"';
+                },
+                $content
+            );
+            return $final;
+        } else return null;
+
+    }
+
+    /**
      * @return string
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\base\Exception
@@ -338,51 +384,11 @@ class ImporterController extends \yii\web\Controller
         ]);
     }
 
-    /**
-     * @param $content
-     * @return null|string|string[]
-     */
-    public function localizeContent($content)
-    {
-        if ($content) {
-            $final = preg_replace_callback(
-                '/\<img.*\ src="(.[^"]+)\"/i',
-                function ($m) {
-                    $url = $m[1];
-                    $url = str_replace("https://", "http://", $url);
-                    $extPattern = '/\.([A-Za-z0-9]+)$/i';
-                    $name = md5($url);
-                    preg_match($extPattern, $url, $matches, PREG_OFFSET_CAPTURE, 0);
-                    $ext = isset($matches[0][0]) ? $matches[0][0] : false;
-                    if (!$ext) {
-                        return $url;
-                    };
 
-                    $path = Yii::getAlias($this->module->imgFilePath . '/' . $this->module->postContentImagesDirectory) . '/' . $name . $ext;
-                    $localUrl = Yii::getAlias($this->module->imgFileUrl . '/' . $this->module->postContentImagesDirectory) . '/' . $name . $ext;
-
-                    if (!file_exists($path)) {
-
-                        try {
-
-                            file_put_contents($path, fopen($url, 'r'));
-                            $url = $localUrl;
-
-                        } catch (\Exception $exception) {
-                        }
-                    } else {
-                        $url = $localUrl;
-
-                    }
-
-                    return '<img src="' . $url . '"';
-                },
-                $content
-            );
-            return $final;
-        } else return null;
+    public function actionCsv(){
 
     }
+
 
     public function actionIndex()
     {
