@@ -23,10 +23,12 @@
   ],
   "require": {
     "ext-json": "*",
+    "ext-fileinfo":"*",
     "yiisoft/yii2": "*",
     "diazoxide/yii2-revslider": "*",
     "diazoxide/yii2-infinite-scroll": "dev-master",
     "2amigos/yii2-ckeditor-widget": "dev-master",
+    "trntv/yii2-aceeditor": "^2.0.0",
     "2amigos/yii2-tinymce-widget": "~1.1",
     "yiidoc/yii2-redactor": "*",
     "bower-asset/modmore-redactor-plugins": "v1.1.3",

@@ -40,6 +40,9 @@ use yii\helpers\ArrayHelper;
                 <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
                 <?= $form->field($model, 'name')->textInput(['maxlength' => 64]) ?>
                 <?= $form->field($model, 'layout')->textInput(['maxlength' => 255]) ?>
+                <?= $form->field($model, 'single_pattern')->textarea(['rows' => 5]) ?>
+                <?= $form->field($model, 'archive_pattern')->textarea(['rows' => 5]) ?>
+                <?= $form->field($model, 'default_pattern')->textarea(['rows' => 5]) ?>
                 <?= $form->field($model, 'url_pattern')->textInput(['maxlength' => 255]) ?>
                 <?= $form->field($model, 'has_title')->checkbox() ?>
                 <?= $form->field($model, 'has_content')->checkbox() ?>

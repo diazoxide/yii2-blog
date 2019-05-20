@@ -67,6 +67,7 @@ class BlogPostType extends \yii\db\ActiveRecord
             [['title', 'name'], 'required'],
             [['title', 'url_pattern', 'layout'], 'string', 'max' => 255],
             [['name'], 'string', 'max' => 64],
+            [['single_pattern', 'archive_pattern', 'default_pattern'], 'string'],
             [['has_comment', 'has_banner', 'has_category', 'has_tag', 'has_book', 'has_content', 'has_brief', 'has_title'], 'boolean'],
         ];
     }

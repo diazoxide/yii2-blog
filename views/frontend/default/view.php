@@ -10,6 +10,7 @@
 /* @var $dataProvider \yii\data\ActiveDataProvider */
 
 use diazoxide\blog\Module;
+use diazoxide\blog\widgets\Feed;
 
 
 \diazoxide\blog\assets\AppAsset::register($this);
@@ -131,7 +132,7 @@ $this->context->module->JsonLD->registerScripts();
 <?php endif; ?>
 
 <section id="related-posts">
-    <?= \diazoxide\blog\widgets\Feed::widget([
+    <?= Feed::widget([
         'items_count' => 3,
         'options' => ['tag' => 'div', 'class' => ''],
         'header_options' => ['tag' => 'div', 'class' => 'row'],

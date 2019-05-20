@@ -368,5 +368,4 @@ class Feed extends \yii\bootstrap\Widget
             $this->title_options
         );
     }
-
 }

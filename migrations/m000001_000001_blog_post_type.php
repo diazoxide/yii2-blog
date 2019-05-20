@@ -14,7 +14,7 @@ class m000001_000001_blog_post_type extends Migration
 
     public function safeUp()
     {
-        $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
+        $tableOptions = 'CHARACTER SET utf8 COLLATE utf8mb4_unicode_ci ENGINE=InnoDB';
 
         $this->createTable(
             '{{%blog_post_type}}',
@@ -24,6 +24,9 @@ class m000001_000001_blog_post_type extends Migration
                 'title' => $this->string(255)->notNull(),
                 'url_pattern' => $this->string(255)->null(),
                 'layout' => $this->string(255)->null()->defaultValue(null),
+                'single_pattern' => $this->text()->null()->defaultValue(null),
+                'archive_pattern' => $this->text()->null()->defaultValue(null),
+                'default_pattern' => $this->text()->null()->defaultValue(null),
                 'has_title' => $this->boolean(),
                 'has_content' => $this->boolean(),
                 'has_brief' => $this->boolean(),

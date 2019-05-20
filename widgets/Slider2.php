@@ -2,14 +2,19 @@
 
 namespace diazoxide\blog\widgets;
 
+use Codeception\Exception\ElementNotFound;
 use diazoxide\blog\models\BlogPost;
+use diazoxide\blog\models\BlogPostType;
 use diazoxide\blog\traits\IActiveStatus;
+use yii\base\ViewNotFoundException;
+use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\StringHelper;
 
-class Slider2 extends \yii\bootstrap\Widget
+class Slider2 extends Widget
 {
     public $itemsCount = 10;
+	public $post_type = 'article';
 
     public function init()
     {
@@ -95,10 +100,19 @@ class Slider2 extends \yii\bootstrap\Widget
         ]);
     }
 
-    public function getItems()
+	/**
+	 * @return array
+	 */
+	public function getItems()
     {
+    	$post_type = BlogPostType::findOne(['name'=>$this->post_type]);
+
+    	if($post_type == null){
+		    throw new ElementNotFound('The requested post type does not exist.');
+	    }
+
         $posts = BlogPost::find()
-            ->where(['status' => IActiveStatus::STATUS_ACTIVE, 'is_slide' => true])
+            ->where(['status' => IActiveStatus::STATUS_ACTIVE, 'is_slide' => true,'type_id'=>$post_type->id])
             ->andWhere('FROM_UNIXTIME(published_at) <= NOW()')
             ->limit($this->itemsCount)
             ->orderBy(['id' => SORT_DESC])

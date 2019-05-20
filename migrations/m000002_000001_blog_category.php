@@ -22,7 +22,7 @@ class m000002_000001_blog_category extends Migration
                 'id' => $this->primaryKey(11),
                 'parent_id' => $this->integer(11)->notNull()->defaultValue(0),
                 'title' => $this->string(255)->notNull(),
-                'slug' => $this->string(128)->notNull(),
+                'slug' => $this->string(255)->notNull(),
                 'banner' => $this->string(255)->null()->defaultValue(null),
                 'icon_class' => $this->string(60)->null()->defaultValue(null),
                 'is_nav' => $this->integer(11)->notNull()->defaultValue(1),

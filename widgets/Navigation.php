@@ -4,6 +4,7 @@ namespace diazoxide\blog\widgets;
 
 use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogPostType;
+use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
 use yii\base\NotSupportedException;
 use yii\bootstrap\Nav;
@@ -36,12 +37,12 @@ class Navigation extends \yii\bootstrap\Widget
         }
 
         NavBar::begin([
-            'brandLabel' => 'Բաժիններ',
+            'brandLabel' => Module::t('', 'Categories'),
             'brandOptions' => [
                 'class' => 'visible-xs'
             ],
-            'innerContainerOptions' => ['class' => 'nopadding-sm'],
-            'containerOptions' => ['class' => 'container nopadding-sm'],
+            'innerContainerOptions' => ['class' => 'container nopadding-sm'],
+            'containerOptions' => ['class' => 'nopadding-sm'],
 
             'options' => [
                 'class' => 'navbar-default',

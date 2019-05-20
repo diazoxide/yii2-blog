@@ -7,8 +7,10 @@
 
 namespace diazoxide\blog\controllers\frontend;
 
+use diazoxide\blog\components\ViewPatternHelper;
 use diazoxide\blog\models\BlogPostType;
 use Yii;
+use yii\base\ViewNotFoundException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use diazoxide\blog\models\BlogCategory;
@@ -61,9 +63,21 @@ class DefaultController extends Controller
     }
 
 
-    public function actionIndex()
+    /**
+     * @param string $type
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionIndex($type = 'article')
     {
-        $featuredCategories = BlogCategory::find()->where(['is_featured' => true, 'status' => IActiveStatus::STATUS_ACTIVE])->orderBy(['sort_order' => SORT_DESC]);
+
+        $type_model = BlogPostType::findOne(['name' => $type]);
+
+        if (!$type_model) {
+            throw new NotFoundHttpException('The requested post type does not exist.');
+        }
+
+        $featuredCategories = BlogCategory::find()->where(['type_id'=>$type_model->id,'is_featured' => true, 'status' => IActiveStatus::STATUS_ACTIVE])->orderBy(['sort_order' => SORT_DESC]);
 
         $this->module->openGraph->set([
             'title' => $this->module->homeTitle,
@@ -80,11 +94,24 @@ class DefaultController extends Controller
             'content' => $this->module->homeKeywords
         ]);
 
-        return $this->render($this->module->getView(), [
-            'title' => $this->getModule()->homeTitle,
-            'featuredCategories' => $featuredCategories,
-        ]);
+	    $pattern = $type_model->default_pattern;
+	    $view = $this->module->getView();
 
+	    $params = [
+		    'pattern'=>$pattern,
+		    'type'=>$type_model,
+		    'title' => $this->getModule()->homeTitle,
+		    'featuredCategories' => $featuredCategories,
+	    ];
+
+
+	    if($pattern){
+		    return $this->renderContent(ViewPatternHelper::extract($pattern,$params));
+	    } elseif($view){
+		    return $this->render($view, $params);
+	    } else{
+		    throw new ViewNotFoundException('The requested view file or view pattern does not exist.');
+	    }
     }
 
 
@@ -122,27 +149,6 @@ class DefaultController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-    }
-
-    public function actionTest()
-    {
-        echo Yii::$app->controller->route;
-    }
-
-
-    /**
-     * @param $action
-     * @return bool
-     * @throws \yii\web\BadRequestHttpException
-     */
-    public function beforeAction($action)
-    {
-
-        if (isset($this->module->frontendLayoutMap[$this->route])) {
-            $this->layout = $this->module->frontendLayoutMap[$this->route];
-        }
-
-        return parent::beforeAction($action);
     }
 
 

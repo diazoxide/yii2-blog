@@ -82,7 +82,7 @@ if ($showDate): ?>
     <span class="blog_datetime">
         <i class="fa fa-calendar"></i>
         <?= /** @var string $dateType */
-        Yii::$app->formatter->format($model->created_at, $dateType) ?>
+        Yii::$app->formatter->format($model->published_at, $dateType) ?>
     </span>
 <?php endif; ?>
 <?php /** @var boolean $showViews */

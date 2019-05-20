@@ -34,6 +34,7 @@ use yiidreamteam\upload\ImageUploadBehavior;
  * @property string $title
  * @property string $url
  * @property boolean $show_comments
+ * @property boolean $is_slide
  * @property string $content
  * @property string $brief
  * @property string $tags
@@ -87,7 +88,7 @@ class BlogPost extends ActiveRecord
             ],
             [
                 'class' => blog\behaviors\DataOptionsBehavior\Behavior::class,
-                'data_model'=>BlogPostData::class
+                'data_model' => BlogPostData::class
             ],
             [
                 'class' => SluggableBehavior::class,
@@ -141,7 +142,7 @@ class BlogPost extends ActiveRecord
             /*
              * Title always required for every type of post
              * */
-            [['title'], 'required'],
+            [['title', 'type_id'], 'required'],
 
             /*
              * Additional property for many_to_many behavior
@@ -165,20 +166,20 @@ class BlogPost extends ActiveRecord
              * */
             ['category_id', 'categoryValidation'],
 
-            [['slug'], 'string', 'max' => 128],
 
-            [['slug'], 'unique'],
+            [['category_id', 'click', 'type_id', 'user_id', 'status'], 'integer'],
+            [['created_at', 'updated_at', 'published_at'], 'integer', 'min' => 0],
 
-            [['category_id', 'click', 'type_id', 'user_id', 'status', 'created_at', 'updated_at', 'published_at'], 'integer'],
             [['brief', 'content'], 'string'],
             [['is_slide', 'show_comments'], 'boolean'],
             [['show_comments'], 'default', 'value' => true],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
-            [['title', 'tags'], 'string', 'max' => 255],
+            [['title', 'tags', 'slug'], 'string', 'max' => 255],
             ['click', 'default', 'value' => 0],
 
             [['created', 'updated', 'published'], 'date', 'format' => Yii::$app->formatter->datetimeFormat],
 
+            [['slug'], 'unique'],
             /*
              * Check if type id is exists in BlogPostType table
              * */

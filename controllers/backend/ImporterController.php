@@ -5,12 +5,13 @@ namespace diazoxide\blog\controllers\backend;
 use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\models\BlogPostType;
+use diazoxide\blog\models\importer\Csv;
 use diazoxide\blog\models\importer\Wordpress;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\IActiveStatus;
+use diazoxide\blog\traits\StatusTrait;
 use Yii;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\helpers\FileHelper;
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
@@ -68,13 +69,13 @@ class ImporterController extends \yii\web\Controller
 
         $extension = $matches[1][0];
         $name = $id . '.' . $extension;
-        $dir_path = \Yii::getAlias($this->module->imgFilePath) . '/post/' . $type_id ;
+        $dir_path = Yii::getAlias($this->module->imgFilePath) . '/post/' . $type_id;
 
         if (!is_dir($dir_path)) {
             FileHelper::createDirectory($dir_path, $mode = 0775, $recursive = true);
         }
 
-        $path = $dir_path. '/' . $name;
+        $path = $dir_path . '/' . $name;
 
         if (!file_exists($path)) {
             try {
@@ -129,7 +130,6 @@ class ImporterController extends \yii\web\Controller
             );
             return $final;
         } else return null;
-
     }
 
     /**
@@ -385,7 +385,140 @@ class ImporterController extends \yii\web\Controller
     }
 
 
-    public function actionCsv(){
+    /**
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\base\Exception
+     */
+    public function actionCsv()
+    {
+
+        $csv = new Csv();
+        $posts = [];
+
+        $action = $this::ACTION_VALIDATE;
+
+        /*
+         * Loading model from get parameters
+         * */
+        if ($csv->load(Yii::$app->request->get())) {
+
+            if ($csv->validate()) {
+
+                /*
+                * Getting url get params
+                * */
+                $args = Yii::$app->request->get();
+
+                /*
+                 * Getting post type model
+                 * */
+                $post_type = BlogPostType::findOne($csv->post_type_id);
+
+
+                $action = Yii::$app->request->get('action') ? Yii::$app->request->get('action') : $this::ACTION_VALIDATE;
+
+
+                $posts = $csv->getPosts();
+
+                /*
+                     * If current page of posts
+                     * Is empty than redirect already to success action
+                     * */
+                if (empty($posts)) {
+                    $args['action'] = $this::ACTION_SUCCESS;
+                    array_unshift($args, 'wordpress');
+                    return $this->redirect($args);
+                }
+
+                Yii::warning($posts, self::class);
+
+                foreach ($posts as $post) {
+                    /*
+                     * Creating new BlogPost object model
+                     * */
+                    $model = new BlogPost();
+
+                    /*
+                     * If overwrite enabled than for first finding old post
+                     * If old post detected than overwriting old post
+                     * But if old post not detected than setting new model id from origin
+                     * */
+                    if ($csv->overwrite) {
+                        $old_model = (new BlogPost())->findByData($csv->key . '_origin_id', $post['id'])->andWhere(['type_id' => $csv->post_type_id])->one();
+                        if ($old_model) {
+                            $model = $old_model;
+                        }
+                    }
+
+                    $model->setDataValue($csv->key . '_origin_id', $post['id']);
+
+                    $model->type_id = $csv->post_type_id;
+                    $model->title = isset($post['title']) ? $post['title'] : null;
+                    $model->content = isset($post['content']) ? $post['content'] : null;
+                    $model->brief = isset($post['brief']) ? $post['brief'] : null;
+                    $model->is_slide = isset($post['is_slide']) ? $post['is_slide'] : null;
+                    $model->slug = isset($post['slug']) ? $post['slug'] : null;
+                    $model->click = isset($post['click']) ? $post['click'] : null;
+                    $model->created_at = Yii::$app->formatter->asTimestamp(isset($post['created_at']) ? $post['created_at'] : null);
+                    $model->updated_at = Yii::$app->formatter->asTimestamp(isset($post['updated_at']) ? $post['updated_at'] : null);
+                    $model->published_at = Yii::$app->formatter->asTimestamp(isset($post['published_at']) ? $post['published_at'] : null);
+                    $model->status = IActiveStatus::STATUS_ACTIVE;
+
+
+                    if (isset($post['category_id'])) {
+                        $model->category_id = $post['category_id'];
+                    } elseif (isset($post['category_name'])) {
+                        $category = (new BlogCategory())->findByData($csv->key . '_origin_name', $post['category_name'])->andWhere(['type_id' => $csv->post_type_id])->one();
+                        if (!$category) {
+                            $category = new BlogCategory();
+                            $category->title = $post['category_name'];
+                            $category->type_id = $csv->post_type_id;
+                            $category->setDataValue($csv->key . '_origin_name', $post['category_name']);
+                            $category->prependTo(BlogCategory::findOne(1))->save();
+                        }
+                        $model->category_id = $category->id;
+                    }
+
+                    if ($model->validate() && $model->save()) {
+                        /*
+                        * If post type has banner
+                        * And isset banner property in post array
+                        * Than for first downloading image from url
+                        * Finally create thumbs
+                        * */
+                        if ($post_type->has_banner && isset($post['banner'])) {
+                            Yii::warning("Trying to download attachment: ".$post['banner'], self::class);
+                            $model->banner = $this->downloadImage($post['banner'], $model->id, $csv->post_type_id);
+                            $model->save();
+                            $model->createThumbs();
+                        }
+
+                    } else {
+                        Yii::error($model->firstErrors, self::class);
+                    }
+
+
+//                    $model->user_id = isset($post['user_id']) ? $post['user_id'] : null;
+
+
+                }
+
+
+                $args[$csv->formName()]['page']++;
+                array_unshift($args, 'csv');
+                $redirect_url = Url::to($args);
+                $this->view->registerJs('setTimeout(function(){window.location.href="' . $redirect_url . '";},2000)');
+
+            }
+
+        }
+
+        return $this->render('csv', [
+            'csv' => $csv,
+            'posts' => $posts,
+            'action' => $action
+        ]);
 
     }
 
@@ -394,5 +527,12 @@ class ImporterController extends \yii\web\Controller
     {
         return $this->render('index');
     }
+
+    public function actionTest()
+    {
+        $model = new BlogPost();
+        print_r($model->attributes());
+    }
+
 
 }
