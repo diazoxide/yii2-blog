@@ -14,7 +14,7 @@ class m000001_000001_blog_post_type extends Migration
 
     public function safeUp()
     {
-        $tableOptions = 'CHARACTER SET utf8 COLLATE utf8mb4_unicode_ci ENGINE=InnoDB';
+        $tableOptions = 'CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE=InnoDB';
 
         $this->createTable(
             '{{%blog_post_type}}',
