@@ -211,14 +211,24 @@ class DefaultController extends Controller
             return $this->redirect(['view', 'id' => $post->id, '#' => $comment->id]);
         }
 
-        return $this->render($this->module->getView(), [
-            'post' => $post,
-            'dataProvider' => $dataProvider,
-            'comment' => $comment,
-            'showClicks' => $this->getModule()->showClicksInPost,
-            'showDate' => $this->getModule()->showDateInPost,
-            'dateType' => $this->getModule()->dateTypeInPost,
-        ]);
+        $params = [
+	        'post' => $post,
+	        'dataProvider' => $dataProvider,
+	        'comment' => $comment,
+	        'showClicks' => $this->getModule()->showClicksInPost,
+	        'showDate' => $this->getModule()->showDateInPost,
+	        'dateType' => $this->getModule()->dateTypeInPost,
+        ];
+	    $pattern = $post->type->single_pattern;
+	    $view = $this->module->getView();
+
+	    if($pattern){
+		    return $this->renderContent(ViewPatternHelper::extract($pattern,$params));
+	    } elseif($view){
+		    return $this->render($view, $params);
+	    } else{
+		    throw new ViewNotFoundException('The requested view file or view pattern does not exist.');
+	    }
     }
 
     /**

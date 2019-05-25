@@ -173,12 +173,12 @@ class Module extends \yii\base\Module
     protected function _frontendLayoutPatterns()
     {
         return [
-            $this->id . '/default/index' => '[navigation]<div class="container">[content]</div>',
-            $this->id . '/default/view' => '[navigation]<div class="container">[content]</div>',
-            $this->id . '/default/archive' => '[navigation]<div class="container">[content]</div>',
-            $this->id . '/default/book' => '[navigation]<div class="container">[content]</div>',
-            $this->id . '/default/chapter' => '[navigation]<div class="container">[content]</div>',
-            $this->id . '/default/chapter-search' => '[navigation]<div class="container">[content]</div>',
+            $this->id . '/default/index' => '[navigation]<div class="container">[$content]</div>',
+            $this->id . '/default/view' => '[navigation]<div class="container">[$content]</div>',
+            $this->id . '/default/archive' => '[navigation]<div class="container">[$content]</div>',
+            $this->id . '/default/book' => '[navigation]<div class="container">[$content]</div>',
+            $this->id . '/default/chapter' => '[navigation]<div class="container">[$content]</div>',
+            $this->id . '/default/chapter-search' => '[navigation]<div class="container">[$content]</div>',
         ];
     }
 
