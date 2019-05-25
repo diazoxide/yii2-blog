@@ -94,7 +94,7 @@ class BlogPostBookChapter extends \yii\db\ActiveRecord
             [['brief','keywords'], 'string'],
             [['bbcode'], 'boolean'],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
-            [['title','keywords'], 'string', 'max' => 255],
+            [['title','keywords'], 'string', 'max' => 191],
             [['content'], 'string'],
 
         ];

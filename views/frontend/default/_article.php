@@ -64,41 +64,15 @@ use diazoxide\blog\Module;
         if ($post->type->has_content) {
 
             /*
-             * Before post content Event
-             * */
-            $this->context->module->trigger(
-                $this->context->module::EVENT_BEFORE_POST_CONTENT_VIEW,
-                new Event(['sender' => $this, 'data' => ['post' => $post]])
-            );
-
-            /*
              * Printing main post content property value
              * */
             echo $post->content;
 
-            /*
-             * After post content event
-            * */
-            $this->context->module->trigger(
-                $this->context->module::EVENT_AFTER_POST_CONTENT_VIEW,
-                new Event(['sender' => $this, 'data' => ['post' => $post]])
-            );
         }
-
-        /* Before books */
-        $this->context->module->trigger(
-            $this->context->module::EVENT_BEFORE_POST_BOOK_VIEW,
-            new Event(['sender' => $this, 'data' => ['post' => $post]])
-        );
 
         /* Printing books */
         echo $this->render('_books', ['books' => $post->getBooks()]);
 
-        /* After books event*/
-        $this->context->module->trigger(
-            $this->context->module::EVENT_AFTER_POST_BOOK_VIEW,
-            new Event(['sender' => $this, 'data' => ['post' => $post]])
-        );
         ?>
     </div>
 </article>

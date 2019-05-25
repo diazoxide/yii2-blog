@@ -66,7 +66,7 @@ class BlogWidgetType extends ActiveRecord {
 	public function rules() {
 		return [
 			[ [ 'title' ], 'required' ],
-			[ [ 'title' ], 'string', 'max' => 255 ],
+			[ [ 'title' ], 'string', 'max' => 191 ],
 			[ [ 'config' ], 'safe' ],
 		];
 	}

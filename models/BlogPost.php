@@ -174,7 +174,7 @@ class BlogPost extends ActiveRecord
             [['is_slide', 'show_comments'], 'boolean'],
             [['show_comments'], 'default', 'value' => true],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
-            [['title', 'tags', 'slug'], 'string', 'max' => 255],
+            [['title', 'tags', 'slug'], 'string', 'max' => 191],
             ['click', 'default', 'value' => 0],
 
             [['created', 'updated', 'published'], 'date', 'format' => Yii::$app->formatter->datetimeFormat],

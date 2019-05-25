@@ -187,7 +187,7 @@ class BlogCategory extends \yii\db\ActiveRecord
             [['parent_id'], 'parentValidation'],
             [['sort_order', 'page_size'], 'default', 'value' => 0],
             [['icon_class', 'read_icon_class', 'read_more_text'], 'string', 'max' => 60],
-            [['title', 'template', 'redirect_url', 'slug'], 'string', 'max' => 255],
+            [['title', 'template', 'redirect_url', 'slug'], 'string', 'max' => 191],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp', 'mimeTypes' => 'image/jpeg, image/png, image/webp'],
         ];
     }

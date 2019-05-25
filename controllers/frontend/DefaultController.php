@@ -62,7 +62,6 @@ class DefaultController extends Controller
         ];
     }
 
-
     /**
      * @param string $type
      * @return string
@@ -97,10 +96,14 @@ class DefaultController extends Controller
 	    $pattern = $type_model->default_pattern;
 	    $view = $this->module->getView();
 
+	    /*
+	     * Setting Title of page
+	     * */
+	    Yii::$app->view->title = $this->getModule()->homeTitle;
+
 	    $params = [
 		    'pattern'=>$pattern,
 		    'type'=>$type_model,
-		    'title' => $this->getModule()->homeTitle,
 		    'featuredCategories' => $featuredCategories,
 	    ];
 
@@ -113,7 +116,6 @@ class DefaultController extends Controller
 		    throw new ViewNotFoundException('The requested view file or view pattern does not exist.');
 	    }
     }
-
 
     /**
      * @param string $type
@@ -143,14 +145,28 @@ class DefaultController extends Controller
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render($this->module->getView(), [
+        Yii::$app->view->title = $type_model->title.' '.Module::t('','Archive');
+        Yii::$app->view->params['breadcrumbs'] = $category->breadcrumbs;
+
+        $pattern = $type_model->archive_pattern;
+        $view = $this->module->getView();
+
+        $params = [
             'title' => isset($category) ? $category->title : Module::t('', "Գրառումներ"),
             'category' => $category,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
-    }
+        ];
 
+        if($pattern){
+            return $this->renderContent(ViewPatternHelper::extract($pattern,$params));
+        } elseif($view){
+            return $this->render($view, $params);
+        } else{
+            throw new ViewNotFoundException('The requested view file or view pattern does not exist.');
+        }
+
+    }
 
     /**
      * @param $slug
@@ -196,6 +212,14 @@ class DefaultController extends Controller
             'name' => 'keywords',
             'content' => $post->title
         ]);
+
+        /*
+         * Setting page title and breadcrumbs
+         * */
+        Yii::$app->view->title = $post->title;
+        Yii::$app->view->params['breadcrumbs'] = $post->breadcrumbs;
+        Yii::$app->view->params['breadcrumbs'][] = $post->title;
+
 
         $post->updateCounters(['click' => 1]);
 

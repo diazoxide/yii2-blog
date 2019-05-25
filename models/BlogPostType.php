@@ -19,6 +19,9 @@ use yii\helpers\FileHelper;
  * @property string $url
  * @property string $title
  * @property string $name
+ * @property string $archive_pattern
+ * @property string $single_pattern
+ * @property string $default_pattern
  * @property string $url_pattern
  * @property string $layout
  * @property boolean $has_title
@@ -65,7 +68,7 @@ class BlogPostType extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'name'], 'required'],
-            [['title', 'url_pattern', 'layout'], 'string', 'max' => 255],
+            [['title', 'url_pattern', 'layout'], 'string', 'max' => 191],
             [['name'], 'string', 'max' => 64],
             [['single_pattern', 'archive_pattern', 'default_pattern'], 'string'],
             [['has_comment', 'has_banner', 'has_category', 'has_tag', 'has_book', 'has_content', 'has_brief', 'has_title'], 'boolean'],

@@ -92,7 +92,7 @@ class BlogPostBook extends \yii\db\ActiveRecord
             [['brief'], 'string'],
             [['bbcode'], 'boolean'],
             [['banner'], 'file', 'extensions' => 'jpg, png, webp, jpeg', 'mimeTypes' => 'image/jpeg, image/png, image/webp',],
-            [['title'], 'string', 'max' => 255],
+            [['title'], 'string', 'max' => 191],
             [['slug'], 'string', 'max' => 128],
             [['slug'], 'unique'],
         ];
