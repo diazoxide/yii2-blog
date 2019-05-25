@@ -20,7 +20,7 @@ class m000009_000001_blog_widget_type extends Migration
             '{{%blog_widget_type}}',
             [
                 'id'=> $this->primaryKey(11),
-                'title'=> $this->string(255)->notNull(),
+                'title'=> $this->string(191)->notNull(),
                 'config'=> $this->text()->notNull(),
             ],$tableOptions
         );

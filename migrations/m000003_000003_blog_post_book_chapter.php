@@ -20,12 +20,12 @@ class m000003_000003_blog_post_book_chapter extends Migration
             [
                 'id' => $this->primaryKey(11),
                 'book_id' => $this->integer(11)->notNull(),
-                'title' => $this->string(255)->notNull(),
+                'title' => $this->string(191)->notNull(),
                 'content' => $this->text()->notNull(),
                 'bbcode' => $this->tinyInteger(1)->null()->defaultValue(null),
-                'brief' => $this->string(255)->notNull(),
-                'keywords' => $this->string(255)->notNull(),
-                'banner' => $this->string(255)->notNull(),
+                'brief' => $this->string(191)->notNull(),
+                'keywords' => $this->string(191)->notNull(),
+                'banner' => $this->string(191)->notNull(),
                 'parent_id' => $this->integer(11)->null()->defaultValue(null),
                 'sort_order' => $this->integer(11)->notNull(),
             ], $tableOptions

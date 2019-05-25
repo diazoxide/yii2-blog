@@ -21,7 +21,7 @@ class m000002_000004_blog_category_data extends Migration
             [
                 'id' => $this->primaryKey(11),
                 'owner_id' => $this->integer(11)->notNull()->defaultValue(0),
-                'name' => $this->string(255)->notNull(),
+                'name' => $this->string(191)->notNull(),
                 'value' => $this->text(),
             ], $tableOptions
         );

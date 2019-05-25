@@ -21,9 +21,9 @@ class m000003_000002_blog_post_book extends Migration
             [
                 'id'=> $this->primaryKey(11),
                 'post_id'=> $this->integer(11)->notNull(),
-                'title'=> $this->string(255)->notNull(),
-                'brief'=> $this->string(255)->notNull(),
-                'banner'=> $this->string(255)->notNull(),
+                'title'=> $this->string(191)->notNull(),
+                'brief'=> $this->string(191)->notNull(),
+                'banner'=> $this->string(191)->notNull(),
                 'slug'=> $this->string(128)->notNull(),
                 'bbcode'=> $this->tinyInteger(1)->null()->defaultValue(null),
                 'created_at'=> $this->integer(11)->notNull(),
