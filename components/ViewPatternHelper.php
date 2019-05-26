@@ -1,12 +1,13 @@
 <?php
-
+/*
+ * Build page from pattern
+ * */
 namespace diazoxide\blog\components;
 
 use diazoxide\blog\Module;
 use ReflectionMethod;
 use Yii;
 use yii\base\Component;
-use yii\web\View;
 
 class ViewPatternHelper extends Component
 {
@@ -28,13 +29,18 @@ class ViewPatternHelper extends Component
         $config = self::$configPattern;
         $code = self::$codePattern;
 
+        /*
+         * Constructing instances pattern
+         * */
         $instance = "(?>$class|$view|$var)";
 
+        /*
+         * Building final pattern
+         * */
         $pattern = "/\[(?>$code|(?>$instance(?>\s*)$config?))\]/";
-
         return $pattern;
-
     }
+
     private static function initConfig($config, $dependencies)
     {
         foreach ($config as $key => $option) {
@@ -115,6 +121,11 @@ class ViewPatternHelper extends Component
                         return $obj->{$method};
                     }
                 }
+
+                /*
+                 * Return Full match as string
+                 * */
+                return $matches[0];
 
             }, $pattern);
 
