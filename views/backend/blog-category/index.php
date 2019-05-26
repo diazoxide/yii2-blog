@@ -25,7 +25,6 @@ function renderItem($model)
         $menu .= Html::a('<i class="fa fa-eye"></i> ' . Module::t('', 'View'), ['blog-category/view', 'id' => $item->id], ['class' => 'btn btn-default btn-xs', 'title' => Module::t('', 'View Category')]);
         $menu .= Html::a('<i class="fa fa-plus"></i> ' . Module::t('', 'Create subcategory'), ['blog-category/create', 'parent_id' => $item->id, 'type' => $item->type->name], ['class' => 'btn btn-success btn-xs', 'title' => Module::t('', 'Add Sub Category')]);
         $menu .= Html::a('<i class="fa fa-pencil"></i> ' . Module::t('', 'Update'), ['blog-category/update', 'id' => $item->id], ['class' => 'btn btn-warning btn-xs', 'title' => Module::t('', 'Update Category')]);
-        $menu .= Html::a('<i class="fa fa-remove"></i> ' . Module::t('', 'Delete'), ['blog-category/delete', 'id' => $item->id], ['class' => 'btn btn-danger btn-xs', 'title' => Module::t('', 'Delete Category'), 'data-confirm' => Module::t('', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'data-pjax' => 0]);
         $menu .= Html::endTag('span');
 
         echo Html::a('<i class="fa fa-bars"></i>', null, [
@@ -61,6 +60,9 @@ function renderItem($model)
                 'placement' => "bottom"
             ]
         ]);
+
+        echo Html::a('<i class="fa fa-remove"></i> ' . Module::t('', 'Delete'), ['blog-category/delete', 'id' => $item->id], ['class' => 'btn btn-danger btn-xs', 'title' => Module::t('', 'Delete Category'), 'data-confirm' => Module::t('', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'data-pjax' => 0]);
+
 
         echo Html::endTag('span');
 
