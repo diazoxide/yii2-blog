@@ -66,7 +66,7 @@ class BlogPostSearch extends BlogPost
         $query->andFilterWhere([$this::tableName() . '.type_id' => $this->type_id]);
 
         if ($this->scenario == self::SCENARIO_ADMIN) {
-            $query->orderBy(['id' => SORT_DESC]);
+            $query->orderBy(['created_at' => SORT_DESC]);
 
         }
         if ($this->scenario == self::SCENARIO_USER) {
