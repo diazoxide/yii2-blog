@@ -180,13 +180,49 @@ class Feed extends \yii\bootstrap\Widget
 
         echo Html::beginTag($tag, $options);
 
+        $instance = $this;
         echo ListView::widget([
             'id' => $this->_listViewId,
             'dataProvider' => $this->getDataProvider(),
             'options' => array_filter($this->list_options),
             'itemOptions' => array_filter($this->item_options),
             'layout' => "{items}" . ($this->show_pager ? "{pager}" : ""),
-            'itemView' => '@vendor/diazoxide/yii2-blog/widgets/views/_feed_item',
+
+            /**
+             * Deprecated
+             * 'itemView' => '@vendor/diazoxide/yii2-blog/widgets/views/_feed_item',
+             */
+            'itemView' => function ($model, $key, $index, $widget) use($instance) {
+                return Article::widget([
+                   'post'=>$model,
+                   'body_options' => $instance->item_body_options,
+                   'show_brief' => $instance->show_item_brief,
+                   'brief_length' => $instance->item_brief_length,
+                   'brief_suffix' => $instance->item_brief_suffix,
+                   'title_length' => $instance->item_title_length,
+                   'title_suffix' => $instance->item_title_suffix,
+                   'date_type' => $instance->item_date_type,
+                   'image_type' => $instance->item_image_type,
+                   'show_category' => $instance->show_item_category,
+                   'show_category_icon' => $instance->show_item_category_icon,
+                   'show_category_with_icon' => $instance->show_item_category_with_icon,
+                   'show_date' => $instance->show_item_date,
+                   'show_views' => $instance->show_item_views,
+                   'image_container_options' => $instance->item_image_container_options,
+                   'content_container_options' => $instance->item_content_container_options,
+                   'show_title' => $instance->show_item_title,
+                   'title_options' => $instance->item_title_options,
+                   'brief_options' => $instance->item_brief_options,
+                   'show_read_more_button' => $instance->show_item_read_more_button,
+                   'read_more_button_options' => $instance->item_read_more_button_options,
+                   'read_more_button_text' => $instance->item_read_more_button_text,
+                   'read_more_button_icon_class' => $instance->item_read_more_button_icon_class,
+                   'info_container_options' => $instance->item_info_container_options
+                ]);
+            },
+
+           /* *
+            * Deprecated
             'viewParams' => [
                 'bodyOptions' => $this->item_body_options,
                 'showBrief' => $this->show_item_brief,
@@ -212,6 +248,7 @@ class Feed extends \yii\bootstrap\Widget
                 'readMoreButtonIconClass' => $this->item_read_more_button_icon_class,
                 'infoContainerOptions' => $this->item_info_container_options
             ],
+           */
 
             'pager' => $this->_pager
         ]);
