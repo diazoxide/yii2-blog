@@ -52,6 +52,7 @@ use diazoxide\blog\widgets\Feed;
                         $form->field($model, 'config[active_title]')->dropDownList([0 => Module::t('', 'No'), 1 => Module::t('', 'Yes')])->label(Module::t('', 'Active Title')) .
                         $form->field($model, 'config[active_title_url]')->textInput(['maxlength' => 255])->label(Module::t('', 'Active Title Url')) .
                         $form->field($model, 'config[title]')->textInput(['maxlength' => 255])->label(Module::t('', 'Widget Title')) .
+                        $form->field($model, 'config[days_interval]')->textInput(['type' => 'number'])->label(Module::t('', 'Days Interval')) .
                         $form->field($model, 'config[show_category_title]')->dropDownList([0 => Module::t('', 'No'), 1 => Module::t('', 'Yes')])->label(Module::t('', 'Show Category Title')) .
                         $form->field($model, 'config[show_category_filter]')->dropDownList([0 => Module::t('', 'No'), 1 => Module::t('', 'Yes')])->label(Module::t('', 'Show Category Filter')) .
                         $form->field($model, 'config[infinite_scroll]')->dropDownList([0 => Module::t('', 'No'), 1 => Module::t('', 'Yes')])->label(Module::t('', 'Infinite Scroll')) .
