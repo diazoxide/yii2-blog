@@ -96,7 +96,7 @@ class BlogWidgetType extends ActiveRecord {
 			throw new NotFoundHttpException( 'Widget Type not found' );
 		}
 
-		$config = array_merge( $config, $type->config );
+		$config = array_merge(  $type->config, $config);
 
 		return Feed::widget(  $config  );
 

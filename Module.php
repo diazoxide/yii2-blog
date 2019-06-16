@@ -12,6 +12,7 @@ use diazoxide\blog\models\BlogPostType;
 use diazoxide\blog\models\BlogTag;
 use diazoxide\blog\models\BlogWidgetType;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\base\ViewNotFoundException;
 use yii\db\ActiveRecord;
 use diazoxide\blog\assets\AdminAsset;
@@ -51,6 +52,52 @@ class Module extends \yii\base\Module
     public $frontendTitleMap = [];
 
     public $urlManager = 'urlManager';
+
+    public $thumbnailsSizes = [
+	    'xsthumb' => ['width' => 64, 'height' => 64],
+	    'sthumb' => ['width' => 128, 'height' => 128],
+	    'mthumb' => ['width' => 240, 'height' => 240],
+	    'nthumb' => ['width' => 320, 'height' => 320],
+	    'xthumb' => ['width' => 480, 'height' => 480],
+	    'thumb' => ['width' => 400, 'height' => 300],
+	    'facebook' => ['width' => 600, 'height' => 315],
+    ];
+    public $t =   array (
+    'facebook' =>
+    array (
+      'height' => '315',
+      'width' => '600',
+    ),
+    'thumb' =>
+    array (
+      'width' => '240',
+    ),
+    'xthumb' =>
+    array (
+      'height' => '320',
+      'width' => '480',
+    ),
+    'nthumb' =>
+    array (
+      'height' => '240',
+      'width' => '320',
+    ),
+    'mthumb' =>
+    array (
+      'height' => '200',
+      'width' => '240',
+    ),
+    'sthumb' =>
+    array (
+      'height' => '86',
+      'width' => '128',
+    ),
+    'xsthumb' =>
+    array (
+      'height' => '48',
+      'width' => '64',
+    )
+  );
 
     public $imgFilePath = '@frontend/web/img/blog';
 
@@ -377,7 +424,7 @@ class Module extends \yii\base\Module
     /**
      * Need correct Full IMG URL for Backend
      * @return string
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getImgFullPathUrl()
     {
@@ -533,7 +580,7 @@ class Module extends \yii\base\Module
      * @param string $type
      * @param null $format
      * @return string
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public static function convertTime($dateStr, $type = 'date', $format = null)
     {

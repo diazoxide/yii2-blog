@@ -7,49 +7,50 @@
 
 namespace diazoxide\blog\models;
 
+use Yii;
+use yii\base\InvalidConfigException;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\TimestampBehavior;
+use yii\widgets\Breadcrumbs;
+use yiidreamteam\upload\ImageUploadBehavior;
 use diazoxide\blog\Module;
 use diazoxide\blog\traits\ModuleTrait;
 use diazoxide\blog\traits\StatusTrait;
 use diazoxide\blog\widgets\Feed;
 use paulzi\adjacencyList\AdjacencyListBehavior;
-use Yii;
-use yii\behaviors\SluggableBehavior;
-use yii\behaviors\TimestampBehavior;
-use yii\widgets\Breadcrumbs;
-use yiidreamteam\upload\ImageUploadBehavior;
-
 
 /**
  * This is the model class for table "blog_category".
  *
- * @property integer $id
- * @property integer $parent_id
- * @property integer $type_id
- * @property string $title
- * @property string $slug
- * @property string $banner
- * @property integer $is_nav
- * @property integer $sort_order
- * @property integer $page_size
- * @property string $template
- * @property string $redirect_url
- * @property string $icon_class
- * @property string $icon
- * @property string $data
- * @property string $read_more_text
- * @property string $read_icon_class
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property BlogPost[] $blogPosts
- * @property string titleWithIcon
- * @property string url
- * @property BlogCategory childs
- * @property BlogWidgetType widgetType
+ * @property integer             $id
+ * @property integer             $parent_id
+ * @property integer             $type_id
+ * @property string              $title
+ * @property string              $slug
+ * @property string              $banner
+ * @property integer             $is_nav
+ * @property integer             $sort_order
+ * @property integer             $page_size
+ * @property string              $template
+ * @property string              $redirect_url
+ * @property string              $icon_class
+ * @property string              $icon
+ * @property string              $data
+ * @property string              $read_more_text
+ * @property string              $read_icon_class
+ * @property integer             $status
+ * @property integer             $created_at
+ * @property integer             $updated_at
+ * @property BlogPost[]          $blogPosts
+ * @property string              titleWithIcon
+ * @property string              url
+ * @property BlogCategory        childs
+ * @property BlogWidgetType      widgetType
  * @method \yii\db\ActiveQuery getChildren()
  * @property \yii\db\ActiveQuery children
- * @property Breadcrumbs breadcrumbs
- * @property BlogCategory parent
+ * @property Breadcrumbs         breadcrumbs
+ * @property BlogCategory        parent
+ * @property Module              module
  */
 class BlogCategory extends \yii\db\ActiveRecord
 {
@@ -76,7 +77,6 @@ class BlogCategory extends \yii\db\ActiveRecord
         return '{{%blog_category}}';
     }
 
-
     /**
      * @return array
      */
@@ -84,7 +84,7 @@ class BlogCategory extends \yii\db\ActiveRecord
     {
         return [
             self::IS_NAV_YES => Module::t('', 'YES'),
-            self::IS_NAV_NO => Module::t('', 'NO'),
+            self::IS_NAV_NO  => Module::t('', 'NO'),
         ];
     }
 
@@ -95,14 +95,15 @@ class BlogCategory extends \yii\db\ActiveRecord
     {
         return [
             self::IS_FEATURED_YES => Module::t('', 'YES'),
-            self::IS_FEATURED_NO => Module::t('', 'NO'),
+            self::IS_FEATURED_NO  => Module::t('', 'NO'),
         ];
     }
 
 
     /**
-     * @param int $parentId
+     * @param int   $parentId
      * @param array $array
+     *
      * @return int|string
      */
     static public function getCategoryIdStr($parentId = 0, $array = array())
@@ -117,6 +118,7 @@ class BlogCategory extends \yii\db\ActiveRecord
                 }
             }
         }
+
         return $str;
     }
 
@@ -127,13 +129,14 @@ class BlogCategory extends \yii\db\ActiveRecord
         } else {
             $result = $this->getModule()->categoryBreadcrumbs;
         }
-        if (!$this->isNewRecord && $this->id != 1) {
+        if ( ! $this->isNewRecord && $this->id != 1) {
 
             $result[] = [
                 'label' => $this->title,
-                'url' => $this->url
+                'url'   => $this->url
             ];
         }
+
         return $result;
     }
 
@@ -143,35 +146,41 @@ class BlogCategory extends \yii\db\ActiveRecord
     }
 
 
+    /**
+     * @return array
+     * @throws InvalidConfigException
+     */
     public function behaviors()
     {
         return [
             [
-                'class' => \diazoxide\blog\behaviors\DataOptionsBehavior\Behavior::class,
-                'data_model'=>BlogCategoryData::class
+                'class'      => \diazoxide\blog\behaviors\DataOptionsBehavior\Behavior::class,
+                'data_model' => BlogCategoryData::class
             ],
             [
-                'class' => AdjacencyListBehavior::className(),
+                'class'    => AdjacencyListBehavior::class,
                 'sortable' => [
                     'sortAttribute' => 'sort_order'
                 ]
             ],
             TimestampBehavior::class,
             [
-                'class' => SluggableBehavior::class,
-                'attribute' => 'title',
+                'class'         => SluggableBehavior::class,
+                'attribute'     => 'title',
                 'slugAttribute' => 'slug',
             ],
             [
-                'class' => ImageUploadBehavior::class,
+                'class'     => ImageUploadBehavior::class,
                 'attribute' => 'banner',
-                'thumbs' => [
-                    'thumb' => ['width' => 400, 'height' => 300]
-                ],
-                'filePath' => $this->module->imgFilePath . '/[[model]]/[[pk]].[[extension]]',
-                'fileUrl' => $this->module->getImgFullPathUrl() . '/[[model]]/[[pk]].[[extension]]',
-                'thumbPath' => $this->module->imgFilePath . '/[[model]]/[[profile]]_[[pk]].[[extension]]',
-                'thumbUrl' => $this->module->getImgFullPathUrl() . '/[[model]]/[[profile]]_[[pk]].[[extension]]',
+                'thumbs'    => $this->module->thumbnailsSizes,
+                'filePath'  => $this->module->imgFilePath
+                    . '/[[model]]/[[pk]].[[extension]]',
+                'fileUrl'   => $this->module->getImgFullPathUrl()
+                    . '/[[model]]/[[pk]].[[extension]]',
+                'thumbPath' => $this->module->imgFilePath
+                    . '/[[model]]/[[profile]]_[[pk]].[[extension]]',
+                'thumbUrl'  => $this->module->getImgFullPathUrl()
+                    . '/[[model]]/[[profile]]_[[pk]].[[extension]]',
             ],
         ];
     }
@@ -182,13 +191,39 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'type_id', 'is_nav', 'is_featured', 'sort_order', 'widget_type_id', 'page_size', 'status', 'sort'], 'integer'],
+            [
+                [
+                    'parent_id',
+                    'type_id',
+                    'is_nav',
+                    'is_featured',
+                    'sort_order',
+                    'widget_type_id',
+                    'page_size',
+                    'status',
+                    'sort'
+                ],
+                'integer'
+            ],
             [['title'], 'required'],
             [['parent_id'], 'parentValidation'],
             [['sort_order', 'page_size'], 'default', 'value' => 0],
-            [['icon_class', 'read_icon_class', 'read_more_text'], 'string', 'max' => 60],
-            [['title', 'template', 'redirect_url', 'slug'], 'string', 'max' => 191],
-            [['banner'], 'file', 'extensions' => 'jpg, png, webp', 'mimeTypes' => 'image/jpeg, image/png, image/webp'],
+            [
+                ['icon_class', 'read_icon_class', 'read_more_text'],
+                'string',
+                'max' => 60
+            ],
+            [
+                ['title', 'template', 'redirect_url', 'slug'],
+                'string',
+                'max' => 191
+            ],
+            [
+                ['banner'],
+                'file',
+                'extensions' => 'jpg, png, webp',
+                'mimeTypes'  => 'image/jpeg, image/png, image/webp'
+            ],
         ];
     }
 
@@ -196,16 +231,21 @@ class BlogCategory extends \yii\db\ActiveRecord
     {
         if ($this->id == $this->parent_id) {
             // no real check at the moment to be sure that the error is triggered
-            $this->addError($attribute, Module::t('', 'The element cannot use itself as a parent.'));
+            $this->addError($attribute,
+                Module::t('', 'The element cannot use itself as a parent.'));
         }
 
-        if ($this->parent->type_id != $this->type_id && $this->parent->type_id != null) {
-            $this->addError($attribute, Module::t('', 'Category type must be same type as the parent category.'));
+        if ($this->parent->type_id != $this->type_id
+            && $this->parent->type_id != null
+        ) {
+            $this->addError($attribute, Module::t('',
+                'Category type must be same type as the parent category.'));
 
         }
 
         if ($this->id != 1 && $this->parent_id == null) {
-            $this->addError($attribute, Module::t('', 'You can not create root element.'));
+            $this->addError($attribute,
+                Module::t('', 'You can not create root element.'));
 
         }
     }
@@ -216,24 +256,24 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Module::t('', 'ID'),
-            'parent_id' => Module::t('', 'Parent'),
-            'title' => Module::t('', 'Title'),
-            'slug' => Module::t('', 'Slug'),
-            'banner' => Module::t('', 'Banner'),
-            'icon_class' => Module::t('', 'Icon Class'),
+            'id'              => Module::t('', 'ID'),
+            'parent_id'       => Module::t('', 'Parent'),
+            'title'           => Module::t('', 'Title'),
+            'slug'            => Module::t('', 'Slug'),
+            'banner'          => Module::t('', 'Banner'),
+            'icon_class'      => Module::t('', 'Icon Class'),
             'read_icon_class' => Module::t('', 'Read Icon Class'),
-            'read_more_text' => Module::t('', 'Read More Text'),
-            'is_nav' => Module::t('', 'Is Nav'),
-            'is_featured' => Module::t('', 'Is Featured'),
-            'sort_order' => Module::t('', 'Sort Order'),
-            'sort' => Module::t('', 'Sort'),
-            'page_size' => Module::t('', 'Page Size'),
-            'template' => Module::t('', 'Template'),
-            'redirect_url' => Module::t('', 'Redirect Url'),
-            'status' => Module::t('', 'Status'),
-            'created_at' => Module::t('', 'Created At'),
-            'updated_at' => Module::t('', 'Updated At'),
+            'read_more_text'  => Module::t('', 'Read More Text'),
+            'is_nav'          => Module::t('', 'Is Nav'),
+            'is_featured'     => Module::t('', 'Is Featured'),
+            'sort_order'      => Module::t('', 'Sort Order'),
+            'sort'            => Module::t('', 'Sort'),
+            'page_size'       => Module::t('', 'Page Size'),
+            'template'        => Module::t('', 'Template'),
+            'redirect_url'    => Module::t('', 'Redirect Url'),
+            'status'          => Module::t('', 'Status'),
+            'created_at'      => Module::t('', 'Created At'),
+            'updated_at'      => Module::t('', 'Updated At'),
         ];
     }
 
@@ -262,6 +302,7 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function getIcon()
     {
         $iconClass = $this->icon_class ? $this->icon_class : "fa fa-bookmark";
+
         return "<i class=\"$iconClass\"></i>";
     }
 
@@ -273,9 +314,17 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function getUrl()
     {
         if ($this->getModule()->getIsBackend()) {
-            return Yii::$app->getUrlManager()->createUrl([$this->getModule()->id . '/blog-category/update', 'id' => $this->id]);
+            return Yii::$app->getUrlManager()->createUrl([
+                $this->getModule()->id . '/blog-category/update',
+                'id' => $this->id
+            ]);
         }
-        return Yii::$app->getUrlManager()->createUrl([$this->getModule()->id . '/default/archive', 'type' => $this->type ? $this->type->name : null, 'slug' => $this->slug]);
+
+        return Yii::$app->getUrlManager()->createUrl([
+            $this->getModule()->id . '/default/archive',
+            'type' => $this->type ? $this->type->name : null,
+            'slug' => $this->slug
+        ]);
 
     }
 
@@ -290,15 +339,16 @@ class BlogCategory extends \yii\db\ActiveRecord
 
     /**
      * @return string
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      * @throws \Exception
      */
     public function getWidget()
     {
-        $config = (array)$this->widgetType->config;
-        $config = reset($config);
+        $config                = (array)$this->widgetType->config;
+        $config                = reset($config);
         $config['category_id'] = $this->id;
-        $config['id'] = $this->formName() . '_' . $this->id;
+        $config['id']          = $this->formName() . '_' . $this->id;
+
         return Feed::widget($config);
     }
 
@@ -308,9 +358,10 @@ class BlogCategory extends \yii\db\ActiveRecord
     public function getIsNavLabel()
     {
         if ($this->_isNavLabel === null) {
-            $arrayIsNav = self::getArrayIsNav();
+            $arrayIsNav        = self::getArrayIsNav();
             $this->_isNavLabel = $arrayIsNav[$this->is_nav];
         }
+
         return $this->_isNavLabel;
     }
 }

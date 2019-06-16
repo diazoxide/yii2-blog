@@ -16,6 +16,7 @@ class Slider2 extends Widget
     public $itemsCount = 10;
 	public $post_type = 'article';
 
+	public $show_indicators = true;
     public function init()
     {
         parent::init();
@@ -121,7 +122,7 @@ class Slider2 extends Widget
         $items = [];
 
         foreach ($posts as $post) {
-            $items[] = [
+            $item = [
                 'content' => Html::tag('div', null, ['style' => 'height:450px; width:100%; background-image:url(' . $post->getImageFileUrl('banner') . '); background-size:cover']),
                 'caption' =>
                     implode('', [
@@ -132,17 +133,21 @@ class Slider2 extends Widget
                         ),
 //                        Html::tag('p', StringHelper::truncate($post->brief, 50, '...'))
                     ]),
-                'indicator' => [
-                    'content' => implode('', [
-                        Html::img($post->getThumbFileUrl('banner', 'xsthumb')),
-                        Html::tag('div', StringHelper::truncate($post->title, 50, '...'), ['class' => 'carousel-indicator-content']),
-                        Html::tag('p', $post->category->getTitleWithIcon(), ['class' => 'text-right text-warning'])
-                    ]),
-//                    'options' => ['style'=>'overflow:hidden'],
-//                    'options' => ['style' => 'zoom:2; background:url(' . $post->getThumbFileUrl('banner', 'xsthumb') . '); background-size:cover'],
-                ],
                 'options' => [],
             ];
+
+            if($this->show_indicators){
+            	$item['indicator'] = [
+		            'content' => implode('', [
+			            Html::img($post->getThumbFileUrl('banner', 'xsthumb')),
+			            Html::tag('div', StringHelper::truncate($post->title, 50, '...'), ['class' => 'carousel-indicator-content']),
+			            Html::tag('p', $post->category->getTitleWithIcon(), ['class' => 'text-right text-warning'])
+		            ]),
+//                    'options' => ['style'=>'overflow:hidden'],
+//                    'options' => ['style' => 'zoom:2; background:url(' . $post->getThumbFileUrl('banner', 'xsthumb') . '); background-size:cover'],
+	            ];
+            }
+	        $items[] = $item;
         }
         return $items;
     }

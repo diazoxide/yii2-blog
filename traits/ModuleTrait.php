@@ -2,13 +2,13 @@
 
 namespace diazoxide\blog\traits;
 
-
+use diazoxide\blog\Module;
 use Yii;
 
 trait ModuleTrait
 {
     /**
-     * @return  \diazoxide\blog\Module
+     * @return  Module
      */
     public function getModule()
     {

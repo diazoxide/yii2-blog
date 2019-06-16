@@ -98,6 +98,11 @@ class Feed extends \yii\bootstrap\Widget
     {
         parent::init();
 
+        /*
+         * Exporting properties as array
+         * */
+        Yii::warning(json_encode(get_object_vars($this)),self::class."::".$this->id);
+
         /* Init. category model */
 
         $this->_listViewId = $this->id . "_list_view";
@@ -176,7 +181,7 @@ class Feed extends \yii\bootstrap\Widget
 
         $options = $this->body_options;
 
-        $tag = ArrayHelper::remove($options, 'tag', 'div');
+        $tag = ArrayHelper::remove($options, 'tag', 'div') ?? 'div';
 
         echo Html::beginTag($tag, $options);
 
@@ -326,7 +331,7 @@ class Feed extends \yii\bootstrap\Widget
     public function renderInfinityScrollStatusHtml()
     {
         $options = $this->_infiniteScrollPagerStatusOptions;
-        $tag = ArrayHelper::remove($options, 'tag', 'div');
+        $tag = ArrayHelper::remove($options, 'tag', 'div') ?? 'div';
 
         echo Html::beginTag($tag, $options);
         echo Html::tag('div', Module::t('', 'Loading...'), ['class' => 'infinite-scroll-request']);
@@ -367,7 +372,7 @@ class Feed extends \yii\bootstrap\Widget
     public function renderHeader()
     {
         $options = $this->header_options;
-        $tag = ArrayHelper::remove($options, 'tag', 'div');
+        $tag = ArrayHelper::remove($options, 'tag', 'div') ?? 'div';
 
         echo Html::beginTag($tag, $options);
 
@@ -399,8 +404,10 @@ class Feed extends \yii\bootstrap\Widget
             $title = Html::a($title, $url, $this->active_title_options);
         }
 
+        $tag = ArrayHelper::remove($this->title_options, 'tag', 'div') ?? 'div';
+
         echo Html::tag(
-            isset($this->title_options['tag']) && !empty($this->title_options['tag']) ? $this->title_options['tag'] : 'div',
+            $tag,
             $title,
             $this->title_options
         );
