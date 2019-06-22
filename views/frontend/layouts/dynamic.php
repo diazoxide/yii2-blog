@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /*
  * Registering Dynamic frontend assets
  * */
-DynamicFrontendAsset::register( $this );
+$this->context->module->registerAssets();
 ?>
 
 <?php $this->beginPage() ?>

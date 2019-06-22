@@ -7,6 +7,7 @@
 
 namespace diazoxide\blog;
 
+use diazoxide\blog\assets\DynamicFrontendAsset;
 use diazoxide\blog\models\BlogComment;
 use diazoxide\blog\models\BlogPostType;
 use diazoxide\blog\models\BlogTag;
@@ -23,6 +24,7 @@ use diazoxide\blog\models\BlogCategory;
 use diazoxide\blog\models\BlogPost;
 use diazoxide\blog\traits\IActiveStatus;
 use himiklab\sitemap\behaviors\SitemapBehavior;
+use yii\web\AssetBundle;
 
 /**
  * @property array breadcrumbs
@@ -54,50 +56,31 @@ class Module extends \yii\base\Module
     public $urlManager = 'urlManager';
 
     public $thumbnailsSizes = [
-	    'xsthumb' => ['width' => 64, 'height' => 64],
-	    'sthumb' => ['width' => 128, 'height' => 128],
-	    'mthumb' => ['width' => 240, 'height' => 240],
-	    'nthumb' => ['width' => 320, 'height' => 320],
-	    'xthumb' => ['width' => 480, 'height' => 480],
-	    'thumb' => ['width' => 400, 'height' => 300],
-	    'facebook' => ['width' => 600, 'height' => 315],
+        'xsthumb' => ['width' => 64, 'height' => 64],
+        'sthumb' => ['width' => 128, 'height' => 128],
+        'mthumb' => ['width' => 240, 'height' => 240],
+        'nthumb' => ['width' => 320, 'height' => 320],
+        'xthumb' => ['width' => 480, 'height' => 480],
+        'thumb' => ['width' => 400, 'height' => 300],
+        'facebook' => ['width' => 600, 'height' => 315],
     ];
-    public $t =   array (
-    'facebook' =>
-    array (
-      'height' => '315',
-      'width' => '600',
-    ),
-    'thumb' =>
-    array (
-      'width' => '240',
-    ),
-    'xthumb' =>
-    array (
-      'height' => '320',
-      'width' => '480',
-    ),
-    'nthumb' =>
-    array (
-      'height' => '240',
-      'width' => '320',
-    ),
-    'mthumb' =>
-    array (
-      'height' => '200',
-      'width' => '240',
-    ),
-    'sthumb' =>
-    array (
-      'height' => '86',
-      'width' => '128',
-    ),
-    'xsthumb' =>
-    array (
-      'height' => '48',
-      'width' => '64',
-    )
-  );
+
+    /*
+     * Assets by routes
+     * */
+    public $assets = [];
+
+    /*
+     * Default assets by routes
+     * */
+    private $_assets = [
+        /*
+         * The default assets including in all routes
+         * */
+        'default' => [
+            DynamicFrontendAsset::class
+        ],
+    ];
 
     public $imgFilePath = '@frontend/web/img/blog';
 
@@ -231,7 +214,7 @@ class Module extends \yii\base\Module
 
     /**
      * Getting the view file for current route
-     * Using this method in controller actions
+     * Use this method in controller actions
      * @return mixed|string
      */
     public function getView()
@@ -251,6 +234,37 @@ class Module extends \yii\base\Module
             }
         }
         throw new ViewNotFoundException('The view file does not exist.');
+    }
+
+    /**
+     * Dynamic register assets for each route
+     */
+    public function registerAssets()
+    {
+        $route = Yii::$app->controller->route;
+        $assets = $this->_assets['default'];
+
+        if(isset($this->assets)){
+            $assets = array_merge_recursive($assets,$this->assets);
+        }
+
+        if ($this->getIsBackend() !== true) {
+
+            if (isset($this->assets[$route])) {
+                /** @var AssetBundle $asset */
+                $assets[] = $this->assets[$route];
+            } elseif (isset($this->_assets[$route])) {
+                $assets[] = $this->_assets[$route];
+            }
+        }
+
+        if (!empty($assets)) {
+            foreach ($assets as $asset) {
+                $asset::register(Yii::$app->controller->view);
+            }
+        } else{
+            Yii::info("The assets array was empty for this route.",self::class );
+        }
     }
 
     /**
@@ -455,16 +469,31 @@ class Module extends \yii\base\Module
             ];
         }
         return [
-            ['label' => Module::t('', 'Blog'),
+            [
+                'label' => '<i class="fa fa-newspaper-o"></i> '.Module::t('', 'Blog'),
                 'items' => [
-                    ['label' => Module::t('', 'Posts'),
+                    [
+                        'label' => ' '.Module::t('', 'Posts'),
                         'visible' => Yii::$app->user->can("BLOG_VIEW_POSTS"),
                         'items' => $post_types_items
                     ],
-                    ['label' => Module::t('', 'Comments') . ' (' . BlogComment::find()->count() . ')', 'url' => ["/{$this->id}/blog-comment"], 'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")],
-                    ['label' => Module::t('', 'Tags') . ' (' . BlogTag::find()->count() . ')', 'url' => ["/{$this->id}/blog-tag"], 'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")],
-                    ['label' => Module::t('', 'Widget Types') . ' (' . BlogWidgetType::find()->count() . ')', 'url' => ["/{$this->id}/widget-type/index"], 'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")],
-                    ['label' => Module::t('', 'Options'),
+                    [
+                        'label' => Module::t('', 'Comments') . ' (' . BlogComment::find()->count() . ')',
+                        'url' => ["/{$this->id}/blog-comment"],
+                        'visible' => Yii::$app->user->can("BLOG_VIEW_COMMENTS")
+                    ],
+                    [
+                        'label' => Module::t('', 'Tags') . ' (' . BlogTag::find()->count() . ')',
+                        'url' => ["/{$this->id}/blog-tag"],
+                        'visible' => Yii::$app->user->can("BLOG_VIEW_TAGS")
+                    ],
+                    [
+                        'label' => Module::t('', 'Widget Types') . ' (' . BlogWidgetType::find()->count() . ')',
+                        'url' => ["/{$this->id}/widget-type/index"],
+                        'visible' => Yii::$app->user->can("BLOG_VIEW_WIDGET_TYPES")
+                    ],
+                    [
+                        'label' => Module::t('', 'Options'),
                         'items' => [
                             [
                                 'label' => Module::t('', 'Post Types'),
@@ -473,7 +502,8 @@ class Module extends \yii\base\Module
                             ],
 
                             [
-                                'label' => 'Importer', 'url' => ["/{$this->id}/importer/index"],
+                                'label' => 'Importer',
+                                'url' => ["/{$this->id}/importer/index"],
                                 'visible' => Yii::$app->user->can("BLOG_IMPORT_POSTS"),
 
                             ],
@@ -481,13 +511,13 @@ class Module extends \yii\base\Module
                             [
                                 'label' => Module::t('', 'Regenerate Thumbnails'),
                                 'url' => ["/{$this->id}/default/thumbnails"],
-                                'visible' => Yii::$app->user->can("BLOG_REGENERATE_THUMBNAILS")]
+                                'visible' => Yii::$app->user->can("BLOG_REGENERATE_THUMBNAILS")
+                            ]
                         ],
                         'visible' =>
                             Yii::$app->user->can("BLOG_VIEW_POST_TYPES") ||
                             Yii::$app->user->can("BLOG_IMPORT_POSTS") ||
                             Yii::$app->user->can("BLOG_REGENERATE_THUMBNAILS")
-
                     ]
                 ]
             ],

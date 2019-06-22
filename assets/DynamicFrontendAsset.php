@@ -17,7 +17,6 @@ class DynamicFrontendAsset extends AssetBundle
     public $baseUrl = '@web';
 
     public $css = [
-//        'css/style.css',
         'css/bootstrap_custom.css',
         'css/common.css',
     ];
