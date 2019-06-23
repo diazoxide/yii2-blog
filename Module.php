@@ -55,7 +55,9 @@ class Module extends \yii\base\Module
 
     public $urlManager = 'urlManager';
 
-    public $thumbnailsSizes = [
+    public $thumbnailsSizes = [];
+
+    private $_thumbnailsSizes = [
         'xsthumb' => ['width' => 64, 'height' => 64],
         'sthumb' => ['width' => 128, 'height' => 128],
         'mthumb' => ['width' => 240, 'height' => 240],
@@ -245,7 +247,7 @@ class Module extends \yii\base\Module
         $assets = $this->_assets['default'];
 
         if(isset($this->assets)){
-            $assets = array_merge_recursive($assets,$this->assets);
+            $assets = array_merge($assets, $this->assets);
         }
 
         if ($this->getIsBackend() !== true) {
@@ -265,6 +267,14 @@ class Module extends \yii\base\Module
         } else{
             Yii::info("The assets array was empty for this route.",self::class );
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getThumbnailsSizes(){
+//        return $this->thumbnailsSizes;
+        return array_merge($this->_thumbnailsSizes,$this->thumbnailsSizes);
     }
 
     /**

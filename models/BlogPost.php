@@ -121,7 +121,7 @@ class BlogPost extends ActiveRecord
             [
                 'class'     => ImageUploadBehavior::class,
                 'attribute' => 'banner',
-                'thumbs'    => $this->module->thumbnailsSizes,
+                'thumbs'    => $this->module->getThumbnailsSizes(),
                 'filePath'  => $this->module->imgFilePath
                     . '/post/[[attribute_type_id]]/[[pk]].[[extension]]',
                 'fileUrl'   => $this->module->getImgFullPathUrl()

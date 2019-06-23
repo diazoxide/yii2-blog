@@ -172,7 +172,7 @@ class BlogCategory extends \yii\db\ActiveRecord
             [
                 'class'     => ImageUploadBehavior::class,
                 'attribute' => 'banner',
-                'thumbs'    => $this->module->thumbnailsSizes,
+                'thumbs'    => $this->module->getThumbnailsSizes(),
                 'filePath'  => $this->module->imgFilePath
                     . '/[[model]]/[[pk]].[[extension]]',
                 'fileUrl'   => $this->module->getImgFullPathUrl()
