@@ -21,7 +21,8 @@ class m000003_000001_blog_post extends Migration
             [
                 'id' => $this->primaryKey(11),
                 'title' => $this->string(191)->notNull(),
-                'content' => $this->text()->null()->defaultValue(null),
+                'content' => $this->getDb()->getSchema()->createColumnSchemaBuilder('longtext')->null()->defaultValue(null),
+//                'content' => $this->text()->null()->defaultValue(null),
                 'brief' => $this->text()->null()->defaultValue(null),
                 'created_at' => $this->integer(11)->defaultValue(0),
                 'published_at' => $this->integer(11)->defaultValue(0),
