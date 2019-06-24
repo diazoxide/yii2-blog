@@ -36,6 +36,7 @@ class Article extends Widget {
 	public $show_views = false;
 	public $show_date = true;
 	public $show_comments = false;
+	public $show_social_media = false;
 
 	public $image_type = 'mthumb';
 	public $read_more_button_text = 'Read more...';
@@ -47,6 +48,8 @@ class Article extends Widget {
 	public $title_suffix = '...';
 	public $active_title = true;
 
+	public $comments_options = ['body_options'=>['tag'=>'div','class'=>'col-xs-12']];
+	public $social_media_options = ['body_options'=>['tag'=>'div','class'=>'col-xs-12']];
 	public $image_container_options = [ 'class' => 'col-xs-3' ];
 	public $content_container_options = [ 'class' => 'col-xs-9' ];
 	public $info_container_options = [];
@@ -208,42 +211,15 @@ class Article extends Widget {
 
 		echo Html::endTag( 'div' );
 
-		if($this->show_comments){
-		    $this->renderComments();
+		if($this->show_comments && $this->post->showComments()){
+		    echo Comments::widget($this->comments_options);
+        }
+
+		if($this->show_social_media){
+		    echo SocialMedia::widget($this->social_media_options);
         }
 
 		echo Html::endTag( $bodyTag );
 
-	}
-
-	public function renderComments() {
-		if ( $this->post->module->enableComments && $this->post->show_comments && $this->post->type->has_comment ) :?>
-            <section class="top-buffer-20-xs">
-
-                <div class="row">
-                    <div class="widget_title"><?= Module::t( '', 'Comments' ); ?></div>
-
-					<?php if ( $this->post->module->enableFacebookComments ): ?>
-
-                        <div class="col-sm-12">
-							<?php
-							if ( isset( $this->context->module->social['facebook']['app_id'] ) ) {
-								echo FacebookComments::widget(
-									[
-										'app_id' => $this->context->module->social['facebook']['app_id'],
-										'data'   => [ 'width' => '100%', 'numposts' => '5' ]
-									]
-								);
-							}
-							?>
-                        </div>
-
-
-					<?php endif; ?>
-
-                </div>
-
-            </section>
-		<?php endif;
 	}
 }

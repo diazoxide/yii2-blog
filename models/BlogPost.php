@@ -604,4 +604,16 @@ class BlogPost extends ActiveRecord
         return Module::convertTime($this->published_at, 'datetime');
     }
 
+    /**
+     * If global comments enabled and
+     * Post comments enabled
+     * @return bool
+     */
+    public function showComments(){
+        if($this->module->enableComments && $this->show_comments){
+            return true;
+        }
+        return false;
+    }
+
 }

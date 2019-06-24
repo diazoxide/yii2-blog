@@ -7,6 +7,7 @@
 
 namespace diazoxide\blog\controllers\frontend;
 
+use diazoxide\blog\models\BlogPostData;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -44,6 +45,13 @@ class FixerController extends Controller
     public function actionId($id)
     {
         $post = BlogPost::findOne($id);
+        return $this->redirect($post->url);
+    }
+
+
+    public function actionWordpress($id){
+        $opt = BlogPostData::findOne(['name'=>"wp_" . md5("https://armday.org")."_origin_id",'value'=>$id]);
+        $post = BlogPost::findOne($opt->owner_id);
         return $this->redirect($post->url);
     }
 }

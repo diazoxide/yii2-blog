@@ -6,7 +6,7 @@ use diazoxide\blog\behaviors\DataOptionsBehavior\DataModel;
 
 /**
  * @property integer $id
- * @property integer $category_id
+ * @property integer $owner_id
  * @property string $name
  * @property string $value
  */
